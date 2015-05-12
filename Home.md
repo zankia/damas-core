@@ -12,3 +12,14 @@
 Search every /production node:
 
     damas/server/model.json.php?cmd=search&keys={%22*%22:%22REGEXP%20%27^/production%27%22}
+
+## API Scripting Examples
+Parse the current node's children, retrieve the 'file' key from the first grand-child, and set it on the child
+```js
+damas.current_node.children.each( function(n){
+    console.log(n.id);
+    var file = damas.children(n.id)[0].keys.get('file')
+    console.log(file);
+    damas.update(n.id, {file: file}
+});
+```
