@@ -17,9 +17,7 @@ Search every /production node:
 Parse the current node's children, retrieve the 'file' key from the first grand-child, and set it on the child
 ```js
 damas.current_node.children.each( function(n){
-    console.log(n.id);
-    var file = damas.children(n.id)[0].keys.get('file')
-    console.log(file);
-    damas.update(n.id, {file: file}
+    var file = damas.children(n.id)[0].keys.get('file');
+    damas.update(n.id, {file: file});
 });
 ```
