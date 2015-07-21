@@ -27,12 +27,15 @@ Copy the provided damas.py module to your installation or to your current direct
 >>> project.create({"key1":"value1","key2":"value2"});
 [{u'key2': u'value2', u'key1': u'value1', u'time': 1437469470133, u'_id': u'55ae0b1ed81e88357d77d0e9', u'author': u'xxx.xxx.xxx.xxx'}]
 
-# read the node
+# search for this node using a key it is wearing
+>>> project.search("key1:value1")
+[u'55ae0b1ed81e88357d77d0e9']
+
+# read the node index
 >>> project.read('55ae0b1ed81e88357d77d0e9')
 [{u'key2': u'value2', u'key1': u'value1', u'time': 1437469470133, u'_id': u'55ae0b1ed81e88357d77d0e9', u'author': u'xxx.xxx.xxx.xxx'}]
 
 ```
-
 
 ### Web service
 You can directly use the web service urls with curl for example.
