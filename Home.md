@@ -56,10 +56,10 @@ damas.current_node.children.each( function(n){
 ```
 Please refer to the [[API documentation|API]].
 
-## Administrators
+# Administrators
 [[MySQL Miscellaneous]]
 
-### server-php installation
+## server-php installation
 * apache2, mysql-server and php5 have to be installed.
 * import damas_init.sql in a new database
 * edit server/server.php to match your configuration
