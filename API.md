@@ -85,8 +85,16 @@ Find elements wearing the specified key(s)
 
 ```js
 // Javascript
-var matches = damas.search('rabbit type:char');
+var matches = damas.search('file:/rabbit/ type:char');
 ```
+
+#### search string format:
+
+* (keyname)(operator)(value)
+* operators list: <, <=, >, >=, :
+* in case of : operator, you can use a regular expression as value
+* "file:/floor.*png/" will list every png file containing "floor" in the file name
+
 
 ## Graphs
 
