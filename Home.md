@@ -2,8 +2,7 @@
 The Javascript and Python implementations are available in this repository under /js/damas.js and /py/damas.py
 respectively.
 
-## Getting Started
-### Javascript
+## Javascript
 Include the library from a html document
 ```html
 <script type="text/javascript" src="damas.js"></script>
@@ -13,7 +12,7 @@ or using requireJS
 require('damas.js');
 ```
 
-### Python
+## Python
 Copy the provided damas.py module to your installation or to your current directory and import it
 
 ```python
@@ -37,7 +36,7 @@ Copy the provided damas.py module to your installation or to your current direct
 
 ```
 
-### Web service
+## Web service
 You can directly use the web service urls with curl for example.
 
 Search every /production asset on the server
@@ -45,7 +44,7 @@ Search every /production asset on the server
 http://yourserver/search/file:/^production
 ```
 
-#### Script examples from version 2.2
+## Script examples from version 2.2
 ```js
 // Javascript
 // Parse the current node's children, retrieve the 'file' key from the first grand-child, and set it on the child
