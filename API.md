@@ -117,6 +117,19 @@ Link between 2 nodes is also a node. It is wearing the reserved keys ___src_id__
 create({"src_id":"xxxx", "tgt_id":"yyyy"})
 ```
 
+## Assets
+
+### damas.lock( id, [callback] )
+Lock the asset for edition, for the current user. Sets a `lock` key on the node, with the authenticated username as value. If the asset is already locked, it will return false.
+* @param {String} id asset node index
+* @param {function} callback - Function to call, accepting a boolean argument
+* @return {Boolean} true on success, false otherwise
+
+### damas.unlock( id, [callback] )
+Unlock a locked asset. If the asset is not locked or locked for someone else (`lock` key value != authenticated user name) it returns false. If it was successfully unlocked, returns true.
+* @param {String} id asset node index
+* @param {function} callback - Function to call, accepting a boolean argument
+* @return {Boolean} true on success, false otherwise
 
 <!--
 ## Trees, based on a #parent key
@@ -143,13 +156,4 @@ Process the file upload
 * @param {String} $message
 * @returns {Boolean} true on success, false otherwise
 
-### damas.lock( id )
-Lock the asset for the current user
-* @param {String} id asset node index
-* @return {Boolean} true on success, false otherwise
-
-### damas.unlock( id )
-Unlock the asset so other users can lock it for edition
-* @param {String} id asset node index
-* @return {Boolean} true on success, false otherwise
 -->
