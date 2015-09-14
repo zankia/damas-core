@@ -2,7 +2,7 @@
 
 [JSON web tokens](https://en.wikipedia.org/wiki/JSON_Web_Token) are used for the new user authentication scheme (2015, NodeJS).
 
-User's passwords are stored as SHA1 encoded strings in a `password` key under user nodes in the database.
+User's passwords are stored as encoded strings in a `password` key under user nodes in the database.
 
 ## signIn
 The `signIn()` method is used to request a token from the server:
@@ -13,7 +13,7 @@ import damas
 project = damas.http_connection("https://localhost:8443")
 if project.signIn("demo","demo"):
     # The token is automatically used in further API calls
-    user_id = project.search("username:demo")
+    new_node = project.create({"label":"test","key2":"test")
 else:
     print "Invalid username or password"
 ```
@@ -30,9 +30,7 @@ project.token['token_iat'] # The time when the token was generated
 project.token['_id']       # The user node id
 ```
 
-The tokens expire at a certain duration after it was requested. This duration is configured on the server configuration file under the `conf.jwt.exp` key.
-
-You can ask the server if the current token is still valid:
+You can ask the server if the current token is still valid and didn't expire:
 ```python
 # Python
 if project.verify():
@@ -62,6 +60,15 @@ Delete a user using Python:
 project.delete(project.search("username:john")[0])
 ```
 
+## Configuration
+
+The configuration options of this module are located in the configuration file `server-nodejs/conf.json` under the `jwt` section.
+
+`jwt.passwordHashAlgorithm` is the hash algorithm used to compare passwords. Possible values are `sha1` or `md5`.
+
+`jwt.exp` the number of minutes after which tokens expire
+
+`jwt.secret` the secret passphrase used to encode and decode tokens
 
 ## NodeJS
 
