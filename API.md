@@ -1,41 +1,56 @@
-# API
+The API is divided into sections: nodes and links, search, assets, graphs, authentication.
 
-The API is available as a web service accessible through standard HTTP requests and as implementations for different languages. The implementations follow the same specifications, in order to provide the same methods for the web service and for the different programming languages (Javascript and Python so far).
+The API is available in Python, Javascript, and command line tools like curl.
 
-The web service sends results as JSON, and errors as HTTP errors (200, 404, etc).
+The implementations for Python and Javascript use the native types available in the languages - like Python dictionnaries and Javascript Objects.
 
-The implementations for the differents programming languages use the native types available in the programming languages (like Javascript Objects and Python dictionaries).
+# Nodes and links
 
-## Nodes
-
-### damas.create( keys, [callback] )
+## /api/create
 Creates a node with the specified keys, asynchronously if a callback function is specified or synchronously otherwise.
 * @param {hash} keys - Hash of key:value pairs
-* @param {function} [callback] - Function with the XHR object as argument to call
-* @returns {object|boolean|undefined} New node on success, false otherwise (or nothing if async)
+* @param {function} [callback] - Function taking the returned result as argument (_Javascript only_)
+* @returns {object|boolean} New node on success, false otherwise
 
-```js
-// Javascript
-// Create a set of keys for our node
-var keys= {name:'test',type:'char'};
-
-//Create a new node using this set of keys
-var newNode = damas.create(keys);
+```python
+# Python
+# create a new node
+>>> project.create({"key1":"value1"})
+{u'key1': u'value1', u'time': 1437469470133, u'_id': u'55ae0b1ed81e88357d77d0e9', u'author': u'demo'}
 ```
 
-In Javascript we can call these methods in an asynchronous manner:
 ```js
 // Javascript
-// Create a new node asynchronously providing a function to process the result
-var newNode = damas.create({name:'test',type:'char'}, function(json){
-    console.log(json);
+// keys for our node
+var keys = {name:'test',type:'char'};
+
+// synchronous creation
+var node = damas.create(keys);
+console.log(node);
+
+// asynchronous in case a function is provided
+var newNode = damas.create(keys, function(node){
+    console.log(node);
 });
 ```
 
-* HTTP result: 200, 400, 409
+In case of a successful node creation, the created object is returned. It always wear a `_id` key which is its unique id string in the database, and can have more keys depending on the behavior of the server:
 
+```js
+Object { _id="560061f2d4cb24441ed88aa4", author="demo", name="test", time=1442865650145, type="char" }
+```
 
-### damas.read( indexes, [callback] )
+From Damas 2.4, the data model changed and now links are also nodes, which means that we use the same methods to create and maintain nodes and links.
+
+```python
+# Python
+# create a new link
+project.create({"src_id":"55ae0b1ed81e88357d77d0e9","tgt_id":"560061f2d4cb24441ed88aa4"})
+```
+
+HTTP status codes `200` `400` `409`
+
+## /api/read
 Retrieve one or many nodes, specifying index(es)
 * @param {string|string[]} id - internal node index(es) to read. accepts arrays or comma separated indexes to read multiple nodes
 * @param {function} callback optional callback function to call for asynchrone mode. if undefined, fall back to synchrone mode.
@@ -49,16 +64,16 @@ var node = damas.read(id1);
 //Get a group of nodes
 var nodes= damas.read(ids);
 ```
-### damas.update( id, keys, [callback] )
+## /api/update
 Update the keys of a node. The specified keys overwrite existing keys, others are left untouched. A null key value removes the key.
 * @param {string} id - Internal index of the node to update
 * @param {object} keys - Hash of key:value pairs
 * @returns {object|undefined} Node or nothing in case of asynchronous call
 ```js
-//Create a set of keys for our node
+// Create a set of keys for our node
 var keys = {name:'test2',newKey:'name'};
 
-//Update the node id with this set of keys
+// Update the node id with this set of keys
 var node = damas.update(id, keys);
 ```
 In Python the None value is used to remove a key
@@ -68,19 +83,20 @@ In Python the None value is used to remove a key
 project.update(id, {"key1": "value1", "key2": None})
 
 ```
-### damas.delete( indexes, [callback] )
+## /api/delete
 Recursively delete the specified node
 * @param {string} id - Node internal index to delete
-* @param {function} callback - Function to call, boolean argument
+* @param {function} [callback] - Function to call, boolean argument
 * @returns {boolean} true on success, false otherwise
 ```js
 // Javascript
 damas.delete(id);
 ```
 
-### damas.search( query, [callback] )
+## /api/search
 Find elements wearing the specified key(s)
 * @param {String} search query string
+* @param {function} [callback] - Function to call, boolean argument
 * @returns {Array} array of element indexes or null if no element found
 
 ```js
@@ -88,7 +104,7 @@ Find elements wearing the specified key(s)
 var matches = damas.search('file:/rabbit/ type:char');
 ```
 
-#### search string format:
+### search string format:
 
 * (keyname)(operator)(value)
 * operators list: <, <=, >, >=, :
@@ -96,12 +112,12 @@ var matches = damas.search('file:/rabbit/ type:char');
 * "file:/floor.*png/" will list every png file containing "floor" in the file name
 
 
-## Graphs
+# Graphs
 
-### damas.graph( indexes, [callback] )
+## /api/graph
 Recursively get all links and nodes sourced by the specified node
-* @param {String} id - Node index
-* @param {function} callback - Function to call, array argument
+* @param {String} id - Node indexes
+* @param {function} [callback] - Function to call, array argument
 * @returns {Array} array of element indexes
 
 ```js
@@ -117,18 +133,18 @@ Link between 2 nodes is also a node. It is wearing the reserved keys ___src_id__
 create({"src_id":"xxxx", "tgt_id":"yyyy"})
 ```
 
-## Assets
+# Assets
 
-### damas.lock( id, [callback] )
+## /api/lock
 Lock the asset for edition, for the current user. Sets a `lock` key on the node, with the authenticated username as value. If the asset is already locked, it will return false.
 * @param {String} id asset node index
-* @param {function} callback - Function to call, accepting a boolean argument
+* @param {function} [callback] - Function to call, accepting a boolean argument
 * @return {Boolean} true on success, false otherwise
 
-### damas.unlock( id, [callback] )
+## /api/unlock
 Unlock a locked asset. If the asset is not locked or locked for someone else (`lock` key value != authenticated user name) it returns false. If it was successfully unlocked, returns true.
 * @param {String} id asset node index
-* @param {function} callback - Function to call, accepting a boolean argument
+* @param {function} [callback] - Function to call, accepting a boolean argument
 * @return {Boolean} true on success, false otherwise
 
 <!--
@@ -157,3 +173,21 @@ Process the file upload
 * @returns {Boolean} true on success, false otherwise
 
 -->
+
+# Authentication
+
+## /api/signIn
+Sign in using the server embeded authentication system
+* @param {String} username the user id
+* @param {String} password the user secret password
+* @param {function} [callback] - Function to call, accepting a node (object or dictionnary) as argument
+* @return User node on success, false otherwise
+
+## /api/signOut
+* @param {function} [callback] - Function to call, accepting a boolean argument
+* @return true on success, false otherwise
+
+## /api/verify
+Check if the authentication is valid
+* @param {function} [callback] - Function to call, accepting a boolean argument
+* @return true on success, false otherwise
