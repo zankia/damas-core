@@ -9,12 +9,9 @@ The implementations for Python and Javascript use the native types available in 
 ## /api/create
 Creates a node wearing the specified keys.
 
-
 * @param {hash} keys - Hash of key:value pairs
 * @param {function} [callback] - Function taking the returned result as argument (_Javascript only_)
 * @returns {object|boolean} New node on success, false otherwise
-
-> in Javascript, if a callback function is specified the creation will be made asynchronously, or synchronously otherwise.
 
 ```python
 # Python
@@ -22,6 +19,8 @@ Creates a node wearing the specified keys.
 >>> project.create({"key1":"value1"})
 {u'key1': u'value1', u'time': 1437469470133, u'_id': u'55ae0b1ed81e88357d77d0e9', u'author': u'demo'}
 ```
+
+> in Javascript, if a callback function is specified the creation will be made asynchronously, or synchronously otherwise.
 
 ```js
 // Javascript
