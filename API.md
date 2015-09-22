@@ -1,4 +1,4 @@
-The API is divided into chapters: nodes and links (`create` `read` `update` `delete`), search (`search`), assets (`lock`, `unlock`), graphs (`graph`) and authentication (`signin` `signout` `verify`).
+The API is divided into chapters: nodes and links (`create` `read` `update` `delete`), search (`search`), assets (`lock`, `unlock`), graphs (`graph`) and authentication (`signIn` `signOut` `verify`).
 
 The implementations for Python and Javascript use the native types available in the languages - like Python dictionnaries and Javascript Objects.
 
