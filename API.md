@@ -1,7 +1,5 @@
 The API is divided into sections: nodes and links, search, assets, graphs, authentication.
 
-The API is available in Python, Javascript, and command line tools like curl.
-
 The implementations for Python and Javascript use the native types available in the languages - like Python dictionnaries and Javascript Objects.
 
 # Nodes and links
