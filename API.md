@@ -7,10 +7,14 @@ The implementations for Python and Javascript use the native types available in 
 # Nodes and links
 
 ## /api/create
-Creates a node with the specified keys, asynchronously if a callback function is specified or synchronously otherwise.
+Creates a node wearing the specified keys.
+
+
 * @param {hash} keys - Hash of key:value pairs
 * @param {function} [callback] - Function taking the returned result as argument (_Javascript only_)
 * @returns {object|boolean} New node on success, false otherwise
+
+> in Javascript, if a callback function is specified the creation will be made asynchronously, or synchronously otherwise.
 
 ```python
 # Python
@@ -65,24 +69,35 @@ var node = damas.read(id1);
 var nodes= damas.read(ids);
 ```
 ## /api/update
-Update the keys of a node. The specified keys overwrite existing keys, others are left untouched. A null key value removes the key.
-* @param {string} id - Internal index of the node to update
+Modify keys on the specified node(s). The specified keys overwrite existing keys, others are left untouched. A null key value removes the key.
+* @param {string|array} id - index(es) of the node to update
 * @param {object} keys - Hash of key:value pairs
-* @returns {object|undefined} Node or nothing in case of asynchronous call
+* @returns {array|undefined} modified nodes or nothing in case of asynchronous call
 ```js
+// Javascript
 // Create a set of keys for our node
 var keys = {name:'test2',newKey:'name'};
 
 // Update the node id with this set of keys
 var node = damas.update(id, keys);
 ```
-In Python the None value is used to remove a key
-```python
-// Python
-// This will remove the key2 key
-project.update(id, {"key1": "value1", "key2": None})
 
+In __Python__, indexes can be specified as a string (containing one or multiple node indexes separated by comma) or a Python list. The None value is used to remove a key.
+
+```py
+# Python
+# We create 2 nodes...
+project.create({'a':'a', 'b':'b'})
+# {u'a': u'a', u'_id': u'56017b3053f58ea107dea5f7', u'b': u'b', u'time': 1442937648390, u'author': u'demo'}
+project.create({'a':'a', 'b':'b'})
+# {u'a': u'a', u'_id': u'56017b3853f58ea107dea5f8', u'b': u'b', u'time': 1442937656258, u'author': u'demo'}
+
+# Then we modify the 'a' key and remove the 'b' key on both nodes in one query
+project.update(['56017b3053f58ea107dea5f7', '56017b3853f58ea107dea5f8'], {'a':'A', 'b':None})
+# [{u'a': u'A', u'_id': u'56017b3053f58ea107dea5f7', u'time': 1442937648390, u'author': u'demo'}, {u'a': u'A', u'_id': u'56017b3853f58ea107dea5f8', u'time': 1442937656258, u'author': u'demo'}]
 ```
+
+
 ## /api/delete
 Recursively delete the specified node
 * @param {string} id - Node internal index to delete
