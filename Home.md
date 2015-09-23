@@ -1,9 +1,9 @@
-# Developers
-The Javascript and Python implementations are available in this repository under /js/damas.js and /py/damas.py
-respectively.
 
-## Javascript
-Include the library from a html document
+# Javascript
+The Javascript support of the damas-core API is provided as an AMD module in this repository located in /js/damas.js.
+
+## Web Browser
+Include the library from a HTML document
 ```html
 <script type="text/javascript" src="damas.js"></script>
 ```
@@ -12,7 +12,7 @@ or using requireJS
 require('damas.js');
 ```
 
-## Python
+# Python
 Copy the provided damas.py module to your installation or to your current directory and import it
 
 ```python
@@ -57,11 +57,3 @@ Please refer to the [[API documentation|API]].
 
 # Administrators
 [[MySQL Miscellaneous]]
-
-## server-php installation
-* apache2, mysql-server and php5 have to be installed.
-* import damas_init.sql in a new database
-* edit server/server.php to match your configuration
-* add an Alias in Apache pointing to your repository
-
-`Alias /damas/server      "/usr/share/damas-core/server/"`
