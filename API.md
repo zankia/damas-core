@@ -1,15 +1,32 @@
-The API is divided into chapters: nodes and links (`create` `read` `update` `delete`), search (`search`), assets (`lock`, `unlock`), graphs (`graph`) and authentication (`signIn` `signOut` `verify`).
+For a start guide please see this wiki [Home](Home) page.
 
-The implementations for Python and Javascript use the native types available in the languages - like Python dictionnaries and Javascript Objects.
+The API is divided into chapters:
 
-# Nodes and links
+[Nodes](#nodes): [`create`](#apicreate) [`read`](#apiread) [`update`](#apiupdate) [`delete`](#apidelete)
+
+[Search](#search): [`search`](#apisearch)
+
+[Assets](#assets): [`lock`](#apilock) [`unlock`](#apiunlock)
+
+[Graphs](#graphs): [`graph`](#apigraph)
+
+[Authentication](#Authentication): [`signIn`](#apisignIn) [`signOut`](#apisignOut) [`verify`](#apiverify)
+
+> The Python and Javascript implementations of the API use the native types available in the languages - Python uses dictionaries for nodes, None for null values. Javascript uses Objects to describe nodes.
+
+> Some methods are still missing compared to the PHP API, but we are carefully implementing them :)
+
+# Nodes
 
 ## /api/create
 Creates a node wearing the specified keys.
 
-* @param {hash} keys - Hash of key:value pairs
-* @param {function} [callback] - Function taking the returned result as argument (_Javascript only_)
-* @returns {object|boolean} New node on success, false otherwise
+__create( `keys`, [`callback`] )__
+
+* `keys` key:value pairs
+* `callback` _(optional)_ (_js only_) function to call for asynchronous mode
+* Returns the new node on success, false otherwise
+
 
 ```python
 # Python
@@ -22,14 +39,8 @@ Creates a node wearing the specified keys.
 
 ```js
 // Javascript
-// keys for our node
 var keys = {name:'test',type:'char'};
-
-// synchronous creation
-var node = damas.create(keys);
-console.log(node);
-
-// asynchronous in case a function is provided
+// asynchronous mode
 var newNode = damas.create(keys, function(node){
     console.log(node);
 });
@@ -41,15 +52,7 @@ In case of a successful node creation, the created object is returned. It always
 Object { _id="560061f2d4cb24441ed88aa4", author="demo", name="test", time=1442865650145, type="char" }
 ```
 
-From Damas 2.4, the data model changed and now links are also nodes, which means that we use the same methods to create and maintain nodes and links.
-
-```python
-# Python
-# create a new link
-project.create({"src_id":"55ae0b1ed81e88357d77d0e9","tgt_id":"560061f2d4cb24441ed88aa4"})
-```
-
-HTTP status codes `200` `400` `409`
+HTTP status codes `201` `400` `409`
 
 ## /api/read
 Retrieve the keys of one or many nodes indexes.
@@ -74,10 +77,14 @@ var nodes = damas.read(["55ae0b1ed81e88357d77d0e9", "560061f2d4cb24441ed88aa4"])
 In Python the `id` argument can be a list, a tuple or a set
 
 ## /api/update
-Modify keys on the specified node(s).
-* @param {string|array} id - index(es) of the node to update
-* @param {object} keys - Hash of key:value pairs
-* @returns {array|undefined} modified nodes or nothing in case of asynchronous call
+Modify the keys on the specified node(s).
+
+__update( `ids`, `keys`, [`callback`] )__
+
+* `id` node index as string, string of comma separated indexes, or array
+* `keys` key:value pairs
+* `callback` _(optional)_ (_js only_) function to call for asynchronous mode
+* Returns the modified nodes on success, false otherwise
 
 > The specified keys overwrite existing keys, others are left untouched. A null value removes the key.
 
@@ -110,16 +117,20 @@ project.update(['56017b3053f58ea107dea5f7', '56017b3853f58ea107dea5f8'], {'a':'A
 
 ## /api/delete
 Recursively delete the specified node
-* @param {string} id - Node internal index to delete
-* @param {function} [callback] - Function to call, boolean argument
-* @returns {boolean} true on success, false otherwise
+
+__delete( `ids`, [`callback`] )__
+
+* `id` node index as string, string of comma separated indexes, or array
+* `callback` _(optional)_ (_js only_) function to call for asynchronous mode
+* Returns true on success, false otherwise
+
 ```js
 // Javascript
 damas.delete(id);
 ```
-
+# Search
 ## /api/search
-Find elements wearing the specified key(s)
+Find elements wearing the specified key(s) using a query string
 * @param {String} search query string
 * @param {function} [callback] - Function to call, boolean argument
 * @returns {Array} array of element indexes or null if no element found
@@ -138,6 +149,14 @@ var matches = damas.search('file:/rabbit/ type:char');
 
 
 # Graphs
+
+From Damas 2.4, the data model changed and we are now describing links as nodes. This means that unlink and link methods don't exist anymore, the same methods are used to create and maintain nodes and links.
+
+```python
+# Python
+# create a new link
+project.create({"src_id":"55ae0b1ed81e88357d77d0e9","tgt_id":"560061f2d4cb24441ed88aa4"})
+```
 
 ## /api/graph
 Recursively get all links and nodes sourced by the specified node
