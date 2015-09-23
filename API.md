@@ -10,7 +10,7 @@ The API is divided into chapters:
 
 [Graphs](#graphs): [`graph`](#apigraph)
 
-[Authentication](#Authentication): [`signIn`](#apisignIn) [`signOut`](#apisignOut) [`verify`](#apiverify)
+[Authentication](#authentication): [`signIn`](#apisignIn) [`signOut`](#apisignOut) [`verify`](#apiverify)
 
 > The Python and Javascript implementations of the API use the native types available in the languages - Python uses dictionaries for nodes, None for null values. Javascript uses Objects to describe nodes.
 
