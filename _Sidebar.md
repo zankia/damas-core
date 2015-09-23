@@ -1,8 +1,8 @@
 [Nodes](#nodes):
-* [`create`](#apicreate)
-* [`read`](#apiread)
-* [`update`](#apiupdate)
-* [`delete`](#apidelete)
+* [`create`](/API#apicreate)
+* [`read`](/API#apiread)
+* [`update`](/API#apiupdate)
+* [`delete`](/API#apidelete)
 
 [Search](#search):
 * [`search`](#apisearch)
