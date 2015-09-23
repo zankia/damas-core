@@ -1,20 +1,21 @@
-[Nodes](/wiki/API#nodes):
-* [`create`](/wiki/API#apicreate)
-* [`read`](/wiki/API#apiread)
-* [`update`](/wiki/API#apiupdate)
-* [`delete`](/wiki/API#apidelete)
+[[Nodes|API#nodes]]:
+* [[`create`|API#apicreate]]
+* [`create`](API#picreate)
+* [[`read`|API#apiread]]
+* [[`update`|API#apiupdate]]
+* [[`delete`|API#apidelete]]
 
-[Search](/wiki/API#search):
-* [`search`](/wiki/API#apisearch)
+[[Search|API#search]]:
+* [[`search`|API#apisearch]]
 
-[Assets](/wiki/API#assets):
-* [`lock`](/wiki/API#apilock)
-* [`unlock`](/wiki/API#apiunlock)
+[[Assets|API#assets]]:
+* [[`lock`|API#apilock]]
+* [[`unlock`|API#apiunlock]]
 
-[Graphs](/wiki/API#graphs):
-* [`graph`](/wiki/API#apigraph)
+[[Graphs|API#graphs]]:
+* [[`graph`|API#apigraph]]
 
-[Authentication](/wiki/API#Authentication):
-* [`signIn`](/wiki/API#apisignIn)
-* [`signOut`](/wiki/API#apisignOut)
-* [`verify`](/wiki/API#apiverify)
+[[Authentication|API#Authentication]]:
+* [[`signIn`|API#apisignIn]]
+* [[`signOut`|API#apisignOut]]
+* [[`verify`|API#apiverify]]
