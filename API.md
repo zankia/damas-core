@@ -52,24 +52,37 @@ project.create({"src_id":"55ae0b1ed81e88357d77d0e9","tgt_id":"560061f2d4cb24441e
 HTTP status codes `200` `400` `409`
 
 ## /api/read
-Retrieve one or many nodes, specifying index(es)
-* @param {string|string[]} id - internal node index(es) to read. accepts arrays or comma separated indexes to read multiple nodes
-* @param {function} callback optional callback function to call for asynchrone mode. if undefined, fall back to synchrone mode.
-* @returns {object|object[]|undefined} Node or array of nodes
+Retrieve the keys of one or many nodes indexes.
+
+__read( `id`, [`callback`] )__
+* `id` node index as string, string of comma separated indexes, or array
+* `callback` _(optional)_ (_js only_) function to call after asynchronous read. If callback is undefined, a synchronous read is performed.
+* Returns a JSON node, a node list or undefined.
+
+> The resulting array is sorted in the same order as the input array of indexes.
+
 ```js
+// Javascript
 var ids=[id1,id2];
+// Get one node
+var node = damas.read("55ae0b1ed81e88357d77d0e9");
 
-//Get one node
-var node = damas.read(id1);
-
-//Get a group of nodes
-var nodes= damas.read(ids);
+// Get a group of nodes
+var nodes = damas.read(["55ae0b1ed81e88357d77d0e9", "560061f2d4cb24441ed88aa4"]);
 ```
+
+In Python the `id` argument can be a list, a tuple or a set
+
 ## /api/update
-Modify keys on the specified node(s). The specified keys overwrite existing keys, others are left untouched. A null key value removes the key.
+Modify keys on the specified node(s).
 * @param {string|array} id - index(es) of the node to update
 * @param {object} keys - Hash of key:value pairs
 * @returns {array|undefined} modified nodes or nothing in case of asynchronous call
+
+> The specified keys overwrite existing keys, others are left untouched. A null value removes the key.
+
+> The resulting array is sorted in the same order as the input array of indexes.
+
 ```js
 // Javascript
 // Create a set of keys for our node
