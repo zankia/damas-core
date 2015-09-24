@@ -1,8 +1,12 @@
 
-# Javascript
-The Javascript support of the damas-core API is provided as an AMD module in this repository located in /js/damas.js.
+* [[API documentation|API]]
 
-## Web Browser
+# Scripting Environment Setup
+
+## Javascript
+__damas.js__ is an AMD module containing the damas-core API for Javascript, located in `/js/damas.js` in the damas-core code repository. This module can be loaded in various environments.
+
+#### Web Browser
 Include the library from a HTML document
 ```html
 <script type="text/javascript" src="damas.js"></script>
@@ -12,15 +16,19 @@ or using requireJS
 require('damas.js');
 ```
 
-# Python
-Copy the provided damas.py module to your installation or to your current directory and import it
+## Python
+__damas.py__ is a Python library containing the damas-core API for Python, located in `/py/damas.py` in the damas-core repository.
 
 ```python
+# Example use in a Python console
 # import the module
 >>> import damas
 
 # connect to your server
 >>> project = damas.http_connection('http://xxx.xxx.xxx.xxx:8090')
+
+# get an authentication token if the server is requesting authentication
+>>> project.signIn("demouser","demouserpassword")
 
 # create a new node
 >>> project.create({"key1":"value1","key2":"value2"});
@@ -36,6 +44,7 @@ Copy the provided damas.py module to your installation or to your current direct
 
 ```
 
+<!--
 ## Web service
 You can directly use the web service urls with curl for example.
 
@@ -53,7 +62,4 @@ damas.current_node.children.each( function(n){
     damas.update(n.id, {file: file});
 });
 ```
-Please refer to the [[API documentation|API]].
-
-# Administrators
-[[MySQL Miscellaneous]]
+-->
