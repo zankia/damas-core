@@ -6,15 +6,13 @@ The API is divided into chapters:
 
 [Search](#search): [`search`](#apisearch)
 
-[Assets](#assets): [`lock`](#apilock) [`unlock`](#apiunlock)
+[Assets](#assets): [`lock`](#apilock) [`unlock`](#apiunlock) [`version`](#apiversion) `write`
 
-[Graphs](#graphs): [`graph`](#apigraph)
+[Graphs](#graphs): `ancestors` [`graph`](#apigraph)
 
 [Authentication](#authentication): [`signIn`](#apisignIn) [`signOut`](#apisignOut) [`verify`](#apiverify)
 
 > The Python and Javascript implementations of the API use the native types available in the languages - Python uses dictionaries for nodes, None for null values. Javascript uses Objects to describe nodes.
-
-> Some methods are still missing compared to the PHP API, but we are carefully implementing them :)
 
 # Nodes
 
@@ -180,16 +178,43 @@ create({"src_id":"xxxx", "tgt_id":"yyyy"})
 # Assets
 
 ## /api/lock
-Lock the asset for edition, for the current user. Sets a `lock` key on the node, with the authenticated username as value. If the asset is already locked, it will return false.
-* @param {String} id asset node index
-* @param {function} [callback] - Function to call, accepting a boolean argument
-* @return {Boolean} true on success, false otherwise
+Lock the asset for edition, for the current user.
+
+__lock( `id`, [`callback`] )__
+
+* `id` asset node index string
+* `callback` _(optional)_ (_js only_) function to call for asynchronous mode accepting a boolean argument
+* Returns true on success, false otherwise
+
+> Sets a `lock` key on the node, with the authenticated username as value. If the asset is already locked, it will return false.
 
 ## /api/unlock
-Unlock a locked asset. If the asset is not locked or locked for someone else (`lock` key value != authenticated user name) it returns false. If it was successfully unlocked, returns true.
-* @param {String} id asset node index
-* @param {function} [callback] - Function to call, accepting a boolean argument
-* @return {Boolean} true on success, false otherwise
+Unlock a locked asset.
+
+__unlock( `id`, [`callback`] )__
+
+* `id` asset node index string
+* `callback` _(optional)_ (_js only_) function to call for asynchronous mode accepting a boolean argument
+* Returns true on success, false otherwise
+
+> If the asset is not locked or locked for someone else (`lock` key value != authenticated user name) it returns false. If it was successfully unlocked, returns true.
+
+## /api/version
+Insert a new file as a new version of an existing asset, wearing the specified keys.
+
+__version( `id`, `path`, `keys`, [`callback`] )__
+
+* `id` asset node index string
+* `path` path string to the new version file
+* `keys` key:value pairs
+* `callback` _(optional)_ (_js only_) function to call for asynchronous mode
+* Returns the new node on success, null otherwise
+
+```py
+# Python
+>>> project.version("5601542f690375ccae0c1a3b","/project/files/scene-150925121320.ma",{"comment":"added requested elements and cleaned"})
+{u'comment': u'added requested elements and cleaned', u'author': u'demo', u'#parent': u'5601542f690375ccae0c1a3b', u'file': "/project/files/scene-150925121320.ma", u'time': 1443174266343, u'_id': u'5605177ad8b454a87e771b65'}
+```
 
 <!--
 ## Trees, based on a #parent key
