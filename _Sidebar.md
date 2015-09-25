@@ -10,6 +10,7 @@
 [Assets](API#assets):
 * [`lock`](API#apilock)
 * [`unlock`](API#apiunlock)
+* [`version`](API#apiversion)
 
 [Graphs](API#graphs):
 * [`graph`](API#apigraph)
