@@ -202,19 +202,24 @@ __unlock( `id`, [`callback`] )__
 ## /api/version
 Insert a new file as a new version of an existing asset, wearing the specified keys.
 
-__version( `id`, `path`, `keys`, [`callback`] )__
+__version( `id`, `keys`, [`callback`] )__
 
 * `id` asset node index string
-* `path` path string to the new version file
 * `keys` key:value pairs
+    * `file` path string to the new version file
+    * [`comment`] _(optional)_ a text message to comment the version 
 * `callback` _(optional)_ (_js only_) function to call for asynchronous mode
 * Returns the new node on success, null otherwise
 
+> The key `keys.file` must exist, else the server returns an error. It contains the path to the new version file
+
 ```py
 # Python
->>> project.version("5601542f690375ccae0c1a3b","/project/files/scene-150925121320.ma",{"comment":"added requested elements and cleaned"})
+>>> project.version("5601542f690375ccae0c1a3b",{"comment":"added requested elements and cleaned", "file":"/project/files/scene-150925121320.ma"})
 {u'comment': u'added requested elements and cleaned', u'author': u'demo', u'#parent': u'5601542f690375ccae0c1a3b', u'file': "/project/files/scene-150925121320.ma", u'time': 1443174266343, u'_id': u'5605177ad8b454a87e771b65'}
 ```
+
+HTTP status codes: `200` `400` `401`
 
 <!--
 ## Trees, based on a #parent key
