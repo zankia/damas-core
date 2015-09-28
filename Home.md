@@ -1,18 +1,5 @@
 # Scripting Environment Setup
 
-## Javascript
-__damas.js__ is an AMD module containing the damas-core API for Javascript, located in `/js/damas.js` in the damas-core code repository. This module can be loaded in various environments.
-
-#### Web Browser
-Include the library from a HTML document
-```html
-<script type="text/javascript" src="damas.js"></script>
-```
-or using requireJS
-```js
-require('damas.js');
-```
-
 ## Python
 __damas.py__ is a Python library containing the damas-core API for Python, located in `/py/damas.py` in the damas-core repository.
 
@@ -28,7 +15,7 @@ __damas.py__ is a Python library containing the damas-core API for Python, locat
 >>> project.signIn("demouser","demouserpassword")
 
 # create a new node
->>> project.create({"key1":"value1","key2":"value2"});
+>>> project.create({"key1":"value1","key2":"value2"})
 {u'key2': u'value2', u'key1': u'value1', u'time': 1437469470133, u'_id': u'55ae0b1ed81e88357d77d0e9', u'author': u'xxx.xxx.xxx.xxx'}
 
 # search for this node using a key it is wearing
@@ -41,6 +28,37 @@ __damas.py__ is a Python library containing the damas-core API for Python, locat
 
 ```
 
+## Javascript
+__damas.js__ is an AMD module containing the damas-core API for Javascript, located in `/js/damas.js` in the damas-core code repository. This module can be loaded in various environments.
+
+### Using requireJS
+```js
+require('damas.js');
+damas.server = "/api"; // the server is on the localhost
+damas.signIn("demouser", "demouserpassword", function(res){
+    if(!res)
+    {
+        // login failed
+        return;
+    }
+    damas.create({"key1":"value1","key2":"value2"});
+});
+
+```
+#### In HTML Documents
+Include the library from a HTML document
+```html
+<html>
+    <head>
+        <script type="text/javascript" src="damas.js"></script>
+        <script type="text/javascript">
+            // your code here
+        </script>
+    </head>
+    <body>
+    </body>
+</html>
+```
 
 # Documentation
 The [[API documentation|API]] in this wiki is a reference for a complete list of the methods available in the API.
