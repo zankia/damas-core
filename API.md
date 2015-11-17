@@ -6,7 +6,7 @@ The API is divided into chapters:
 
 [Search](#search): [`search`](#apisearch)
 
-[Assets](#assets): [`lock`](#apilock) [`unlock`](#apiunlock) [`version`](#apiversion) `write`
+[Assets](#assets): [`lock`](#apilock) [`unlock`](#apiunlock) [`version`](#apiversion) `variation` `reference` `write`
 
 [Graphs](#graphs): `ancestors` [`graph`](#apigraph)
 
