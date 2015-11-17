@@ -6,11 +6,13 @@ The API is divided into chapters:
 
 [Search](#search): [`search`](#apisearch)
 
-[Assets](#assets): [`lock`](#apilock) [`unlock`](#apiunlock) [`version`](#apiversion) `variation` `reference` `write`
+[Assets](#assets): [`lock`](#apilock) [`unlock`](#apiunlock) [`version`](#apiversion) `variation*` `reference*` `write*`
 
-[Graphs](#graphs): `ancestors` [`graph`](#apigraph)
+[Graphs](#graphs): `ancestors*` [`graph`](#apigraph)
 
 [Authentication](#authentication): [`signIn`](#apisignIn) [`signOut`](#apisignOut) [`verify`](#apiverify)
+
+\* Not implemented yet in NodeJS
 
 > The Python and Javascript implementations of the API use the native types available in the languages - Python uses dictionaries for nodes, None for null values. Javascript uses Objects to describe nodes.
 
