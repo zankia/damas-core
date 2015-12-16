@@ -1,7 +1,6 @@
 Libraries for Python and Javascript languages are provided in order to access a server remotely, interface its methods and process the JSON results using the language native objects. Once you get a working environment for scripting, you can visit the [[API documentation|API]] for a complete reference about the available methods.
 
 ## Setup Python Environment
-
 The _requests_ module needs to be installed.
 On a Debian operating system you can install it using this command line:
 
@@ -21,7 +20,7 @@ Then connect to a running server and start working with the nodes:
 
 ```python
 # connect to your server
->>> project = damas.http_connection('http://xxx.xxx.xxx.xxx:8090')
+>>> project = damas.http_connection('http://localhost:8090/api')
 
 # get an authentication token if the server is requesting authentication
 >>> project.signIn("demouser","demouserpassword")
