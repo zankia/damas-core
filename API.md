@@ -4,7 +4,7 @@ The API is divided into chapters:
 
 [Nodes](#nodes): [`create`](#apicreate) [`read`](#apiread) [`update`](#apiupdate) [`delete`](#apidelete)
 
-[Search](#search): [`search`](#apisearch) (#apisearch_mongo)
+[Search](#search): [`search`](#apisearch) [`search_mongo`](#apisearch_mongo)
 
 [Assets](#assets): [`lock`](#apilock) [`unlock`](#apiunlock) [`version`](#apiversion) `variation*` `reference*` `write*`
 
