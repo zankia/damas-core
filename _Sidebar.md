@@ -6,6 +6,7 @@
 
 [Search](API#search):
 * [`search`](API#apisearch)
+* [`search_mongo`](API#apisearch_mongo)
 
 [Assets](API#assets):
 * [`lock`](API#apilock)
