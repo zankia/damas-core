@@ -1,4 +1,4 @@
-For a start guide please see this wiki [Home](Home) page.
+For documentation about how to setup a scripting environment please see this wiki [Scripting](Scripting) page.
 
 The API is divided into chapters:
 
@@ -52,13 +52,16 @@ In case of a successful node creation, the created object is returned. It always
 Object { _id="560061f2d4cb24441ed88aa4", author="demo", name="test", time=1442865650145, type="char" }
 ```
 
-HTTP status codes `201` `400` `409`
+##### HTTP Request `POST` `/api/` `application/json`
+##### HTTP Request `POST` `/api/` `application/x-www-form-urlencoded`
+##### HTTP Response `201` `application/json` created node
+##### HTTP Response `400` `409` `text/html` error description
 
 ## /api/read
 Retrieve the keys of one or many nodes indexes.
 
-__read( `id`, [`callback`] )__
-* `id` node index as string, string of comma separated indexes, or array
+__read( `ids`, [`callback`] )__
+* `ids` a node index as string, a string of comma separated indexes, or an array of string indexes
 * `callback` _(optional)_ (_js only_) function to call after asynchronous read. If callback is undefined, a synchronous read is performed.
 * Returns a JSON node, a node list or undefined.
 
@@ -76,12 +79,17 @@ var nodes = damas.read(["55ae0b1ed81e88357d77d0e9", "560061f2d4cb24441ed88aa4"])
 
 In Python the `id` argument can be a list, a tuple or a set
 
+##### HTTP Request `GET` `/api/ids`
+##### HTTP Response `200` `application/json` node or array of nodes
+##### HTTP Response `404` `text/html` error message
+##### HTTP Response `409` `text/html` error message
+
 ## /api/update
 Modify the keys on the specified node(s).
 
 __update( `ids`, `keys`, [`callback`] )__
 
-* `id` node index as string, string of comma separated indexes, or array
+* `ids` a node index as string, a string of comma separated indexes, or an array of string indexes
 * `keys` key:value pairs
 * `callback` _(optional)_ (_js only_) function to call for asynchronous mode
 * Returns the modified nodes on success, false otherwise
@@ -114,13 +122,16 @@ project.update(['56017b3053f58ea107dea5f7', '56017b3853f58ea107dea5f8'], {'a':'A
 # [{u'a': u'A', u'_id': u'56017b3053f58ea107dea5f7', u'time': 1442937648390, u'author': u'demo'}, {u'a': u'A', u'_id': u'56017b3853f58ea107dea5f8', u'time': 1442937656258, u'author': u'demo'}]
 ```
 
+##### HTTP Request `PUT` `/api/`
+##### HTTP Response `200` `application/json` updated node or array of updated nodes
+##### HTTP Response `409` `text/html` error message
 
 ## /api/delete
 Recursively delete the specified node
 
 __delete( `ids`, [`callback`] )__
 
-* `id` node index as string, string of comma separated indexes, or array
+* `ids` a node index as string, a string of comma separated indexes, or an array of string indexes
 * `callback` _(optional)_ (_js only_) function to call for asynchronous mode
 * Returns true on success, false otherwise
 
@@ -128,6 +139,11 @@ __delete( `ids`, [`callback`] )__
 // Javascript
 damas.delete(id);
 ```
+
+##### HTTP Request `DELETE` `/api/ids`
+##### HTTP Response `200` `text/html` message
+##### HTTP Response `409` `text/html` error message
+
 # Search
 ## /api/search
 Find elements wearing the specified key(s) using a query string
@@ -146,6 +162,35 @@ var matches = damas.search('file:/rabbit/ type:char');
 * operators list: <, <=, >, >=, :
 * in case of : operator, you can use a regular expression as value
 * "file:/floor.*png/" will list every png file containing "floor" in the file name
+
+## /api/search_mongo
+
+__damas.search_mongo(`query`, [`sort`, `limit`, `skip`, `callback`])__
+
+The MongoDB find methods is exposed here in order to provide a powerful find with many options. It is only available when the server runs a MongoDB database to store the data.
+
+* `query` the query object https://docs.mongodb.org/v3.0/reference/method/db.collection.find/
+* `sort` _(optional)_ the sort object
+* `limit` _(optional)_ https://docs.mongodb.org/v3.0/reference/method/cursor.limit/
+* `skip` _(optional)_
+* `callback` _(optional)_ _(js only)_ function to call to perform an asynchronous search. If undefined, a synchronous read is performed.
+* @returns {Array} array of element indexes or null if no element found
+
+
+```py
+# Python
+# get the 200 most recent files
+project.search_mongo({"file":{"$exists": True}},{"time":-1},200,0)
+```
+
+> You can refer to the MongoDB documentation for details on parameters https://docs.mongodb.org/v3.0/reference/method/cursor.sort/
+
+##### HTTP `POST` `/api/search_mongo` `application/json` `query` `sort` `limit` `skip`
+##### HTTP Response `200` `application/json` array of string indexes
+##### HTTP Response `409` `text/html` error string
+
+
+
 
 
 # Graphs
@@ -221,7 +266,8 @@ __version( `id`, `keys`, [`callback`] )__
 {u'comment': u'added requested elements and cleaned', u'author': u'demo', u'#parent': u'5601542f690375ccae0c1a3b', u'file': "/project/files/scene-150925121320.ma", u'time': 1443174266343, u'_id': u'5605177ad8b454a87e771b65'}
 ```
 
-HTTP status codes: `200` `400` `401`
+##### HTTP Request `POST` `/api/version/id` `application/json`
+##### HTTP Response `200` `400` `401` `application/json`
 
 <!--
 ## Trees, based on a #parent key
@@ -259,11 +305,22 @@ Sign in using the server embeded authentication system
 * @param {function} [callback] - Function to call, accepting a node (object or dictionnary) as argument
 * @return User node on success, false otherwise
 
+##### HTTP Request `POST` `/api/signIn` `application/x-www-form-urlencoded` `username` `password`
+##### HTTP Response `200` `application/json`
+##### HTTP Response `401`
+
 ## /api/signOut
 * @param {function} [callback] - Function to call, accepting a boolean argument
 * @return true on success, false otherwise
+
+##### HTTP Request
+##### HTTP Response
 
 ## /api/verify
 Check if the authentication is valid
 * @param {function} [callback] - Function to call, accepting a boolean argument
 * @return true on success, false otherwise
+
+##### HTTP Request `GET` `/api/verify`
+##### HTTP Response `200` `application/json`
+##### HTTP Response `401`
