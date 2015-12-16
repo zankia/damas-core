@@ -55,8 +55,7 @@ Object { _id="560061f2d4cb24441ed88aa4", author="demo", name="test", time=144286
 ##### HTTP Request `POST` `/api/` `application/json`
 ##### HTTP Request `POST` `/api/` `application/x-www-form-urlencoded`
 ##### HTTP Response `201` `application/json` created node
-##### HTTP Response `400` `409` `text/html` error description
-
+##### HTTP Response `400` `409` `text/html` error message
 ## /api/read
 Retrieve the keys of one or many nodes indexes.
 
@@ -165,7 +164,7 @@ var matches = damas.search('file:/rabbit/ type:char');
 
 ## /api/search_mongo
 
-The MongoDB find methods are exposed here in order to provide a powerful search with many options. It is only available when the server runs a MongoDB database to store the data.
+We expose the MongoDB find and cursor methods here in order to provide a powerful search with many options. It is only available when the server runs a MongoDB database to store the data.
 
 __damas.search_mongo(`query`, [`sort`, `limit`, `skip`, `callback`])__
 
@@ -176,7 +175,11 @@ __damas.search_mongo(`query`, [`sort`, `limit`, `skip`, `callback`])__
 * `callback` _(optional)_ _(js only)_ function to call to perform an asynchronous search. If undefined, a synchronous read is performed.
 * returns arrays of matching indexes
 
-> In order to use regular expressions, and because the JSON format only accept strings and has no type for regular expressions, we use strings with the prefix REGEX_ to indicate to the server that it must convert it to a RegExp object before executing the Mongo query. For example, the "REGEX_.*" string is converted to the /.*/ regular expression.
+> In order to use regular expressions, and because the JSON format only accept strings and has no type for regular expressions, we use strings with the prefix REGEX_ to indicate to the server that it must convert it to a RegExp object before executing the Mongo query.
+
+    For example: the /.*/ regular expression.
+
+    is written "REGEX_.*" as string format in the JSON messages
 
 ```py
 # Python
