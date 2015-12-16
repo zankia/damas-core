@@ -4,7 +4,7 @@ The API is divided into chapters:
 
 [Nodes](#nodes): [`create`](#apicreate) [`read`](#apiread) [`update`](#apiupdate) [`delete`](#apidelete)
 
-[Search](#search): [`search`](#apisearch)
+[Search](#search): [`search`](#apisearch) (#apisearch_mongo)
 
 [Assets](#assets): [`lock`](#apilock) [`unlock`](#apiunlock) [`version`](#apiversion) `variation*` `reference*` `write*`
 
@@ -165,29 +165,51 @@ var matches = damas.search('file:/rabbit/ type:char');
 
 ## /api/search_mongo
 
+The MongoDB find methods are exposed here in order to provide a powerful search with many options. It is only available when the server runs a MongoDB database to store the data.
+
 __damas.search_mongo(`query`, [`sort`, `limit`, `skip`, `callback`])__
 
-The MongoDB find methods is exposed here in order to provide a powerful find with many options. It is only available when the server runs a MongoDB database to store the data.
-
 * `query` the query object https://docs.mongodb.org/v3.0/reference/method/db.collection.find/
-* `sort` _(optional)_ the sort object
+* `sort` _(optional)_ https://docs.mongodb.org/v3.0/reference/method/cursor.sort/
 * `limit` _(optional)_ https://docs.mongodb.org/v3.0/reference/method/cursor.limit/
-* `skip` _(optional)_
+* `skip` _(optional)_ https://docs.mongodb.org/v3.0/reference/method/cursor.skip/
 * `callback` _(optional)_ _(js only)_ function to call to perform an asynchronous search. If undefined, a synchronous read is performed.
-* @returns {Array} array of element indexes or null if no element found
+* returns arrays of matching indexes
 
+> In order to use regular expressions, and because the JSON format only accept strings and has no type for regular expressions, we use strings with the prefix REGEX_ to indicate to the server that it must convert it to a RegExp object before executing the Mongo query. For example, the "REGEX_.*" string is converted to the /.*/ regular expression.
 
 ```py
 # Python
-# get the 200 most recent files
-project.search_mongo({"file":{"$exists": True}},{"time":-1},200,0)
+# get the 10 most recent files (having the higher `time` key on nodes)
+>> project.search_mongo({"file":{"$exists": True}}, {"time":-1}, 10, 0)
+[u'56701f266899505c6d82ffc4', u'56701e2583cfa5c16c1a2f78', u'56701b791da266d26bc11126', u'56701cf1570a32f16be5bb60', u'56701923a26510e96969e277', u'5670305b40c1a51070f3356f', u'567026b69b2d56016f663242', u'56702671a86238e76e08f600', u'56701fb92fdef89f6dcb8c6c', u'55b36829cc6742a30da59b98']
 ```
 
-> You can refer to the MongoDB documentation for details on parameters https://docs.mongodb.org/v3.0/reference/method/cursor.sort/
+```js
+// Javascript
+// get the 200 last indexed files, sorted by descending time key, and display a table in html format as output
+damas.search_mongo({'time': {$exists:true}}, {"time":-1},200,0, function(res){
+    damas.read(res, function(assets){
+        var out = document.querySelector('#contents');
+        var str = '<table><tr><th>author</th><th>file</th><th>time &xutri;</th><th>comment</th></tr>';
+        for(var i=0; i<assets.length; i++)
+        {
+            str +=  '<tr>';
+            str +=  '<td>'+assets[i].author+'</td>';
+            str +=  '<td>'+assets[i].file+'</td>';
+            str +=  '<td>'+new Date(parseInt(assets[i].time))+'</td>';
+            str +=  '<td style="white-space:normal">'+assets[i].comment+'</td>';
+            str +=  '</tr>';
+        }
+        str += '</table>';
+        out.innerHTML = str;
+    });
+});
+```
 
 ##### HTTP `POST` `/api/search_mongo` `application/json` `query` `sort` `limit` `skip`
 ##### HTTP Response `200` `application/json` array of string indexes
-##### HTTP Response `409` `text/html` error string
+##### HTTP Response `409` `text/html` error message
 
 
 
