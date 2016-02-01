@@ -1,4 +1,4 @@
-[[Nodes|API#nodes]]:
+Nodes:
 * [`create`](API#apicreate)
 * [`read`](API#apiread)
 * [`update`](API#apiupdate)
@@ -7,14 +7,13 @@
 [Search](API#search):
 * [`search`](API#apisearch)
 * [`search_mongo`](API#apisearch_mongo)
+* [`graph`](API#apigraph)
 
 [Assets](API#assets):
+* [`link`](API#apilink)
 * [`lock`](API#apilock)
 * [`unlock`](API#apiunlock)
 * [`version`](API#apiversion)
-
-[Graphs](API#graphs):
-* [`graph`](API#apigraph)
 
 [Authentication](API#Authentication):
 * [`signIn`](API#apisignIn)

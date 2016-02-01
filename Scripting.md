@@ -1,4 +1,4 @@
-Libraries for Python and Javascript languages are provided in order to access a server remotely, interface its methods and process the JSON results using the language native objects. Once you get a working environment for scripting, you can visit the [[API documentation|API]] for a complete reference about the available methods.
+We provide the libraries for the Python and Javascript languages to access the damas-core server remotely, and interface its methods and the JSON results using the language native objects. Once you get a working environment for scripting, you can visit the [[API documentation|API]] for a complete reference about the available methods.
 
 ## Setup Python Environment
 The _requests_ module needs to be installed.
@@ -42,6 +42,21 @@ Then connect to a running server and start working with the nodes:
 ## Setup Javascript Environment
 __damas.js__ is an AMD module containing the damas-core API for Javascript, located in `/js/damas.js` in the damas-core code repository. This module can be loaded in various environments.
 
+### In HTML Documents
+Include the library from a HTML document
+```html
+<html>
+    <head>
+        <script type="text/javascript" src="damas.js"></script>
+        <script type="text/javascript">
+            // your code here
+        </script>
+    </head>
+    <body>
+    </body>
+</html>
+```
+
 ### Using requireJS
 ```js
 require('damas.js');
@@ -56,19 +71,25 @@ damas.signIn("demouser", "demouserpassword", function(res){
 });
 
 ```
-#### In HTML Documents
-Include the library from a HTML document
-```html
-<html>
-    <head>
-        <script type="text/javascript" src="damas.js"></script>
-        <script type="text/javascript">
-            // your code here
-        </script>
-    </head>
-    <body>
-    </body>
-</html>
+
+
+## Command line using curl
+Command line access to the server using curl. Request an access token from the server:
+
+```sh
+$ curl -k https://localhost:8443/api/signIn -d "username=xxx&password=yyy" > /tmp/token
+```
+
+Read the token:
+```sh
+$ cat /tmp/token
+{"_id":"56029d03dff07e50a860a09d","username":"remyla","token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjAyOWQwM2RmZjA3ZTUwYTg2MGEwOWQiLCJ1x2VybmFtZSI6InJlbXlsYSIsImlhdCI6MTQ1NDA3ODY1MiwiZXhwIjoxNDU0MTY1MDUyfQ.5AhJIh6ReeS2y6H0Mpcx8fJralsTDSidJAniuaJiVP8","token_exp":1454165052,"token_iat":1454078652}
+```
+
+Use the token:
+```sh
+$ curl -k https://localhost:8445/api/verify -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjAyOWQwM2RmZjA3ZTUwYTg2MGEwOWQiLCJ1x2VybmFtZSI6InJlbXlsYSIsImlhdCI6MTQ1NDA3ODY1MiwiZXhwIjoxNDU0MTY1MDUyfQ.5AhJIh6ReeS2y6H0Mpcx8fJralsTDSidJAniuaJiVP8"
+{"_id":"56029d03dff07e50a860a09d","username":"remyla","iat":1454078652,"exp":1454165052}
 ```
 
 # Documentation

@@ -1,25 +1,47 @@
-For documentation about how to setup a scripting environment please see this wiki [Scripting](Scripting) page.
+Please see the [Scripting](Scripting) page to setup a scripting environment for Python or Javascript .
+
+> The nodes and edges properties are described and sent using a JSON format over the HTTP protocol.
+
+> The implementations of the API use the data types available natively in the languages: the Python implementation uses dictionaries to describe the nodes and the edges, and `None` values is used in place of JSON `null` values. The Javascript implementation uses the native Javascript Objects.
 
 The API is divided into chapters:
 
-[Nodes](#nodes): [`create`](#apicreate) [`read`](#apiread) [`update`](#apiupdate) [`delete`](#apidelete)
+[Nodes and edges basic CRUD methods](#nodes-and-edges):
+[`create`](#apicreate)
+[`read`](#apiread)
+[`update`](#apiupdate)
+[`delete`](#apidelete)
 
-[Search](#search): [`search`](#apisearch) [`search_mongo`](#apisearch_mongo)
+Search queries:
+`ancestors*`
+[`search`](#apisearch)
+[`search_mongo`](#apisearch_mongo)
+[`graph`](#apigraph)
 
-[Assets](#assets): [`lock`](#apilock) [`unlock`](#apiunlock) [`version`](#apiversion) `variation*` `reference*` `write*`
+[Assets](#assets):
+[`lock`](#apilock)
+[`unlock`](#apiunlock)
+[`version`](#apiversion)
+[`link`](#apilink)
+`variation*`
+`reference*`
+`write*`
 
-[Graphs](#graphs): `ancestors*` [`graph`](#apigraph)
-
-[Authentication](#authentication): [`signIn`](#apisignIn) [`signOut`](#apisignOut) [`verify`](#apiverify)
+[Authentication](#authentication):
+[`signIn`](#apisignIn)
+[`signOut`](#apisignOut)
+[`verify`](#apiverify)
 
 \* Not implemented yet in NodeJS
 
-> The Python and Javascript implementations of the API use the native types available in the languages - Python uses dictionaries for nodes, None for null values. Javascript uses Objects to describe nodes.
+# Nodes and Edges CRUD
 
-# Nodes
+These are the low-level methods to handle the generic nodes and edges entities and their attributes. The nodes and edges are identified by unique identifiers, stored in the reserved `_id` key.
+
+> From damas-core version 2.4, the data model evolved and the edges are not described as a separate data type, but are described as regular nodes. This means that the previous unlink and link methods don't exist anymore and the same methods are used to create, edit and delete nodes and edges. The edges are special nodes wearing `src_id` and `tgt_id` keys to describe the directed links, from the source node defined by its identifier specified in the `src_id` key, to the target node defined by its identifier specified in the `tgt_id` key.
 
 ## /api/create
-Creates a node wearing the specified keys.
+Creates a node wearing the specified keys. The created node is returned as JSON by the server on success. It always wear the `_id` key which is its unique identifier string in the database, and can have more keys defined according to the behavior of the server.
 
 __create( `keys`, [`callback`] )__
 
@@ -33,7 +55,11 @@ __create( `keys`, [`callback`] )__
 # create a new node
 >>> project.create({"key1":"value1"})
 {u'key1': u'value1', u'time': 1437469470133, u'_id': u'55ae0b1ed81e88357d77d0e9', u'author': u'demo'}
+
+# create a new link
+>>> project.create({"src_id":"55ae0b1ed81e88357d77d0e9","tgt_id":"560061f2d4cb24441ed88aa4"})
 ```
+
 
 > in Javascript, if a callback function is specified the creation will be made asynchronously, or synchronously otherwise.
 
@@ -143,7 +169,9 @@ damas.delete(id);
 ##### HTTP Response `200` `text/html` message
 ##### HTTP Response `409` `text/html` error message
 
-# Search
+
+# Search Queries
+
 ## /api/search
 Find elements wearing the specified key(s) using a query string
 * @param {String} search query string
@@ -215,21 +243,8 @@ damas.search_mongo({'time': {$exists:true}}, {"time":-1},200,0, function(res){
 ##### HTTP Response `409` `text/html` error message
 
 
-
-
-
-# Graphs
-
-From Damas 2.4, the data model changed and we are now describing links as nodes. This means that unlink and link methods don't exist anymore, the same methods are used to create and maintain nodes and links.
-
-```python
-# Python
-# create a new link
-project.create({"src_id":"55ae0b1ed81e88357d77d0e9","tgt_id":"560061f2d4cb24441ed88aa4"})
-```
-
 ## /api/graph
-Recursively get all links and nodes sourced by the specified node
+Recursively get all source nodes and edges connected to the specified node
 * @param {String} id - Node indexes
 * @param {function} [callback] - Function to call, array argument
 * @returns {Array} array of element indexes
@@ -240,12 +255,6 @@ Recursively get all links and nodes sourced by the specified node
 var sources = damas.graph("55687e68e040af7047ee1a53");
 ```
 
-Link between 2 nodes is also a node. It is wearing the reserved keys ___src_id___ and ___tgt_id___ to specify the source and the target of the link. Therefore, to create a link, use the create method specifying the source and target nodes to link with 
-```Python
-# Python
-# Create a link between 2 nodes
-create({"src_id":"xxxx", "tgt_id":"yyyy"})
-```
 
 # Assets
 
@@ -294,6 +303,19 @@ __version( `id`, `keys`, [`callback`] )__
 ##### HTTP Request `POST` `/api/version/id` `application/json`
 ##### HTTP Response `200` `400` `401` `application/json`
 
+## /api/link
+Create edges from the sources files to the target file wearing the specified keys. The sources and the target are specified as pathes to the corresponding files.
+
+__link( `target`, `sources`, `keys`, [`callback`] )__
+
+```py
+# Python
+project.link("/bbb/production/chars/bird.blend",["/bbb/production/chars/textures/butterflywings.png","/bbb/production/chars/textures/bird_eye.png"],{"link_type":"texture"})
+```
+
+##### HTTP Request `POST` `/api/link` `application/json`
+##### HTTP Response `200` `400` `401` `application/json`
+
 <!--
 ## Trees, based on a #parent key
 
@@ -323,12 +345,17 @@ Process the file upload
 
 # Authentication
 
+Please refer to the dedicated [Authentication](Authentication) page to have more details about how the implemented JSON web token based authentication works.
+
 ## /api/signIn
 Sign in using the server embeded authentication system
-* @param {String} username the user id
-* @param {String} password the user secret password
-* @param {function} [callback] - Function to call, accepting a node (object or dictionnary) as argument
-* @return User node on success, false otherwise
+
+__signIn( username, password, [callback])__
+
+* `username` string
+* `password` the user secret password string
+* `callback` (js_only, optional) function to call for asynchronous mode
+* returns the authenticated user node on success, false otherwise
 
 ##### HTTP Request `POST` `/api/signIn` `application/x-www-form-urlencoded` `username` `password`
 ##### HTTP Response `200` `application/json`
