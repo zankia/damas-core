@@ -78,10 +78,14 @@ In case of a successful node creation, the created object is returned. It always
 Object { _id="560061f2d4cb24441ed88aa4", author="demo", name="test", time=1442865650145, type="char" }
 ```
 
-##### HTTP Request `POST` `/api/` `application/json`
-##### HTTP Request `POST` `/api/` `application/x-www-form-urlencoded`
-##### HTTP Response `201` `application/json` created node
-##### HTTP Response `400` `409` `text/html` error message
+> HTTP Implementation
+
+* Request `POST` `/api/` `application/json`
+* Request `POST` `/api/` `application/x-www-form-urlencoded`
+* Response `201` `application/json` created node
+* Response `400` `409` `text/html` error message
+
+
 ## /api/read
 Retrieve the keys of one or many nodes indexes.
 
