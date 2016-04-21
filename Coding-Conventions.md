@@ -10,14 +10,32 @@ http://javascript.crockford.com/code.html
 
 ```js
 if (null == variable) {
-    // code...
+    return null;
 } else if ('test' !== variable) {
-    // code...
+    return false;
 } else {
     // code...
 }
 ```
-- When appliable, check the constant value before the variable
+1. When appliable, check the constant value before the variable.
 It allows for more visibility in the code, and prevents unwanted assignments.
-- For multiple conditions, put the next one on the same line as the last closing bracket
-- Use the strict equality check `===`, except when we want to test for equivalent values
+
+2. For multiple conditions, put the next one on the same line as the last closing bracket.
+
+3. Use the strict equality check `===`, except when we want to test for equivalent values.
+
+4. Always use braces and put the instructions on a new line. Even for single-line conditions containing a return statement.
+This way we can insert new instructions within the same condition without modifying existing lines.
+
+## Variables
+
+```js
+var i = 0;
+var maximumValue = list.length;
+i  = 1;
+i += 2;
+```
+
+1. Always use the `var` keyword for each variable.
+
+2. Don't vertically align operators, unless you do so for the same variable ; this way the lines are not dependent.
