@@ -5,3 +5,18 @@ We mainly want to stick to the Crockford document. It will become our reference 
 * indentation: 4 spaces
 
 http://javascript.crockford.com/code.html
+
+## Conditions
+
+```
+if (null === variable) {
+    // code...
+} else if ('test' !== variable) {
+    // code...
+} else {
+    // code...
+}
+```
+- When appliable, check the constant value before the variable
+It allows for more visibility in the code, and prevents unwanted assignments.
+- For multiple conditions, put the next one on the same line as the last closing bracket
