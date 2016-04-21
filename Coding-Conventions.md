@@ -9,7 +9,7 @@ http://javascript.crockford.com/code.html
 ## Conditions
 
 ```js
-if (null === variable) {
+if (null == variable) {
     // code...
 } else if ('test' !== variable) {
     // code...
@@ -20,3 +20,4 @@ if (null === variable) {
 - When appliable, check the constant value before the variable
 It allows for more visibility in the code, and prevents unwanted assignments.
 - For multiple conditions, put the next one on the same line as the last closing bracket
+- Use the strict equality check `===`, except when we want to test for equivalent values
