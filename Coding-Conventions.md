@@ -8,7 +8,7 @@ http://javascript.crockford.com/code.html
 
 ## Conditions
 
-```
+```js
 if (null === variable) {
     // code...
 } else if ('test' !== variable) {
