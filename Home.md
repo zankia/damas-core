@@ -2,6 +2,14 @@
 
 Welcome to the damas-core wiki.
 
-To setup a Python or Javascript scripting environment to access a damas-core server please read the [[Scripting page|Scripting]].
+* [[Scripting Guide|Scripting]] - setup a Python or Javascript scripting environment to access a damas-core server
+* [[API Reference|API]] - complete list of API methods
+* [[Database Admin Cook Book|Admin Cook Book]] - Some recipes for the administration of the underlying database
 
-For a complete list of the methods available in the API please read the [[API page|API]].
+__Implementation notes__
+* [[Coding Conventions]]
+* [[Authentication]] - the documentation for the JSON web token based authentication implemented in the server-nodejs
+* [[Tests]] - REST API tests
+
+---
+<img src="http://damas-software.com/img/primcode_softwareengineeringcompany_logo.svg" alt="PRIMCODE software engineering company logo" align="right"/>
