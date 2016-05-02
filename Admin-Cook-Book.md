@@ -27,11 +27,13 @@ mkdir -p $target
 /usr/bin/mysqldump -u$db_user -p$db_pass $db_name | /bin/bzip2 > $target/${db_name}_`/bin/date +%y%m%d-%H:%M`.sql.bz2
 ```
 
-
 ### Database Queries Examples
 
-#### MongoDB: Update sync flags on PSD files
-In a MongoDB shell, this will print all your files havinf the .psd file extension:
+#### MongoDB: list the 10 last modified files
+> db.node.find({file:{$exists:true}}).sort({time:-1}).limit(10)
+
+#### MongoDB: Update some file synchonization flags on PSD files
+In a MongoDB shell, this will print all your files having the `.psd` file extension:
 ```js
 db.node.find({file:/.*.psd/}).forEach(function(n){print(JSON.stringify(n))})
 ```
@@ -42,17 +44,14 @@ db.node.update({file:/.*.psd/}, {$unset:{dmn_angouleme:1, pipangai:1, dream_wall
 > depending on MongoDB version you have different syntaxes and options available
 https://docs.mongodb.org/manual/reference/method/db.collection.update/
 
-
-#### Convert keys to integers in a MongoDB shell
-We want to force the time keys to be integers instead of strings:
+#### MongoDB: Convert keys to integers
+We wanted to force the time keys to be integers instead of strings:
 ```js
 db.node.find().forEach(function(n){ if(typeof n.time === 'string') n.time = new NumberInt(n.time); db.node.save(n)})
 ```
 
-
-#### Invert edges direction (MySQL)
+#### MySQL: Invert graph edges direction
 You may need to invert the direction of the edges. This was useful for us to migrate our data from the MySQL scheme in the 2.3 version before importing to the newer MongoDB scheme 
 ```SQL
 UPDATE link SET src_id=(@temp:=src_id), src_id = tgt_id, tgt_id = @temp;
 ```
-
