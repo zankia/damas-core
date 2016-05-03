@@ -44,12 +44,15 @@ db.node.update({file:/.*.psd/}, {$unset:{dmn_angouleme:1, pipangai:1, dream_wall
 > depending on MongoDB version you have different syntaxes and options available
 https://docs.mongodb.org/manual/reference/method/db.collection.update/
 
-#### MongoDB: Convert keys to integers
-We wanted to force the time keys to be integers instead of strings:
+#### MongoDB: Mass-change a key type
+The protocol was changing some timestamps values from Integers to Strings during their transfer due to issue #91. We wanted to change their type back to Integers in the database:
 ```js
 db.node.find().forEach(function(n){ if(typeof n.time === 'string') n.time = new NumberInt(n.time); db.node.save(n)})
 ```
-
+To view all `time` keys of String type:
+```js
+db.node.find({time: {$type: 2}});
+```
 #### MySQL: Invert graph edges direction
 You may need to invert the direction of the edges. This was useful for us to migrate our data from the MySQL scheme in the 2.3 version before importing to the newer MongoDB scheme 
 ```SQL
