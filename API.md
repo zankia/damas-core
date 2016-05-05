@@ -78,12 +78,14 @@ In case of a successful node creation, the created object is returned. It always
 Object { _id="560061f2d4cb24441ed88aa4", author="demo", name="test", time=1442865650145, type="char" }
 ```
 
-> HTTP Implementation
-
-* Request `POST` `/api/` `application/json`
-* Request `POST` `/api/` `application/x-www-form-urlencoded`
-* Response `201` `application/json` created node
-* Response `400` `409` `text/html` error message
+__HTTP Implementation__
+* Method: `POST`
+* URI: `/api/create/`
+* Content-Type: `application/json`
+* Response status code `201` `application/json` OK (created node(s))
+* Response status code `400` `text/html` Bad Request (not formatted correctly)
+* Response status code `403` `text/html` Forbidden (the user does not have the right permission)
+* Response status code `409` `text/html` Conflict (some nodes already exist with these identifiers)
 
 
 ## /api/read
@@ -108,10 +110,12 @@ var nodes = damas.read(["55ae0b1ed81e88357d77d0e9", "560061f2d4cb24441ed88aa4"])
 
 In Python the `id` argument can be a list, a tuple or a set
 
-##### HTTP Request `GET` `/api/ids`
-##### HTTP Response `200` `application/json` node or array of nodes
-##### HTTP Response `404` `text/html` error message
-##### HTTP Response `409` `text/html` error message
+__HTTP Implementation__
+* Method `GET`
+* URI `/api/read/`ids
+* HTTP Response status code `200` `application/json` OK (node or array of nodes)
+* HTTP Response status code `400` `text/html` Bad Request (not formatted correctly)
+* HTTP Response status code `404` `text/html` Not Found (the nodes do not exists)
 
 ## /api/update
 Modify the keys on the specified node(s).
@@ -151,9 +155,13 @@ project.update(['56017b3053f58ea107dea5f7', '56017b3853f58ea107dea5f8'], {'a':'A
 # [{u'a': u'A', u'_id': u'56017b3053f58ea107dea5f7', u'time': 1442937648390, u'author': u'demo'}, {u'a': u'A', u'_id': u'56017b3853f58ea107dea5f8', u'time': 1442937656258, u'author': u'demo'}]
 ```
 
-##### HTTP Request `PUT` `/api/`
-##### HTTP Response `200` `application/json` updated node or array of updated nodes
-##### HTTP Response `409` `text/html` error message
+__HTTP Implementation__
+* Method `PUT`
+* URI `/api/update`
+* HTTP Response status code `200` `application/json` OK (updated node or array of updated nodes)
+* HTTP Response status code `400` `text/html` Bad Request (not formatted correctly)
+* HTTP Response status code `403` `text/html` Forbidden (the user does not have the right permission)
+* HTTP Response status code `404` `text/html` Not Found (the nodes do not exist)
 
 ## /api/delete
 Recursively delete the specified node
@@ -192,7 +200,9 @@ var matches = damas.search('file:/rabbit/ type:char');
 * (keyname)(operator)(value)
 * operators list: `:`, `<`, `<=`, `>`, `>=`
 * in case of `:` operator, you can use a regular expression as value:
+
 > "file:/floor.*png/i"
+
 will list every png file containing "floor" in the file name, case insensitive
 
 ## /api/search_one
@@ -200,6 +210,12 @@ Search nodes, returning the first matching occurrence as a node object (not as i
 * @param {String} search query string
 * @param {function} [callback] - Function to call, boolean argument
 * @returns {Array} array of element indexes or null if no element found
+
+__HTTP Implementation__
+* Method: `GET`
+* URI: `/api/search_one/`query
+* Response: `200` `application/json` node or null
+* Response: `400` `409` `text/html` error message
 
 ## /api/search_mongo
 
