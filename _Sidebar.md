@@ -6,6 +6,7 @@ Nodes:
 
 [Search](API#search):
 * [`search`](API#apisearch)
+* [`search_one`](API#apisearch_one)
 * [`search_mongo`](API#apisearch_mongo)
 * [`graph`](API#apigraph)
 
