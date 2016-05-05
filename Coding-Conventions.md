@@ -3,6 +3,7 @@ Abstract: as we start a new coding session with teammates we want to stick to a 
 We mainly want to stick to the Crockford document. It will become our reference for this list:
 * Variable Declaration
 * indentation: 4 spaces
+* 2 line return at the end of file
 
 http://javascript.crockford.com/code.html
 
