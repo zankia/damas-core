@@ -190,9 +190,16 @@ var matches = damas.search('file:/rabbit/ type:char');
 ### search string format:
 
 * (keyname)(operator)(value)
-* operators list: <, <=, >, >=, :
-* in case of : operator, you can use a regular expression as value
-* "file:/floor.*png/" will list every png file containing "floor" in the file name
+* operators list: `:`, `<`, `<=`, `>`, `>=`
+* in case of `:` operator, you can use a regular expression as value:
+> "file:/floor.*png/i"
+will list every png file containing "floor" in the file name, case insensitive
+
+## /api/search_one
+Search nodes, returning the first matching occurrence as a node object (not as index as in search). The search string format is the same as for the search method.
+* @param {String} search query string
+* @param {function} [callback] - Function to call, boolean argument
+* @returns {Array} array of element indexes or null if no element found
 
 ## /api/search_mongo
 
