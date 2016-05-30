@@ -8,11 +8,10 @@ module.exports = function (app, express) {
     //methodOverride = require('method-override'),
     var fs = require('fs');
     var events = require('../events');
-    var sep = '<sep>';
 
     function getRequestIds(req, isArrayCallback) {
         if (req.params.id) {
-            var ids = req.params.id.split(sep);
+            var ids = req.params.id.split('<sep>');
             var isArray = (ids.length > 1);
         } else if (req.body) {
             var isArray = Array.isArray(req.body);

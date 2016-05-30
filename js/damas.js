@@ -55,11 +55,17 @@
     damas.user = null;
 
 
+    /**
+     * Send a request according to the given arguments
+     * @param {object} args - All the given arguments
+     * @return {} - The result of the request
+     */
     function req(args) {
-        if (args.async === undefined) {
+        if (undefined === args.async) {
             args.async = ('function' === typeof args.callback);
         }
-        function checkXHR(xhr) {
+        var xhr = new XHR();
+        function checkXHR() {
             if (xhr.status < 300) {
                 return JSON.parse(xhr.responseText);
             } else {
@@ -67,46 +73,34 @@
                 return false;
             }
         }
-        var xhr = new XHR();
+        xhr.onreadystatechange = function(e) {
+            if (4 === xhr.readyState) {
+                if (args.async && args.callback) {
+                    args.callback(checkXHR());
+                } else {
+                    return checkXHR();
+                }
+            }
+        }
         xhr.open(args.method, damas.server + args.url, args.async);
         xhr.setRequestHeader('Authorization', 'Bearer ' + damas.token);
-        if (undefined === args.data) {
-            xhr.send();
-        } else {
-            var data = JSON.stringify(args.data);
+
+        if (undefined !== args.data) {
             xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.send(data);
-        }
-        if (!args.async) {
-            return checkXHR(xhr);
-        }
-        xhr.onreadystatechange = function(e) {
-            if (xhr.readyState == 4) {
-                args.callback(checkXHR(xhr));
-            }
+            xhr.send(JSON.stringify(args.data));
+        } else if (undefined !== args.form) {
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.send(args.form);
+        } else {
+            xhr.send();
         }
     }
 
-    var sep = '<sep>';
-    function toURI(ids) {
-        if (!Array.isArray(ids)) {
-            if ('string' === typeof ids) {
-                ids = ids.split(',');
-            } else {
-                return null;
-            }
-        }
-        var abc = ids.map(encodeURIComponent).join(sep);
-        console.log(abc);
-        return abc;
-    }
 
-    //
     //
     //
     //
     // CRUD METHODS
-    //
     //
     //
     //
@@ -172,7 +166,7 @@
      * Update the keys of a node. The specified keys overwrite existing keys,
      * others are left untouched. A null key value removes the key.
      * @param {string} id - Internal index of the node to update
-     * @param {object} keys - Hash of key:value pairs
+     * @param {object} node - Hash of key:value pairs
      * @returns {object|undefined} Node or nothing in case of asynchronous call
      *
      * @example
@@ -183,9 +177,10 @@
      * var node= damas.update(id, keys);
      */
     damas.update = function (id, node, callback) {
+        node._id = id;
         return req({
             method: 'PUT',
-            url: 'update/' + toURI(id),
+            url: 'update/',
             data: node,
             callback: callback
         });
@@ -316,29 +311,31 @@
     damas.lock = function (id, callback) {
         var res = req({
             method: 'PUT',
-            url: 'lock/' + toURI(id),
+            url: 'lock/',
+            data: id,
             async: callback !== undefined,
             callback: function (res) {
-                callback(res !== false);
+                if ('function' === typeof callback) {
+                    callback(res !== false);
+                }
             }
         });
-        if (undefined !== res) {
-            return res !== false;
-        }
+        return res !== false;
     }
 
     damas.unlock = function (id, callback) {
         var res = req({
             method: 'PUT',
-            url: 'unlock/' + toURI(id),
+            url: 'unlock/',
+            data: id,
             async: callback !== undefined,
             callback: function (res) {
-                callback(res !== false);
+                if ('function' === typeof callback) {
+                    callback(res !== false);
+                }
             }
         });
-        if (undefined !== res) {
-            return res !== false;
-        }
+        return res !== false;
     }
 
     /**
@@ -367,9 +364,7 @@
     //
     //
     //
-    //
     // USER AUTHENTICATION METHODS
-    //
     //
     //
     //
@@ -381,22 +376,22 @@
      * @return true on success, false otherwise
      */
     damas.signIn = function (username, password, callback) {
-        function req_callback(res) {
-            if (res !== false) {
-                damas.user = JSON.parse(req.responseText);
+        function req_callback(result) {
+            if (result !== false) {
+                damas.user = result;
                 damas.token = damas.user.token;
-                callback(JSON.parse(res));
-            } else {
-                callback(false);
             }
+            return result;
         }
         var res = req({
             method: 'POST',
             url: 'signIn',
-            headers: { 'Content-type': 'application/x-www-form-urlencoded' },
-            data: "username="+encodeURIComponent(username) + "&password="+encodeURIComponent(password),
-            callback: function (res) {
-                callback(req_callback(res));
+            form: 'username='  + encodeURIComponent(username) +
+                  '&password=' + encodeURIComponent(password),
+            callback: function (result) {
+                if ('function' === typeof callback) {
+                    callback(req_callback(result));
+                }
             }
         });
         if (undefined !== res) {
@@ -426,12 +421,12 @@
             url: 'verify',
             async: callback !== undefined,
             callback: function (res) {
-                callback(res !== false);
+                if ('function' === typeof callback) {
+                    callback(res !== false);
+                }
             }
         });
-        if (undefined !== res) {
-            return res !== false;
-        }
+        return res !== false;
     }
 
 
