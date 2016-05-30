@@ -9,21 +9,24 @@ module.exports = function (app, express) {
     var fs = require('fs');
     var events = require('../events');
 
+    function isArray(req) {
+        if (req.params.id) {
+            return 1 < req.params.id.split(',').length;
+        } else if (req.body) {
+            return Array.isArray(req.body);
+        }
+        return false;
+    }
+
     function getRequestIds(req, isArrayCallback) {
         if (req.params.id) {
             var ids = req.params.id.split('<sep>');
-            var isArray = (ids.length > 1);
         } else if (req.body) {
-            var isArray = Array.isArray(req.body);
-            var ids = isArray ? req.body : [req.body];
+            var ids = isArray(req) ? req.body : [req.body];
         }
         if (!ids || ids.some(elem => typeof elem !== 'string')) {
             return false;
         }
-        if ('function' === typeof isArrayCallback) {
-            isArrayCallback(isArray);
-        }
-        return ids;
     }
 /*
     app.use(methodOverride(function (req, res) {
@@ -118,8 +121,7 @@ module.exports = function (app, express) {
      * - 404: Not Found (all the nodes do not exist)
      */
     read = function (req, res) {
-        var isArray = false;
-        var ids = getRequestIds(req, function (isIt) { isArray = isIt; });
+        var ids = getRequestIds(req);
         if (!ids) {
             return httpStatus(res, 400, 'Read');
         }
@@ -135,7 +137,7 @@ module.exports = function (app, express) {
             } else if (response.partial) {
                 httpStatus(res, 207, doc);
             } else {
-                httpStatus(res, 200, isArray ? doc : doc[0]);
+                httpStatus(res, 200, isArray(req) ? doc : doc[0]);
             }
         });
     }; // read()
