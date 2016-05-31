@@ -9,6 +9,11 @@ module.exports = function (app, express) {
     var fs = require('fs');
     var events = require('../events');
 
+    /*
+     * Check if the request contains an array or a unique element
+     * @param {object} req - Request object to process
+     * @return {boolean} - Whether the request data is an array or not
+     */
     function isArray(req) {
         if (req.params.id) {
             return 1 < req.params.id.split(',').length;
@@ -18,6 +23,11 @@ module.exports = function (app, express) {
         return false;
     }
 
+    /*
+     * Extract the ids from a request
+     * @param {object} req - Request object to process
+     * @return {array|false} - The ids of the request or false on error
+     */
     function getRequestIds(req, isArrayCallback) {
         if (req.params.id) {
             var ids = req.params.id.split('<sep>');
@@ -119,6 +129,7 @@ module.exports = function (app, express) {
      * - 207: Multi-Status (some nodes do not exist)
      * - 400: Bad request (not formatted correctly)
      * - 404: Not Found (all the nodes do not exist)
+     * - 409: Conflict (something went wrong)
      */
     read = function (req, res) {
         var ids = getRequestIds(req);
@@ -156,6 +167,7 @@ module.exports = function (app, express) {
      * - 207: Multi-Status (some nodes do not exist)
      * - 400: Bad request (not formatted correctly)
      * - 404: Not Found (all the nodes do not exist)
+     * - 409: Conflict (something went wrong)
      */
     update = function (req, res) {
         if (Object.keys(req.body).length === 0 || !req.params.id) {
@@ -203,23 +215,25 @@ module.exports = function (app, express) {
      * - 207: Multi-Status (some nodes do not exist)
      * - 400: Bad request (not formatted correctly)
      * - 404: Not Found (all the nodes do not exist)
+     * - 409: Conflict (something went wrong)
      */
     deleteNode = function (req, res) {
         var ids = getRequestIds(req);
         if (!ids) {
             return httpStatus(res, 400, 'Remove');
         }
-
         events.fire('pre-remove', ids).then(function (data) {
             if (data.status) {
-                httpStatus(res, data.status, 'remove');
+                httpStatus(res, data.status, 'Remove');
             }
             ids = data.ids || ids;
             db.remove(ids, function (error, doc) {
-                console.log(doc);
+                if (error) {
+                    return httpStatus(res, 400, 'Remove');
+                }
                 var response = getMultipleResponse(doc);
                 if (response.fail) {
-                    httpStatus(res, 404, 'remove');
+                    httpStatus(res, 404, 'Remove');
                 } else if (response.partial) {
                     httpStatus(res, 207, doc);
                 } else {
@@ -243,21 +257,20 @@ module.exports = function (app, express) {
      * - 207: Multi-Status (some nodes do not exist)
      * - 400: Bad request (not formatted correctly)
      * - 404: Not Found (all the nodes do not exist)
+     * - 409: Conflict (something went wrong)
      */
     graph = function (req, res) {
         var ids = getRequestIds(req);
         if (!ids) {
             return httpStatus(res, 400, 'Graph');
         }
-
         db.graph(ids, function (error, nodes) {
             if (error) {
-                httpStatus(res, 409, 'graph');
-                return;
+                return httpStatus(res, 409, 'Graph');
             }
             var response = getMultipleResponse(nodes);
             if (response.fail) {
-                httpStatus(res, 404, 'graph');
+                httpStatus(res, 404, 'Graph');
             } else if (response.partial) {
                 httpStatus(res, 207, nodes);
             } else {
@@ -279,6 +292,7 @@ module.exports = function (app, express) {
      * HTTP status codes:
      * - 200: OK (search successful, even without results)
      * - 400: Bad Request (not formatted correctly)
+     * - 409: Conflict (something went wrong)
      */
     search = function (req, res) {
         var q = req.params.query || req.body.query;
@@ -309,22 +323,23 @@ module.exports = function (app, express) {
      * HTTP status codes:
      * - 200: OK (search successful, even without results)
      * - 400: Bad Request (not formatted correctly)
+     * - 409: Conflict (something went wrong)
      */
     search_one = function (req, res) {
         var q = req.params.query || req.body.query;
         if (!q || q == 'undefined') {
-            httpStatus(res, 400, 'search_one');
+            httpStatus(res, 400, 'Search_one');
             return;
         }
         q = decodeURIComponent(q);
         q = q.replace(/\s+/g, ' ').trim();
         db.searchFromText(q, function (error, doc) {
             if (error) {
-                httpStatus(res, 409, 'search_one');
+                httpStatus(res, 409, 'Search_one');
             } else {
                 db.read([doc[0]], function (error, nodes) {
                     if (error) {
-                        httpStatus(res, 409, 'search_one');
+                        httpStatus(res, 409, 'Search_one');
                     } else {
                         httpStatus(res, 200, nodes[0]);
                     }
@@ -344,7 +359,7 @@ module.exports = function (app, express) {
      *
      * HTTP status codes:
      * - 200: OK (search successful, even without results)
-     * - 400: Bad Request (not formatted correctly)
+     * - 409: Conflict (something went wrong)
      * - 501: Not Implemented (MongoDB not in use)
      */
     search_mongo = function (req, res) {
@@ -391,7 +406,6 @@ module.exports = function (app, express) {
 
     /**
      * Import a JSON graph commit from our current Php Server
-     *
      */
     importJSON = function (req, res) {
         var json = JSON.parse(req.body.text);
@@ -449,7 +463,6 @@ module.exports = function (app, express) {
      *
      * HTTP status codes:
      * - 200: OK (file retrieved)
-     * - 400: Bad Request (not formatted correctly)
      * - 404: Not Found (the file does not exist)
      */
     getFile = function (req, res) {
@@ -484,6 +497,12 @@ module.exports = function (app, express) {
         return result;
     }
 
+    /**
+     * Returns the specified status code along with its data or a message
+     * @param {object} res - The ressource where to send the response
+     * @param {integer} code - The HTTP status code
+     * @param {} data - JSON data to send to the client, or error heading
+     */
     function httpStatus(res, code, data) {
         res.status(code);
         if (code < 300) {

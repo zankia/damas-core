@@ -7,19 +7,20 @@ module.exports = function (app) {
     var db = app.locals.db;
     var sep = '<sep>';
 
-    function getRequestIds(req, isArrayCallback) {
+    /*
+     * Extract the ids from a request
+     * @param {object} req - Request object to process
+     * @return {array|false} - The ids of the request or false on error
+     */
+    function getRequestIds(req) {
         if (req.params.id) {
             var ids = req.params.id.split(sep);
-            var isArray = (ids.length > 1);
         } else if (req.body) {
             var isArray = Array.isArray(req.body);
             var ids = isArray ? req.body : [req.body];
         }
         if (!ids || ids.some(elem => typeof elem !== 'string')) {
             return false;
-        }
-        if ('function' === typeof isArrayCallback) {
-            isArrayCallback(isArray);
         }
         return ids;
     }
@@ -32,19 +33,9 @@ module.exports = function (app) {
      *
      * HTTP status codes:
      * - 200: OK (asset locked correctly by the current user)
-     * - 400: Bad request (not formatted correctly)
-     * - 403: Forbidden (the user does not have the right permissions)
-     * - 404: Not Found (the asset does not exist)
      * - 409: Conflict (asset already locked by someone else)
      */
     app.put('/api/lock/:id', function (req, res) {
-        /* this check should not be based on mongo ObjectId, we disable it
-        if (!ObjectId.isValid(req.params.id)) {
-            res.status(400);
-            res.send('lock error: the specified id is not valid');
-            return;
-        }
-        */
         var n = db.read(getRequestIds(req), function (err, n) {
             if (n[0].lock !== undefined) {
                 res.status(409);
@@ -75,18 +66,9 @@ module.exports = function (app) {
      *
      * HTTP status codes:
      * - 200: OK (asset unlocked correctly)
-     * - 400: Bad request (not formatted correctly)
-     * - 404: Not Found (the asset does not exist)
      * - 409: Conflict (asset locked by someone else)
      */
     app.put('/api/unlock/:id', function (req, res) {
-        /*
-        if (!ObjectId.isValid(req.params.id)) {
-            res.status(400);
-            res.send('lock error: the specified id is not valid');
-            return;
-        }
-        */
         var n = db.read(getRequestIds(req), function (err, n) {
             var user = req.user.username || req.connection.remoteAddress;
             if (n[0].lock !== user) {
@@ -114,11 +96,9 @@ module.exports = function (app) {
      * Create a new version of the specified node (as a child node)
      *
      * HTTP status codes:
-     * - 200: OK (version created correctly)
+     * - 201: Created (version created correctly)
      * - 400: Bad request (not formatted correctly)
-     * ? 403: Forbidden (the user does not have the right permissions)
-     * - 404: Not Found (the parent node (or the file?) does not exist)
-     * ? 409: Conflict (asset locked by someone else)
+     * - 409: Conflict (asset locked by someone else)
      */
     app.post('/api/version/:id', function (req, res) {
         var keys = req.body;
@@ -152,8 +132,6 @@ module.exports = function (app) {
      * HTTP status codes:
      * - 200: OK (link created correctly)
      * - 400: Bad request (not formatted correctly)
-     * ? 403: Forbidden (the user does not have the right permissions)
-     * - 404: Not Found (the source and/or the target does not exist)
 
     app.post('/api/link', function (req, res) {
         if (!req.body.target) {
