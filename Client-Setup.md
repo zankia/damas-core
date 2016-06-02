@@ -1,6 +1,14 @@
 We provide the libraries for the Python and Javascript languages to access the damas-core server remotely, and interface its methods and the JSON results using the language native objects. Once you get a working environment for scripting, you can visit the [[API documentation|API]] for a complete reference about the available methods.
 
-## Setup Python Environment
+## Contents
+* [[Python|Scripting#python-client]]
+* [[Javascript|Scripting#javascript-client]]
+* [[Bash|Scripting#bash-client]]
+* [[Curl|Scripting#curl-commands]]
+* [[Documentation|Scripting#documentation]]
+
+
+## Python Client
 The _requests_ module needs to be installed.
 On a Debian operating system you can install it using this command line:
 
@@ -39,7 +47,8 @@ Then connect to a running server and start working with the nodes:
 
 ```
 
-## Setup Javascript Environment
+
+## Javascript Client
 __damas.js__ is an AMD module containing the damas-core API for Javascript, located in `/js/damas.js` in the damas-core code repository. This module can be loaded in various environments.
 
 ### In HTML Documents
@@ -73,7 +82,50 @@ damas.signIn("demouser", "demouserpassword", function(res){
 ```
 
 
-## Command line using curl
+## Bash client
+
+### Setting up
+
+You can place `damas.sh` anywhere you want (for example `/usr/bin/damas`)
+
+In order to run it, you need to have a `.damas` directory in the root directory of your project (like git).
+In this directory, there to be a `config` file like this : 
+
+```bash
+URL="http://localhost:8090/api/"
+```
+
+### Usage
+
+All commands use the same syntax : `damas action --arguments files`
+
+* `action` is listed with `damas --help`
+* `-j` or `--json` arguments has to be written like this : `'"key1": "value", "key2": ["array", "of", "elements"]'`
+* `files` is the path of the different files (absolute or not) separated by spaces. It supports wildcards
+
+At the end, stdout is filled with a json object or nothing (if something went wrong or the action doesn't output anything)
+
+### Authentification
+
+If the server uses JSON Web Tokens (`"auth" : "jwt"` in server config), you will need to identify yourself in order to perform any action. There are two ways to authenticate : 
+
+* `damas signin <username> <password>`
+* By performing any action, you will be asked to authenticate by typing your username then your password
+
+The authentication token is stored in `/tmp/damas-<username>'. Only root and you can read it and it is removed whenever the system reboots
+
+### Go further
+
+Possible improvements are the following : 
+
+* Auto-generating config file
+* Switch json and line by line informations output
+* Make json input easier to use (how?)
+* Make authentification automated like ssh
+* Tell if signin worked well or not
+
+
+## Curl Commands
 Command line access to the server using curl. Request an access token from the server:
 
 ```sh
@@ -91,6 +143,7 @@ Use the token:
 $ curl -k https://localhost:8445/api/verify -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjAyOWQwM2RmZjA3ZTUwYTg2MGEwOWQiLCJ1x2VybmFtZSI6InJlbXlsYSIsImlhdCI6MTQ1NDA3ODY1MiwiZXhwIjoxNDU0MTY1MDUyfQ.5AhJIh6ReeS2y6H0Mpcx8fJralsTDSidJAniuaJiVP8"
 {"_id":"56029d03dff07e50a860a09d","username":"remyla","iat":1454078652,"exp":1454165052}
 ```
+
 
 # Documentation
 The [[API documentation|API]] in this wiki is a reference for a complete list of the methods available in the API.
