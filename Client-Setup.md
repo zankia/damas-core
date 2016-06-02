@@ -3,7 +3,7 @@ We provide the libraries for the Python and Javascript languages to access the d
 ## Contents
 * [Python](#python-client)
 * [Javascript](#javascript-client)
-* [Bash](#bash-client)
+* [Command-line](#command-line-interface)
 * [Curl](#curl-commands)
 * [Documentation](#documentation)
 
@@ -82,7 +82,7 @@ damas.signIn("demouser", "demouserpassword", function(res){
 ```
 
 
-## Bash client
+## Command-line Interface
 
 ### Setting up
 
