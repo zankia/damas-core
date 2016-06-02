@@ -2,7 +2,7 @@
 
 Welcome to the damas-core wiki.
 
-* [[Scripting Guide|Scripting]] - setup a Python or Javascript scripting environment to access a damas-core server
+* [[Scripting Guide|Client Setup]] - setup a Python or Javascript scripting environment to access a damas-core server
 * [[API Reference|API]] - complete list of API methods
 * [[Database Admin Cook Book|Database Administration]] - Some recipes for the administration of the underlying database
 
