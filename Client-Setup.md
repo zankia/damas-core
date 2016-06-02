@@ -1,11 +1,11 @@
 We provide the libraries for the Python and Javascript languages to access the damas-core server remotely, and interface its methods and the JSON results using the language native objects. Once you get a working environment for scripting, you can visit the [[API documentation|API]] for a complete reference about the available methods.
 
 ## Contents
-* [[Python|Scripting#python-client]]
-* [[Javascript|Scripting#javascript-client]]
-* [[Bash|Scripting#bash-client]]
-* [[Curl|Scripting#curl-commands]]
-* [[Documentation|Scripting#documentation]]
+* [[Python|python-client]]
+* [[Javascript|javascript-client]]
+* [[Bash|bash-client]]
+* [[Curl|curl-commands]]
+* [[Documentation|documentation]]
 
 
 ## Python Client
