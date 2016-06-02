@@ -19,6 +19,8 @@ All commands use the same syntax : `damas action --arguments files`
 * `-j` or `--json` arguments has to be written like this : `'"key1": "value", "key2": ["array", "of", "elements"]'`
 * `files` is the path of the different files (absolute or not) separated by spaces. It supports wildcards
 
+At the end, stdout is filled with a json object or nothing (if something went wrong or the action doesn't output anything)
+
 ## Authentification
 
 If the server uses JSON Web Tokens (`"auth" : "jwt"` in server config), you will need to identify yourself in order to perform any action. There are two ways to authenticate : 
