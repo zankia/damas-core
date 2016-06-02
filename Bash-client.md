@@ -37,5 +37,5 @@ Possible improvements are the following :
 * Auto-generating config file
 * Switch json and line by line informations output
 * Make json input easier to use (how?)
-* Make authentification work like ssh
+* Make authentification automated like ssh
 * Tell if signin worked well or not
