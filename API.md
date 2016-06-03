@@ -92,7 +92,7 @@ __HTTP Implementation__
 Retrieve the keys of one or many nodes indexes.
 
 __read( `ids`, [`callback`] )__
-* `ids` a node index as string, a string of comma separated indexes, or an array of string indexes
+* `ids` a node index as string (for a unique index), or an array of string indexes
 * `callback` _(optional)_ (_js only_) function to call after asynchronous read. If callback is undefined, a synchronous read is performed.
 * Returns a JSON node, a node list or undefined.
 
@@ -122,7 +122,7 @@ Modify the keys on the specified node(s).
 
 __update( `ids`, `keys`, [`callback`] )__
 
-* `ids` a node index as string, a string of comma separated indexes, or an array of string indexes
+* `ids` a node index as string (for a unique index), or an array of string indexes
 * `keys` key:value pairs
 * `callback` _(optional)_ (_js only_) function to call for asynchronous mode
 * Returns the modified nodes on success, false otherwise
@@ -140,7 +140,7 @@ var keys = {name:'test2',newKey:'name'};
 var node = damas.update(id, keys);
 ```
 
-In __Python__, indexes can be specified as a string (containing one or multiple node indexes separated by comma) or a Python list. The None value is used to remove a key.
+In __Python__, indexes can be specified as a string (for a unique index) or a Python list. The None value is used to remove a key.
 
 ```py
 # Python
@@ -168,7 +168,7 @@ Recursively delete the specified node
 
 __delete( `ids`, [`callback`] )__
 
-* `ids` a node index as string, a string of comma separated indexes, or an array of string indexes
+* `ids` a node index as string (for a unique index), or an array of string indexes
 * `callback` _(optional)_ (_js only_) function to call for asynchronous mode
 * Returns true on success, false otherwise
 
