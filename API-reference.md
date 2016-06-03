@@ -1,40 +1,40 @@
-Please see the [Scripting](Scripting) page to setup a scripting environment for Python or Javascript .
+Please see the [Scripting](Scripting) page to setup a scripting environment for Python or Javascript.
 
 > The nodes and edges properties are described and sent using a JSON format over the HTTP protocol.
 
 > The implementations of the API use the data types available natively in the languages: the Python implementation uses dictionaries to describe the nodes and the edges, and `None` values is used in place of JSON `null` values. The Javascript implementation uses the native Javascript Objects.
 
-The API is divided into chapters:
+## Table of contents
 
-[Nodes and edges basic CRUD methods](#nodes-and-edges):
-[`create`](#apicreate)
-[`read`](#apiread)
-[`update`](#apiupdate)
-[`delete`](#apidelete)
+[**CRUD methods**](#crud-methods)
+- [`create`](#apicreate)
+- [`read`](#apiread)
+- [`update`](#apiupdate)
+- [`delete`](#apidelete)
 
-Search queries:
-`ancestors*`
-[`search`](#apisearch)
-[`search_mongo`](#apisearch_mongo)
-[`graph`](#apigraph)
+[**Search queries**](#search-queries)
+- `ancestors` *
+- [`graph`](#apigraph)
+- [`search`](#apisearch)
+- [`search_mongo`](#apisearch_mongo)
 
-[Assets](#assets):
-[`lock`](#apilock)
-[`unlock`](#apiunlock)
-[`version`](#apiversion)
-[`link`](#apilink)
-`variation*`
-`reference*`
-`write*`
+[**Asset management**](#asset-management)
+- [`lock`](#apilock)
+- [`unlock`](#apiunlock)
+- [`version`](#apiversion)
+- [`link`](#apilink)
+- `variation` *
+- `reference` *
+- `write` *
 
-[Authentication](#authentication):
-[`signIn`](#apisignIn)
-[`signOut`](#apisignOut)
-[`verify`](#apiverify)
+[**Authentication**](#authentication)
+- [`signIn`](#apisignIn)
+- [`signOut`](#apisignOut)
+- [`verify`](#apiverify)
 
-\* Not implemented yet in NodeJS
+\* *Not implemented yet in NodeJS*
 
-# Nodes and Edges CRUD
+# CRUD methods
 
 These are the low-level methods to handle the generic nodes and edges entities and their attributes. The nodes and edges are identified by unique identifiers, stored in the reserved `_id` key.
 
@@ -283,7 +283,7 @@ var sources = damas.graph("55687e68e040af7047ee1a53");
 ```
 
 
-# Assets
+# Asset management
 
 ## /api/lock
 Lock the asset for edition, for the current user.
