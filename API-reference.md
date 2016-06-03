@@ -44,7 +44,7 @@ Please see the [Scripting](Scripting) page to setup a scripting environment for 
 
 These are the low-level methods to handle the generic nodes and edges entities and their attributes. The nodes and edges are identified by unique identifiers, stored in the reserved `_id` key.
 
-### /api/create
+## /api/create
 
 Create node(s) in the database.
 Nodes have an `_id` key being their unique identifier in the database. This key can be overwritten at the moment of node creation, but can't be updated afterwards without first deleting the node.
@@ -62,14 +62,11 @@ __Return values__:
 * `null` or `None` on failure
 
 __HTTP Implementation__
-* Method: `POST`
-* URI: `/api/create/`
-* Content-Type: `application/json`
-* Reponses:
-    * `201` `application/json` OK (created node(s))
-    * `207` `application/json` Multi-Status (some nodes were conflictuous, the others are created)
-    * `400` `text/html` Bad Request (not formatted correctly)
-    * `409` `text/html` Conflict (no node was created, probably due to an `_id` conflict)
+* `POST /api/create/`
+* Response `201` `application/json` OK (created node(s))
+* Response `207` `application/json` Multi-Status (some nodes were conflictuous, the others are created)
+* Response `400` `text/html` Bad Request (not formatted correctly)
+* Response `409` `text/html` Conflict (no node was created, probably due to an `_id` conflict)
 
 ```python
 # create a new node
@@ -93,33 +90,33 @@ damas.create({key1: "value2"}, function (node) {
 
 ## /api/read
 
-Retrieve the keys of one or many nodes indexes.
+Retrieve one or more nodes given their ids.
 
-__read( `ids`, [`callback`] )__
-* `ids` a node index as string (for a unique index), or an array of string indexes
-* `callback` _(optional)_ (_js only_) function to call after asynchronous read. If callback is undefined, a synchronous read is performed.
-* Returns a JSON node, a node list or undefined.
+* __`read(ids, [callback])`__
+
+__Arguments__
+
+* `ids` a string or array of string corresponding to the ids to read. In Python, can be a list, tuple or set.
+* `callback` (_js only_) if specified, the request is asynchronous
+
+__Return values__:
+* A unique node or an array of nodes (depending on the input) on success
+* `null` or `None` on failure
 
 > The resulting array is sorted in the same order as the input array of indexes.
 
-```js
-// Javascript
-var ids=[id1,id2];
-// Get one node
-var node = damas.read("55ae0b1ed81e88357d77d0e9");
+__HTTP Implementations__
+* `GET /api/read/id1,id2`
+* `POST /api/read/`
+* Response `200` `application/json` OK (node or array of nodes)
+* Response `400` `text/html` Bad Request (not formatted correctly)
+* Response `404` `text/html` Not Found (the nodes do not exists)
 
-// Get a group of nodes
+```js
+var node = damas.read("55ae0b1ed81e88357d77d0e9");
 var nodes = damas.read(["55ae0b1ed81e88357d77d0e9", "560061f2d4cb24441ed88aa4"]);
 ```
 
-In Python the `id` argument can be a list, a tuple or a set
-
-__HTTP Implementation__
-* Method `GET`
-* URI `/api/read/`ids
-* HTTP Response status code `200` `application/json` OK (node or array of nodes)
-* HTTP Response status code `400` `text/html` Bad Request (not formatted correctly)
-* HTTP Response status code `404` `text/html` Not Found (the nodes do not exists)
 
 ## /api/update
 Modify the keys on the specified node(s).
