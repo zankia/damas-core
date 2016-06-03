@@ -1,4 +1,6 @@
-Abstract: as we start a new coding session with teammates we want to stick to a reference as explained here [#99](../issues/99).
+## Code conventions
+
+Abstract: as we start a new coding session with teammates we want to stick to a reference as explained in the issue [#99](../issues/99).
 
 We mainly want to stick to the Crockford document. It will become our reference for this list:
 * Variable Declaration
@@ -7,7 +9,7 @@ We mainly want to stick to the Crockford document. It will become our reference 
 
 http://javascript.crockford.com/code.html
 
-## Conditions
+### Conditions
 
 ```js
 if (null == variable) {
@@ -28,7 +30,7 @@ It allows for more visibility in the code, and prevents unwanted assignments.
 4. Always use braces and put the instructions on a new line. Even for single-line conditions containing a return statement.
 This way we can insert new instructions within the same condition without modifying existing lines.
 
-## Variables
+### Variables
 
 ```js
 var i = 0;
