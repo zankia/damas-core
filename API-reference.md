@@ -1,8 +1,13 @@
 Please see the [Scripting](Scripting) page to setup a scripting environment for Python or Javascript.
 
-> The nodes and edges properties are described and sent using a JSON format over the HTTP protocol.
+> Since version 2.3, edges (links between nodes) are considered nodes, with the special attributes `src_id` and `tgt_id` referring the `_id` of other nodes.
+> The API supports JSON exchanges over HTTP(S).
 
-> The implementations of the API use the data types available natively in the languages: the Python implementation uses dictionaries to describe the nodes and the edges, and `None` values is used in place of JSON `null` values. The Javascript implementation uses the native Javascript Objects.
+> The implementations of the API use the native data types: nodes are Python dictionaries, or JavaScript objects.
+> Python uses `None`, JavaScript uses `null`.
+
+> In Python, all requests are made synchronously, and the API methods do not support callbacks.
+> In JavaScript, all requests are made synchronously, unless an optional callback function is provided. If so, the request is ran synchronously and its response is sent to the callback when available.
 
 ## Table of contents
 
@@ -34,61 +39,60 @@ Please see the [Scripting](Scripting) page to setup a scripting environment for 
 
 \* *Not implemented yet in NodeJS*
 
+
 # CRUD methods
 
 These are the low-level methods to handle the generic nodes and edges entities and their attributes. The nodes and edges are identified by unique identifiers, stored in the reserved `_id` key.
 
-> From damas-core version 2.4, the data model evolved and the edges are not described as a separate data type, but are described as regular nodes. This means that the previous unlink and link methods don't exist anymore and the same methods are used to create, edit and delete nodes and edges. The edges are special nodes wearing `src_id` and `tgt_id` keys to describe the directed links, from the source node defined by its identifier specified in the `src_id` key, to the target node defined by its identifier specified in the `tgt_id` key.
+### /api/create
 
-## /api/create
-Creates a node wearing the specified keys. The created node is returned as JSON by the server on success. It always wear the `_id` key which is its unique identifier string in the database, and can have more keys defined according to the behavior of the server.
+Create node(s) in the database.
+Nodes have an `_id` key being their unique identifier in the database. This key can be overwritten at the moment of node creation, but can't be updated afterwards without first deleting the node.
+The server may add some other arbitrary keys.
 
-__create( `keys`, [`callback`] )__
+* __`create(nodes, [callback])`__
 
-* `keys` key:value pairs
-* `callback` _(optional)_ (_js only_) function to call for asynchronous mode
-* Returns the new node on success, false otherwise
+__Arguments__
 
+* `node` an object or array of objects to insert in the database
+* `callback` (_js only_) if specified, the request is asynchronous
 
-```python
-# Python
-# create a new node
->>> project.create({"key1":"value1"})
-{u'key1': u'value1', u'time': 1437469470133, u'_id': u'55ae0b1ed81e88357d77d0e9', u'author': u'demo'}
-
-# create a new link
->>> project.create({"src_id":"55ae0b1ed81e88357d77d0e9","tgt_id":"560061f2d4cb24441ed88aa4"})
-```
-
-
-> in Javascript, if a callback function is specified the creation will be made asynchronously, or synchronously otherwise.
-
-```js
-// Javascript
-var keys = {name:'test',type:'char'};
-// asynchronous mode
-var newNode = damas.create(keys, function(node){
-    console.log(node);
-});
-```
-
-In case of a successful node creation, the created object is returned. It always wear a `_id` key which is its unique id string in the database, and can have more keys depending on the behavior of the server:
-
-```js
-Object { _id="560061f2d4cb24441ed88aa4", author="demo", name="test", time=1442865650145, type="char" }
-```
+__Return values__:
+* A unique node or an array of nodes (depending on the input) on success
+* `null` or `None` on failure
 
 __HTTP Implementation__
 * Method: `POST`
 * URI: `/api/create/`
 * Content-Type: `application/json`
-* Response status code `201` `application/json` OK (created node(s))
-* Response status code `400` `text/html` Bad Request (not formatted correctly)
-* Response status code `403` `text/html` Forbidden (the user does not have the right permission)
-* Response status code `409` `text/html` Conflict (some nodes already exist with these identifiers)
+* Reponses:
+    * `201` `application/json` OK (created node(s))
+    * `207` `application/json` Multi-Status (some nodes were conflictuous, the others are created)
+    * `400` `text/html` Bad Request (not formatted correctly)
+    * `409` `text/html` Conflict (no node was created, probably due to an `_id` conflict)
+
+```python
+# create a new node
+>>> project.create({"key1":"value1"})
+{'key1': 'value1', 'time': 1437469470133, '_id': '55ae0b1ed81e88357d77d0e9', 'author': 'demo'}
+
+# create a new edge
+>>> project.create({"src_id":"55ae0b1ed81e88357d77d0e9","tgt_id":"560061f2d4cb24441ed88aa4"})
+```
+
+```js
+var node1, node2;
+// synchronous request
+node1 = damas.create({key1: "value1"});
+// asynchronous request
+damas.create({key1: "value2"}, function (node) {
+    node2 = node;
+});
+```
 
 
 ## /api/read
+
 Retrieve the keys of one or many nodes indexes.
 
 __read( `ids`, [`callback`] )__
