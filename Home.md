@@ -7,7 +7,7 @@ Welcome to the damas-core wiki.
 * [[Database Admin Cook Book|Database Administration]] - Some recipes for the administration of the underlying database
 
 __Implementation notes__
-* [[Coding Conventions]]
+* [[Contributing]]
 * [[Authentication]] - the documentation for the JSON web token based authentication implemented in the server-nodejs
 * [[Tests]] - REST API tests
 
