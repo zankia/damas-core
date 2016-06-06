@@ -21,16 +21,16 @@ $ echo -n "starwars" | sha1sum
 ```
 You can change the hash encryption algorithm from `sha1` to `md5` and other options editing the server configuration file conf.json (as explained in server-nodejs/README.md) and enable the JSON Web Token authentication:
 
-```json
+```javascript
 {
-        "auth" : "jwt",
-...
-        "jwt" : {
-                "passwordHashAlgorithm" : "sha1",
-                "secret" : "webtokensecret",
-                "exp" : 1440
-        },
-...
+    "auth" : "jwt",
+// ...
+    "jwt" : {
+        "passwordHashAlgorithm" : "sha1",
+        "secret" : "webtokensecret",
+        "exp" : 1440
+    },
+// ...
 }
 ```
 Then, restart the server to read the configuration file at startup and sign in using the newly created user. You can also read this [[documentation|Authentication]] about the JSON Web Token base authentification in DAMAS.
