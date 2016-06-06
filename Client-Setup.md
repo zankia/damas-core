@@ -146,7 +146,7 @@ $ curl -k https://localhost:8445/api/verify -H "Authorization: Bearer eyJ0eXAiOi
 
 
 # Documentation
-The [[API documentation|API]] in this wiki is a reference for a complete list of the methods available in the API.
+The [[API documentation|API reference]] in this wiki is a reference for a complete list of the methods available in the API.
 
 <!--
 ## Web service
