@@ -101,6 +101,7 @@ All commands use the same syntax : `damas action --arguments files`
 
 * `action` is listed with `damas --help`
 * `-j` or `--json` arguments has to be written like this : `'"key1": "value", "key2": ["array", "of", "elements"]'`
+* `-h` or `--human` is to get a human readable output
 * `files` is the path of the different files (absolute or not) separated by spaces. It supports wildcards
 
 At the end, stdout is filled with a json object or nothing (if something went wrong or the action doesn't output anything)
@@ -118,11 +119,9 @@ The authentication token is stored in `/tmp/damas-<username>'. Only root and you
 
 Possible improvements are the following : 
 
-* Auto-generating config file
-* Switch json and line by line informations output
 * Make json input easier to use (how?)
 * Make authentification automated like ssh
-* Tell if signin worked well or not
+* Set error code same as HTTP
 
 
 ## Curl Commands
