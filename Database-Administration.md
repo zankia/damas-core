@@ -58,3 +58,11 @@ You may need to invert the direction of the edges. This was useful for us to mig
 ```SQL
 UPDATE link SET src_id=(@temp:=src_id), src_id = tgt_id, tgt_id = @temp;
 ```
+
+### Miscelaneous
+
+#### Add every file of the repository recursively
+In a shell with the damas command line interface:
+```sh
+find . -type f -exec damas add {} \;
+```
