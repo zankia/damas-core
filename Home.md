@@ -2,13 +2,18 @@
 
 Welcome to the damas-core wiki.
 
-* [[Scripting Guide|Client Setup]] - setup a Python or Javascript scripting environment to access a damas-core server
-* [[API Reference|API Reference]] - complete list of API methods
-* [[Database Admin Cook Book|Database Administration]] - Some recipes for the administration of the underlying database
+### Application Programming Interface
 
-__Implementation notes__
+* [[API Reference|API Reference]] - complete list of API methods
+* [[Client Setup]] - Scripting guide to access a damas-core server
+
+### Administration
+
+* [[Database Admin Cook Book|Database Administration]] - Some recipes for the administration of the underlying database
+* [[Authentication]] - Token based authentication implemented in server-nodejs 
+
+### Implementation notes
 * [[Contributing]]
-* [[Authentication]] - the documentation for the JSON web token based authentication implemented in the server-nodejs
 * [[Tests]] - REST API tests
 
 ---
