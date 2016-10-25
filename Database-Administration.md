@@ -47,7 +47,7 @@ https://docs.mongodb.org/manual/reference/method/db.collection.update/
 #### MongoDB: Mass-change a key type
 The protocol was changing some timestamps values from Integers to Strings during their transfer due to issue #91. We wanted to change their type back to Integers in the database:
 ```js
-db.node.find().forEach(function(n){ if(typeof n.time === 'string') n.time = new NumberInt(n.time); db.node.save(n)})
+db.node.find({time:{$type:2}}).forEach(function(obj){obj.time = NumberInt(obj.time); db.node.save(obj) })
 ```
 To view all `time` keys of String type:
 ```js
