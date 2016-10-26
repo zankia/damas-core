@@ -45,14 +45,15 @@ db.node.update({file:/.*.psd/}, {$unset:{dmn_angouleme:1, pipangai:1, dream_wall
 https://docs.mongodb.org/manual/reference/method/db.collection.update/
 
 #### MongoDB: Mass-change a key type
-The protocol was changing some timestamps values from Integers to Strings during their transfer due to issue #91. We wanted to change their type back to Integers in the database:
-```js
-db.node.find({time:{$type:2}}).forEach(function(obj){obj.time = NumberInt(obj.time); db.node.save(obj) })
-```
-To view all `time` keys of String type:
+Context: due to issue #91 the protocol was changing some timestamps values from Integers to Strings during their transfer. To list every String `time` key:
 ```js
 db.node.find({time: {$type: 2}});
 ```
+Then we convert their type back to Integers. Warning, we use NumberLong, which is encoded using 64 bits instead of NumberInt:
+```js
+db.node.find({time:{$type:2}}).forEach(function(obj){obj.time = NumberLong(obj.time); db.node.save(obj) })
+```
+
 #### MySQL: Invert graph edges direction
 You may need to invert the direction of the edges. This was useful for us to migrate our data from the MySQL scheme in the 2.3 version before importing to the newer MongoDB scheme 
 ```SQL
