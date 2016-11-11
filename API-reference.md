@@ -59,19 +59,15 @@ __Arguments__
 
 __Return values__:
 * A unique node or an array of nodes (depending on the input) on success
-* `null` or `None` on failure
-
-__HTTP Implementation__
-* `POST /api/create/`
-* Response `201` `application/json` OK (created node(s))
-* Response `207` `application/json` Multi-Status (some nodes were conflictuous, the others are created)
-* Response `400` `text/html` Bad Request (not formatted correctly)
-* Response `409` `text/html` Conflict (no node was created, probably due to an `_id` conflict)
+* `null` (Javascript) or `None` (Python) on failure
 
 ```python
 # create a new node
 >>> project.create({"key1":"value1"})
 {'key1': 'value1', 'time': 1437469470133, '_id': '55ae0b1ed81e88357d77d0e9', 'author': 'demo'}
+
+# create multiple nodes
+>>> project.create([{"label":"node1"}, {"label":"node2"}])
 
 # create a new edge
 >>> project.create({"src_id":"55ae0b1ed81e88357d77d0e9","tgt_id":"560061f2d4cb24441ed88aa4"})
@@ -105,18 +101,10 @@ __Return values__:
 
 > The resulting array is sorted in the same order as the input array of indexes.
 
-__HTTP Implementations__
-* `GET /api/read/id1,id2`
-* `POST /api/read/`
-* Response `200` `application/json` OK (node or array of nodes)
-* Response `400` `text/html` Bad Request (not formatted correctly)
-* Response `404` `text/html` Not Found (the nodes do not exists)
-
 ```js
 var node = damas.read("55ae0b1ed81e88357d77d0e9");
 var nodes = damas.read(["55ae0b1ed81e88357d77d0e9", "560061f2d4cb24441ed88aa4"]);
 ```
-
 
 ## /api/update
 Modify the keys on the specified node(s).
@@ -156,14 +144,6 @@ project.update(['56017b3053f58ea107dea5f7', '56017b3853f58ea107dea5f8'], {'a':'A
 # [{u'a': u'A', u'_id': u'56017b3053f58ea107dea5f7', u'time': 1442937648390, u'author': u'demo'}, {u'a': u'A', u'_id': u'56017b3853f58ea107dea5f8', u'time': 1442937656258, u'author': u'demo'}]
 ```
 
-__HTTP Implementation__
-* Method `PUT`
-* URI `/api/update`
-* HTTP Response status code `200` `application/json` OK (updated node or array of updated nodes)
-* HTTP Response status code `400` `text/html` Bad Request (not formatted correctly)
-* HTTP Response status code `403` `text/html` Forbidden (the user does not have the right permission)
-* HTTP Response status code `404` `text/html` Not Found (the nodes do not exist)
-
 ## /api/delete
 Recursively delete the specified node
 
@@ -177,11 +157,6 @@ __delete( `ids`, [`callback`] )__
 // Javascript
 damas.delete(id);
 ```
-
-##### HTTP Request `DELETE` `/api/ids`
-##### HTTP Response `200` `text/html` message
-##### HTTP Response `409` `text/html` error message
-
 
 # Search Queries
 
@@ -211,12 +186,6 @@ Search nodes, returning the first matching occurrence as a node object (not as i
 * @param {String} search query string
 * @param {function} [callback] - Function to call, boolean argument
 * @returns {Array} array of element indexes or null if no element found
-
-__HTTP Implementation__
-* Method: `GET`
-* URI: `/api/search_one/`query
-* Response: `200` `application/json` node or null
-* Response: `400` `409` `text/html` error message
 
 ## /api/search_mongo
 
@@ -266,11 +235,6 @@ damas.search_mongo({'time': {$exists:true}}, {"time":-1},200,0, function(res){
 });
 ```
 
-##### HTTP `POST` `/api/search_mongo` `application/json` `query` `sort` `limit` `skip`
-##### HTTP Response `200` `application/json` array of string indexes
-##### HTTP Response `409` `text/html` error message
-
-
 ## /api/graph
 Recursively get all source nodes and edges connected to the specified node
 * @param {String} id - Node indexes
@@ -282,7 +246,6 @@ Recursively get all source nodes and edges connected to the specified node
 // This will return an array containing nodes (links are nodes too)
 var sources = damas.graph("55687e68e040af7047ee1a53");
 ```
-
 
 # Asset management
 
@@ -328,9 +291,6 @@ __version( `id`, `keys`, [`callback`] )__
 {u'comment': u'added requested elements and cleaned', u'author': u'demo', u'#parent': u'5601542f690375ccae0c1a3b', u'file': "/project/files/scene-150925121320.ma", u'time': 1443174266343, u'_id': u'5605177ad8b454a87e771b65'}
 ```
 
-##### HTTP Request `POST` `/api/version/id` `application/json`
-##### HTTP Response `200` `400` `401` `application/json`
-
 ## /api/link
 Create edges from the sources files to the target file wearing the specified keys. The sources and the target are specified as pathes to the corresponding files.
 
@@ -340,9 +300,6 @@ __link( `target`, `sources`, `keys`, [`callback`] )__
 # Python
 project.link("/bbb/production/chars/bird.blend",["/bbb/production/chars/textures/butterflywings.png","/bbb/production/chars/textures/bird_eye.png"],{"link_type":"texture"})
 ```
-
-##### HTTP Request `POST` `/api/link` `application/json`
-##### HTTP Response `200` `400` `401` `application/json`
 
 <!--
 ## Trees, based on a #parent key
@@ -385,22 +342,11 @@ __signIn( username, password, [callback])__
 * `callback` (js_only, optional) function to call for asynchronous mode
 * returns the authenticated user node on success, false otherwise
 
-##### HTTP Request `POST` `/api/signIn` `application/x-www-form-urlencoded` `username` `password`
-##### HTTP Response `200` `application/json`
-##### HTTP Response `401`
-
 ## /api/signOut
 * @param {function} [callback] - Function to call, accepting a boolean argument
 * @return true on success, false otherwise
-
-##### HTTP Request
-##### HTTP Response
 
 ## /api/verify
 Check if the authentication is valid
 * @param {function} [callback] - Function to call, accepting a boolean argument
 * @return true on success, false otherwise
-
-##### HTTP Request `GET` `/api/verify`
-##### HTTP Response `200` `application/json`
-##### HTTP Response `401`
