@@ -44,7 +44,7 @@ Please see the [Scripting](Scripting) page to setup a scripting environment for 
 
 These are the low-level methods to handle the generic nodes and edges entities and their attributes. The nodes and edges are identified by unique identifiers, stored in the reserved `_id` key.
 
-## /api/create
+## create
 
 Create node(s) in the database.
 Nodes have an `_id` key being their unique identifier in the database. This key can be overwritten at the moment of node creation, but can't be updated afterwards without first deleting the node.
@@ -84,7 +84,7 @@ damas.create({key1: "value2"}, function (node) {
 ```
 
 
-## /api/read
+## read
 
 Retrieve one or more nodes given their ids.
 
@@ -106,7 +106,7 @@ var node = damas.read("55ae0b1ed81e88357d77d0e9");
 var nodes = damas.read(["55ae0b1ed81e88357d77d0e9", "560061f2d4cb24441ed88aa4"]);
 ```
 
-## /api/update
+## update
 Modify the keys on the specified node(s).
 
 __update( `ids`, `keys`, [`callback`] )__
@@ -144,7 +144,7 @@ project.update(['56017b3053f58ea107dea5f7', '56017b3853f58ea107dea5f8'], {'a':'A
 # [{u'a': u'A', u'_id': u'56017b3053f58ea107dea5f7', u'time': 1442937648390, u'author': u'demo'}, {u'a': u'A', u'_id': u'56017b3853f58ea107dea5f8', u'time': 1442937656258, u'author': u'demo'}]
 ```
 
-## /api/delete
+## delete
 Recursively delete the specified node
 
 __delete( `ids`, [`callback`] )__
@@ -160,7 +160,7 @@ damas.delete(id);
 
 # Search Queries
 
-## /api/search
+## search
 Find elements wearing the specified key(s) using a query string
 * @param {String} search query string
 * @param {function} [callback] - Function to call, boolean argument
@@ -181,13 +181,13 @@ var matches = damas.search('file:/rabbit/ type:char');
 
 will list every png file containing "floor" in the file name, case insensitive
 
-## /api/search_one
+## search_one
 Search nodes, returning the first matching occurrence as a node object (not as index as in search). The search string format is the same as for the search method.
 * @param {String} search query string
 * @param {function} [callback] - Function to call, boolean argument
 * @returns {Array} array of element indexes or null if no element found
 
-## /api/search_mongo
+## search_mongo
 
 We expose the MongoDB find and cursor methods here in order to provide a powerful search with many options. It is only available when the server runs a MongoDB database to store the data.
 
@@ -235,7 +235,7 @@ damas.search_mongo({'time': {$exists:true}}, {"time":-1},200,0, function(res){
 });
 ```
 
-## /api/graph
+## graph
 Recursively get all source nodes and edges connected to the specified node
 * @param {String} id - Node indexes
 * @param {function} [callback] - Function to call, array argument
@@ -249,7 +249,7 @@ var sources = damas.graph("55687e68e040af7047ee1a53");
 
 # Asset management
 
-## /api/lock
+## lock
 Lock the asset for edition, for the current user.
 
 __lock( `id`, [`callback`] )__
@@ -260,7 +260,7 @@ __lock( `id`, [`callback`] )__
 
 > Sets a `lock` key on the node, with the authenticated username as value. If the asset is already locked, it will return false.
 
-## /api/unlock
+## unlock
 Unlock a locked asset.
 
 __unlock( `id`, [`callback`] )__
@@ -271,7 +271,7 @@ __unlock( `id`, [`callback`] )__
 
 > If the asset is not locked or locked for someone else (`lock` key value != authenticated user name) it returns false. If it was successfully unlocked, returns true.
 
-## /api/version
+## version
 Insert a new file as a new version of an existing asset, wearing the specified keys.
 
 __version( `id`, `keys`, [`callback`] )__
@@ -291,7 +291,7 @@ __version( `id`, `keys`, [`callback`] )__
 {u'comment': u'added requested elements and cleaned', u'author': u'demo', u'#parent': u'5601542f690375ccae0c1a3b', u'file': "/project/files/scene-150925121320.ma", u'time': 1443174266343, u'_id': u'5605177ad8b454a87e771b65'}
 ```
 
-## /api/link
+## link
 Create edges from the sources files to the target file wearing the specified keys. The sources and the target are specified as pathes to the corresponding files.
 
 __link( `target`, `sources`, `keys`, [`callback`] )__
