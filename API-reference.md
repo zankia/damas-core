@@ -1,13 +1,16 @@
-Please see the [Scripting](Scripting) page to setup a scripting environment for Python or Javascript.
+To setup a scripting environment for Python or Javascript please read the [Scripting](Scripting) page.
+
+Notes on API:
+> The implementations of the API use the native data types: nodes are returned as Python dictionaries or JavaScript objects.
+> Python uses `None`, JavaScript uses `null`.
+
+> The current Python API uses synchronous requests only and do not support callbacks.
+> The JavaScript API supports synchronous and asynchronous requests if a optional callback function is provided. If so, the request is ran asynchronously and its response is sent to the callback when available.
 
 > Since version 2.3, edges (links between nodes) are considered nodes, with the special attributes `src_id` and `tgt_id` referring the `_id` of other nodes.
 > The API supports JSON exchanges over HTTP(S).
 
-> The implementations of the API use the native data types: nodes are Python dictionaries, or JavaScript objects.
-> Python uses `None`, JavaScript uses `null`.
-
-> In Python, all requests are made synchronously, and the API methods do not support callbacks.
-> In JavaScript, all requests are made synchronously, unless an optional callback function is provided. If so, the request is ran synchronously and its response is sent to the callback when available.
+> The Python API and the Javascript API follow the behavior described in the [Contributing](Contributing) page.
 
 ## Table of contents
 
