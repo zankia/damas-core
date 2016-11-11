@@ -47,7 +47,7 @@ These are the low-level methods to handle the generic nodes and edges entities a
 ## create
 
 Create node(s) in the database.
-Nodes have an `_id` key being their unique identifier in the database. This key can be overwritten at the moment of node creation, but can't be updated afterwards without first deleting the node.
+Nodes have an `_id` key being their unique identifier in the database. This key can specified during creation, but can't be updated afterwards without first deleting the node.
 The server may add some other arbitrary keys.
 
 * __`create(nodes, [callback])`__
