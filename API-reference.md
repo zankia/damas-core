@@ -1,4 +1,4 @@
-To setup a scripting environment for Python or Javascript please read the [Scripting](Scripting) page.
+To setup a scripting environment for Python or Javascript please read the [Client Setup](Client Setup) page.
 
 Notes on API:
 > The implementations of the API use the native data types: nodes are returned as Python dictionaries or JavaScript objects.
