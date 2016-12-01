@@ -1,4 +1,4 @@
-The programming interfaces consist in exposing the server operations into client modules for Python and Javascript. The server and the clients use the JSON format to communicate through the HTTP protocol, whereas the client modules use the native language data types: nodes are returned as Python dictionaries or JavaScript objects. The Python implementation uses `None`, the JavaScript implementation uses `null`.
+The programming interfaces consist in exposing the server operations using client modules for the Python and the Javascript languages.
 
 To setup a scripting environment for Python or Javascript please read the [Client Setup](Client Setup) guide.
 
@@ -36,13 +36,15 @@ To setup a scripting environment for Python or Javascript please read the [Clien
 
 ## Notes about the API
 
+Types
+> The server and the clients use the JSON format to communicate through the HTTP protocol, whereas the client modules use the native language data types: nodes are returned as Python dictionaries or JavaScript objects. The Python implementation uses `None`, the JavaScript implementation uses `null`.
+
 Sync / Async
 > The Python API supports synchronous requests only and do not support callbacks.
 > The JavaScript API supports asynchronous requests if the optional callback function is provided as argument to the API calls. If so, the request is ran asynchronously and its response is sent to the callback when available. If the callback is not provided, a synchronous call is made and the return value is used.
 
 Graphs
 > Since version 2.3, edges (the directed links between nodes) are also considered as nodes, with the special attributes `src_id` and `tgt_id` referring the `_id` of the other nodes to link.
-> The API supports JSON exchanges over HTTP(S).
 
 Contributing
 > The API implementations follow the specifications described in the [Contributing](Contributing) page to communicate with the server, that you could read if you would like more details about the underlying architecture.
@@ -55,61 +57,64 @@ These are the low-level methods to handle the generic nodes and edges entities a
 
 Create node(s) in the database.
 Nodes have an `_id` key being their unique identifier in the database. This key can specified during creation, but can't be updated afterwards without first deleting the node.
-The server may add some other arbitrary keys.
+The server may add some other arbitrary keys (author, time)
 
-* __create(`nodes`, [`callback`])__
+__create(`nodes`, [`callback`])__
 
-__Arguments__
-
-* `node` an object or array of objects to insert in the database
+* `nodes` an object or array of objects to insert in the database
 * `callback` (_js only_) if specified, the request is asynchronous
-
-__Return values__:
-* A unique node or an array of nodes (depending on the input) on success
-* `null` (Javascript) or `None` (Python) on failure
+* returns a unique node or an array of nodes (depending on the input) on success
+* returns `null` (Javascript) or `None` (Python) on failure
 
 ```python
+# Python
 # create a new node
 >>> project.create({"key1":"value1"})
-{'key1': 'value1', 'time': 1437469470133, '_id': '55ae0b1ed81e88357d77d0e9', 'author': 'demo'}
+{u'key1': u'value1', u'time': 1437469470133, u'_id': u'55ae0b1ed81e88357d77d0e9', u'author': u'demo'}
+
+# create an asset node
+>>> project.create({"_id":"/project/folder/to/file", "additional_key":"value"})
+{u'additional_key': u'value', u'_id': u'/project/folder/to/file', u'time': 1480586620449, u'author': u'demo'}
 
 # create multiple nodes
 >>> project.create([{"label":"node1"}, {"label":"node2"}])
+[{u'_id': u'583ff5a747e759beb73bde32', u'time': 1480586663024, u'label': u'node1', u'author': u'demo'}, {u'_id': u'583ff5a747e759beb73bde33', u'time': 1480586663024, u'label': u'node2', u'author': u'demo'}]
 
 # create a new edge
->>> project.create({"src_id":"55ae0b1ed81e88357d77d0e9","tgt_id":"560061f2d4cb24441ed88aa4"})
+>>> project.create({"src_id":"/project/folder/to/file1","tgt_id":"/project/folder/to/file2"})
+{u'tgt_id': u'/project/folder/to/file2', u'_id': u'583ff67647e759beb73bde34', u'time': 1480586870826, u'src_id': u'/project/folder/to/file1', u'author': u'demo'}
 ```
 
 ```js
-var node1, node2;
-// synchronous request
-node1 = damas.create({key1: "value1"});
-// asynchronous request
+// Javascript
+// create a new node
+damas.create({key1: "value1"});
+>> Object { author: "damas", time: 1480588505449, key1: "value1", _id: "583ffcd947e759beb73bde39" }
+
+// create a new node using an asynchronous call
 damas.create({key1: "value2"}, function (node) {
-    node2 = node;
+    // asynchronous mode
+    console.log(node.time);
 });
 ```
 
 
 ## read
 
-Retrieve one or more nodes given their ids.
+Retrieve one or more nodes given their identifiers.
 
-* __read(`ids`, [`callback`])__
-
-__Arguments__
-
-* `ids` a string or array of string corresponding to the ids to read. In Python, can be a list, tuple or set.
+__read(`ids`, [`callback`])__
+* `ids` a string or array of strings containing the ids to read. In Python, can be a list, tuple or set.
 * `callback` (_js only_) if specified, the request is asynchronous
+* returns a unique node object or an array of nodes (depending on the input) on success
+* returns `null` or `None` on failure
 
-__Return values__:
-* A unique node or an array of nodes (depending on the input) on success
-* `null` or `None` on failure
-
-> The resulting array is sorted in the same order as the input array of indexes.
+> For multiple mode, The resulting array is sorted in the same order as the input array of identifiers. If some identifiers are not found, the result array is filled with None / null values for that position.
 
 ```js
-var node = damas.read("55ae0b1ed81e88357d77d0e9");
+// read an asset node identified by its path
+var node = damas.read("/project/folder/file");
+// read 2 nodes using their unique identifiers
 var nodes = damas.read(["55ae0b1ed81e88357d77d0e9", "560061f2d4cb24441ed88aa4"]);
 ```
 
@@ -118,14 +123,14 @@ Modify the keys on the specified node(s).
 
 __update( `ids`, `keys`, [`callback`] )__
 
-* `ids` a node index as string (for a unique index), or an array of string indexes
+* `ids` a node identifier string (to update one node), or an array of identifiers
 * `keys` key:value pairs
 * `callback` _(optional)_ (_js only_) function to call for asynchronous mode
-* Returns the modified nodes on success, false otherwise
+* returns the modified nodes on success, false otherwise
 
-> The specified keys overwrite existing keys, others are left untouched. A null value removes the key.
+> The specified keys overwrite the existing keys on the server. Other, unspecified keys, are left untouched on the server. A null value removes the key.
 
-> The resulting array is sorted in the same order as the input array of indexes.
+> If multiple nodes are specified, the resulting array is sorted in the same order as the input array of identifiers.
 
 ```js
 // Javascript
@@ -136,7 +141,7 @@ var keys = {name:'test2',newKey:'name'};
 var node = damas.update(id, keys);
 ```
 
-In __Python__, indexes can be specified as a string (for a unique index) or a Python list. The None value is used to remove a key.
+In __Python__, identifiers can be specified as a string (for a unique index) or a Python list. The None value is used to remove a key.
 
 ```py
 # Python
@@ -146,7 +151,7 @@ project.create({'a':'a', 'b':'b'})
 project.create({'a':'a', 'b':'b'})
 # {u'a': u'a', u'_id': u'56017b3853f58ea107dea5f8', u'b': u'b', u'time': 1442937656258, u'author': u'demo'}
 
-# Then we modify the 'a' key and remove the 'b' key on both nodes in one query
+# Then we modify the 'a' key and remove the 'b' key on both nodes using one query
 project.update(['56017b3053f58ea107dea5f7', '56017b3853f58ea107dea5f8'], {'a':'A', 'b':None})
 # [{u'a': u'A', u'_id': u'56017b3053f58ea107dea5f7', u'time': 1442937648390, u'author': u'demo'}, {u'a': u'A', u'_id': u'56017b3853f58ea107dea5f8', u'time': 1442937656258, u'author': u'demo'}]
 ```
@@ -158,7 +163,7 @@ __delete( `ids`, [`callback`] )__
 
 * `ids` a node index as string (for a unique index), or an array of string indexes
 * `callback` _(optional)_ (_js only_) function to call for asynchronous mode
-* Returns true on success, false otherwise
+* returns true on success, false otherwise
 
 ```js
 // Javascript
@@ -173,22 +178,23 @@ Please refer to the dedicated [Authentication](Authentication) page to have more
 ## /api/signIn
 Sign in using the server embeded authentication system
 
-__signIn( username, password, [callback])__
+__signIn( `username`, `password`, [`callback`])__
 
 * `username` string
 * `password` the user secret password string
 * `callback` (js_only, optional) function to call for asynchronous mode
-* returns the authenticated user node on success, false otherwise
+* returns an object containing an authentication token on success, false otherwise
 
 ## /api/signOut
-* @param {function} [callback] - Function to call, accepting a boolean argument
-* @return true on success, false otherwise
+__signOut([`callback`])__
+* `callback` (js_only, optional) function to call for asynchronous mode
+* returns true on success, false otherwise
 
 ## /api/verify
 Check if the authentication is valid
-* @param {function} [callback] - Function to call, accepting a boolean argument
-* @return true on success, false otherwise
-
+__verify([`callback`])__
+* `callback` (js_only, optional) function to call for asynchronous mode
+* returns true on success, false otherwise
 
 
 # Search Queries
