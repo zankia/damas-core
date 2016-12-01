@@ -1,24 +1,20 @@
-To setup a scripting environment for Python or Javascript please read the [Client Setup](Client Setup) page.
+The programming interfaces consist in exposing the server operations into client modules for Python and Javascript. The server and the clients use the JSON format to communicate through the HTTP protocol, whereas the client modules use the native language data types: nodes are returned as Python dictionaries or JavaScript objects. The Python implementation uses `None`, the JavaScript implementation uses `null`.
 
-Notes on API:
-> The implementations of the API use the native data types: nodes are returned as Python dictionaries or JavaScript objects.
-> Python uses `None`, JavaScript uses `null`.
-
-> The current Python API uses synchronous requests only and do not support callbacks.
-> The JavaScript API supports synchronous and asynchronous requests if a optional callback function is provided. If so, the request is ran asynchronously and its response is sent to the callback when available.
-
-> Since version 2.3, edges (links between nodes) are considered nodes, with the special attributes `src_id` and `tgt_id` referring the `_id` of other nodes.
-> The API supports JSON exchanges over HTTP(S).
-
-> The Python API and the Javascript API follow the behavior described in the [Contributing](Contributing) page.
+To setup a scripting environment for Python or Javascript please read the [Client Setup](Client Setup) guide.
 
 ## Table of contents
+[**Notes**](#notes-about-the-API)
 
 [**CRUD methods**](#crud-methods)
 - [`create`](#apicreate)
 - [`read`](#apiread)
 - [`update`](#apiupdate)
 - [`delete`](#apidelete)
+
+[**Authentication**](#authentication)
+- [`signIn`](#apisignIn)
+- [`signOut`](#apisignOut)
+- [`verify`](#apiverify)
 
 [**Search queries**](#search-queries)
 - `ancestors` *
@@ -35,13 +31,21 @@ Notes on API:
 - `reference` *
 - `write` *
 
-[**Authentication**](#authentication)
-- [`signIn`](#apisignIn)
-- [`signOut`](#apisignOut)
-- [`verify`](#apiverify)
-
 \* *Not implemented yet in NodeJS*
 
+
+## Notes about the API
+
+Sync / Async
+> The Python API supports synchronous requests only and do not support callbacks.
+> The JavaScript API supports asynchronous requests if the optional callback function is provided as argument to the API calls. If so, the request is ran asynchronously and its response is sent to the callback when available. If the callback is not provided, a synchronous call is made and the return value is used.
+
+Graphs
+> Since version 2.3, edges (the directed links between nodes) are also considered as nodes, with the special attributes `src_id` and `tgt_id` referring the `_id` of the other nodes to link.
+> The API supports JSON exchanges over HTTP(S).
+
+Contributing
+> The API implementations follow the specifications described in the [Contributing](Contributing) page to communicate with the server, that you could read if you would like more details about the underlying architecture.
 
 # CRUD methods
 
@@ -53,7 +57,7 @@ Create node(s) in the database.
 Nodes have an `_id` key being their unique identifier in the database. This key can specified during creation, but can't be updated afterwards without first deleting the node.
 The server may add some other arbitrary keys.
 
-* __`create(nodes, [callback])`__
+* __create(`nodes`, [`callback`])__
 
 __Arguments__
 
@@ -91,7 +95,7 @@ damas.create({key1: "value2"}, function (node) {
 
 Retrieve one or more nodes given their ids.
 
-* __`read(ids, [callback])`__
+* __read(`ids`, [`callback`])__
 
 __Arguments__
 
@@ -160,6 +164,32 @@ __delete( `ids`, [`callback`] )__
 // Javascript
 damas.delete(id);
 ```
+
+
+# Authentication
+
+Please refer to the dedicated [Authentication](Authentication) page to have more details about how the implemented JSON web token based authentication works.
+
+## /api/signIn
+Sign in using the server embeded authentication system
+
+__signIn( username, password, [callback])__
+
+* `username` string
+* `password` the user secret password string
+* `callback` (js_only, optional) function to call for asynchronous mode
+* returns the authenticated user node on success, false otherwise
+
+## /api/signOut
+* @param {function} [callback] - Function to call, accepting a boolean argument
+* @return true on success, false otherwise
+
+## /api/verify
+Check if the authentication is valid
+* @param {function} [callback] - Function to call, accepting a boolean argument
+* @return true on success, false otherwise
+
+
 
 # Search Queries
 
@@ -274,6 +304,11 @@ __unlock( `id`, [`callback`] )__
 
 > If the asset is not locked or locked for someone else (`lock` key value != authenticated user name) it returns false. If it was successfully unlocked, returns true.
 
+<!--
+## publish
+__publish( `nodes` )__
+-->
+
 ## version
 Insert a new file as a new version of an existing asset, wearing the specified keys.
 
@@ -322,7 +357,7 @@ Increment the asset after a successful backup and commit sequence
 * @param {String} asset node index
 * @param {String} user message for the new version
 
-### damas.upload( files )
+## upload
 Process the file upload
 * @param {String} $id the asset
 * @param {String} $path the path of the uploaded file in the temporary folder
@@ -330,26 +365,3 @@ Process the file upload
 * @returns {Boolean} true on success, false otherwise
 
 -->
-
-# Authentication
-
-Please refer to the dedicated [Authentication](Authentication) page to have more details about how the implemented JSON web token based authentication works.
-
-## /api/signIn
-Sign in using the server embeded authentication system
-
-__signIn( username, password, [callback])__
-
-* `username` string
-* `password` the user secret password string
-* `callback` (js_only, optional) function to call for asynchronous mode
-* returns the authenticated user node on success, false otherwise
-
-## /api/signOut
-* @param {function} [callback] - Function to call, accepting a boolean argument
-* @return true on success, false otherwise
-
-## /api/verify
-Check if the authentication is valid
-* @param {function} [callback] - Function to call, accepting a boolean argument
-* @return true on success, false otherwise
