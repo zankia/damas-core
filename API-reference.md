@@ -1,4 +1,4 @@
-The programming interfaces consist in exposing the server operations using client modules for the Python and the Javascript languages.
+The programming interfaces expose the server operations as modules for the Python and the Javascript languages.
 
 To setup a scripting environment for Python or Javascript please read the [Client Setup](Client Setup) guide.
 
