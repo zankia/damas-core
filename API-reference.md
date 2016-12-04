@@ -40,8 +40,7 @@ Types
 > The server and the clients use the JSON format to communicate through the HTTP protocol, whereas the client modules use the native language data types: nodes are returned as Python dictionaries or JavaScript objects. The Python implementation uses `None`, the JavaScript implementation uses `null`.
 
 Sync / Async
-> The Python API supports synchronous requests only and do not support callbacks.
-> The JavaScript API supports asynchronous requests if the optional callback function is provided as argument to the API calls. If so, the request is ran asynchronously and its response is sent to the callback when available. If the callback is not provided, a synchronous call is made and the return value is used.
+> The Python API supports only synchronous requests (for now). The JavaScript API supports both synchronous and asynchronous requests. If the optional callback is provided as argument to the API calls, the request is ran asynchronously and the response is given as an argument to the specified callback. If the callback is not provided, the request is made synchronously and the return value holds the response.
 
 Graphs
 > Since version 2.3, edges (the directed links between nodes) are also considered as nodes, with the special attributes `src_id` and `tgt_id` referring the `_id` of the other nodes to link.
@@ -55,8 +54,7 @@ These are the low-level methods to handle the generic nodes and edges entities a
 
 ## create
 
-Create node(s) in the database.
-Nodes have an `_id` key being their unique identifier in the database. This key can specified during creation, but can't be updated afterwards without first deleting the node.
+Create node(s) in the database. Nodes have an `_id` key being their unique identifier in the database. This key can be specified during creation, but can't be updated afterwards without first deleting the node.
 The server may add some other arbitrary keys (author, time)
 
 __create(`nodes`, [`callback`])__
