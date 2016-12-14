@@ -7,38 +7,68 @@
 The communication protocol is built on top of HTTP. This chapter describes the queries, responses, and possible error codes to help building consistent and compatible implementations of clients and servers.
 
 ## create
-* Request `POST` `/api/create/` `application/json` object or array of objects
-* Response `201` `application/json` OK (created node(s))
-* Response `207` `application/json` Multi-Status (some nodes were conflictuous, the others are created)
-* Response `400` `text/html` Bad Request (not formatted correctly)
-* Response `409` `text/html` Conflict (no node was created, probably due to an `_id` conflict)
+Insert new nodes
 
-In case of a successful multiple node creation, the returned json is a list of nodes ordered using the same order as the provided input.
+HTTP Requests
+* `POST` `/api/create/` `application/json` object or array of objects
+
+HTTP response status codes
+```
+201 OK (node(s) created)                                           application/json (object or array of objects)
+207 Multi-Status (some nodes already exist with these identifiers) application/json (array of objects or null)
+400 Bad Request (not formatted correctly)                          text/html        (error message)
+403 Forbidden (the user does not have the right permission)        text/html        (error message)
+409 Conflict (all nodes already exist with these identifiers)      text/html        (error message)
+```
+> In case of a successful multiple node creation, the returned json is a list of nodes ordered using the same order as the provided input.
 
 ## read
-* Request `GET` `/api/read/id1,id2`
-* Request `POST` `/api/read/` `application/json` node identifier or array of node identifiers
-* Response `200` `application/json` OK (node or array of nodes)
-* Response `400` `text/html` Bad Request (not formatted correctly)
-* Response `404` `text/html` Not Found (the nodes do not exists)
+Retrieve the specified nodes
 
-The POST method is used in order to bypass the limits of the size of the URL (80KB for NodeJS). The GET method remains.
+HTTP Requests
+* `GET` `/api/read/id1,id2`
+* `POST` `/api/read/` `application/json` node identifier or array of node identifiers
+
+HTTP response status codes
+```
+200 OK (nodes retrieved)                                    application/json (node identifier or array of node identifiers)
+207 Multi-Status (some nodes do not exist)                  application/json (array of node identifiers and null)
+400 Bad request (not formatted correctly)                   text/html        (error message)
+403 Forbidden (the user does not have the right permission) text/html        (error message)
+404 Not Found (all the nodes do not exist)                  text/html        (error message)
+```
+
+> The POST method is used in order to bypass the limits of the size of the URL (80KB for NodeJS). The GET method remains.
 
 ## update
-* Request `PUT` `/api/update/` `application/json` node or array of nodes
-* Response `200` `application/json` OK (updated node or array of updated nodes)
-* Response `400` `text/html` Bad Request (not formatted correctly)
-* Response `403` `text/html` Forbidden (the user does not have the right permission)
-* Response `404` `text/html` Not Found (the nodes do not exist)
+Update existing nodes
 
-The input accepts arrays for _id keys to perform updates of the same kind on multiple nodes. Unspecified keys will be unchanged in the database. A key with null value deletes the key.
+HTTP Requests
+* `PUT` `/api/update/` `application/json` node or array of nodes
+
+HTTP response status codes
+```
+200 OK (nodes updated)                                      `application/json` (object or array of objects)
+207 Multi-Status (some nodes do not exist)                  `application/json` (array of objects or nulls)
+400 Bad Request (not formatted correctly)                   `text/html`        (error message)
+403 Forbidden (the user does not have the right permission) `text/html`        (error message)
+404 Not Found (every nodes do not exist)                    `text/html`        (error message)
+```
+> The input accepts arrays for _id keys to perform updates of the same kind on multiple nodes. Unspecified keys will be unchanged in the database. A key with null value deletes the key.
 
 ## delete
-* Request `DELETE` `/api/ids`
-* Response `200` `application/json` deleted node or array of deleted nodes
-* Response `207` `application/json` array of deleted nodes or null (partial)
-* Response `400` `text/html` error message (bad request)
-* Response `404` `text/html` error message (node not found)
+Delete nodes
+
+HTTP Requests
+* `DELETE` `/api/ids` `application/json` node identifier or array of node identifiers
+
+HTTP response status codes
+```
+200 OK (nodes deleted or not found)        application/json (deleted node identifier or array of identifiers)
+207 Multi-Status (some nodes do not exist) application/json (array of deleted nodes identifiers or null)
+400 Bad request (not formatted correctly)  text/html        (error message)
+404 Not Found (all the nodes do not exist) text/html        (error message)
+```
 
 ## search_one
 * Request `GET` `/api/search_one/`query
