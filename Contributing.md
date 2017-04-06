@@ -4,8 +4,22 @@
 * [JS Code Conventions](#js-code-conventions)
 
 # Protocol Specifications
-The communication protocol is built on top of HTTP. This chapter describes the queries, responses, and possible error codes to help building consistent and compatible implementations of clients and servers.
+The communication protocol is built over HTTP. This chapter describes the service operations, the possible responses and error codes to built consistent and compatible implementations of damas clients and servers.
 
+## publish
+Insert new nodes. Similar to the generic create operation but accessible to the user class, and also performs some verifications of the keys provided as argument.
+
+HTTP Requests
+* `POST` `/api/publish/` `application/json` object or array of objects
+
+HTTP response status codes
+```
+201 OK (node(s) created)                                           application/json (object or array of objects)
+207 Multi-Status (some nodes already exist with these identifiers) application/json (array of objects or null)
+400 Bad Request (not formatted correctly)                          text/html        (error message)
+403 Forbidden (the user does not have the right permission)        text/html        (error message)
+409 Conflict (all nodes already exist with these identifiers)      text/html        (error message)
+```
 ## create
 Insert new nodes
 
