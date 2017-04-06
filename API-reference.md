@@ -1,52 +1,144 @@
-The programming interfaces expose the server operations as modules for the Python and the Javascript languages.
-
-To setup a scripting environment for Python or Javascript please read the [Client Setup](Client Setup) guide.
-
-## Table of contents
-[**Notes**](#notes-about-the-API)
-
-[**CRUD methods**](#crud-methods)
-- [`create`](#apicreate)
-- [`read`](#apiread)
-- [`update`](#apiupdate)
-- [`delete`](#apidelete)
-
-[**Authentication**](#authentication)
-- [`signIn`](#apisignIn)
-- [`signOut`](#apisignOut)
-- [`verify`](#apiverify)
-
-[**Search queries**](#search-queries)
-- `ancestors` *
-- [`graph`](#apigraph)
-- [`search`](#apisearch)
-- [`search_mongo`](#apisearch_mongo)
-
-[**Asset management**](#asset-management)
-- [`lock`](#apilock)
-- [`unlock`](#apiunlock)
-- [`version`](#apiversion)
-- [`link`](#apilink)
-- `variation` *
-- `reference` *
-- `write` *
-
-\* *Not implemented yet in NodeJS*
-
+The damas-core API is implemented as modules for Python and Javascript programming languages. Please read the [[Client Setup]] guide to setup a scripting environment.
 
 ## Notes about the API
 
 Types
-> The server and the clients use the JSON format to communicate through the HTTP protocol, whereas the client modules use the native language data types: nodes are returned as Python dictionaries or JavaScript objects. The Python implementation uses `None`, the JavaScript implementation uses `null`.
+> The client modules use the native language data types: Python nodes are returned as dictionaries or JavaScript objects according to the language used. Python `None`, `True`, `False`, are equivalent to JavaScript `null`, `true`, `false`, and are translated to/from JSON to communicate with the server.
 
 Sync / Async
-> The Python API supports only synchronous requests (for now). The JavaScript API supports both synchronous and asynchronous requests. If the optional callback is provided as argument to the API calls, the request is ran asynchronously and the response is given as an argument to the specified callback. If the callback is not provided, the request is made synchronously and the return value holds the response.
+> The JavaScript API supports both synchronous and asynchronous requests. If the optional callback is provided as argument to the API calls, the request is ran asynchronously and the response is given as an argument to the specified callback. If the callback is not provided, the request is made synchronously and the return value holds the response. The Python API supports only synchronous requests (for now). 
 
 Graphs
 > Since version 2.3, edges (the directed links between nodes) are also considered as nodes, with the special attributes `src_id` and `tgt_id` referring the `_id` of the other nodes to link.
 
 Contributing
-> The API implementations follow the specifications described in the [Contributing](Contributing) page to communicate with the server, that you could read if you would like more details about the underlying architecture.
+> The API implementations follow the specifications described in the [Contributing](Contributing) page to communicate with the server, that you could read if you would like have more details about the underlying architecture.
+
+## Table of contents
+
+[**Asset management**](#asset-management)
+- [`lock`](#lock)
+- [`publish`](#publish)
+- [`unlock`](#unlock)
+
+[**Authentication**](#authentication)
+- [`signIn`](#signIn)
+- [`signOut`](#signOut)
+- [`verify`](#verify)
+
+[**CRUD methods**](#crud-methods)
+- [`create`](#create)
+- [`read`](#read)
+- [`update`](#update)
+- [`delete`](#delete)
+
+[**Search queries**](#search-queries)
+- `ancestors` *
+- [`graph`](#graph)
+- [`search`](#search)
+- [`search_mongo`](#search_mongo)
+
+<!--
+- [`version`](#apiversion)
+- [`link`](#apilink)
+- `variation` *
+- `reference` *
+- `write` *
+-->
+
+\* *Not implemented yet in NodeJS*
+
+
+# Asset management
+
+## lock
+Lock assets for edition, for the current user.
+
+__lock( `ids`, [`callback`] )__
+
+* `ids` a node identifier string (to lock one asset), or an array of identifiers
+* `callback` _(optional)_ (_js only_) function to call for asynchronous mode accepting a boolean argument
+* returns true on success, false otherwise
+
+> Sets a `lock` key on the node, with the authenticated username as value. If the asset is already locked, it will return false.
+
+```py
+# Python
+# lock one asset
+project.lock('/project/path/to/file')
+# True
+
+# lock multiple assets in 1 request
+project.lock(['/project/path/to/file1', '/project/another_file_path'])
+# True
+```
+
+## publish
+__publish( `nodes`, [`callback`] )__
+
+* `nodes` an object or array of objects to insert in the database
+* `callback` (_js only_) if specified, the request is asynchronous
+* returns a unique node or an array of nodes (depending on the input) on success
+* returns `null` (Javascript) or `None` (Python) on failure
+
+> same specifications as /api/create, except that it is accessible to the user class or above, and that it is expecting specific keys.
+
+```json
+{
+  "_id": "/root/folder/file",
+  "comment": "text",
+  "origin": "sitename"
+}
+```
+
+* key `_id` can be a string path, or an array of string paths
+* key `origin` should be an alphanumerical name without space, for ease of use
+
+optional keys (these keys are not mandatory but could ease multi sites configurations and version control):
+* `file_mtime` Number (milliseconds since 1 Jan 1970 00:00)
+* `file_size` Number (number of bytes)
+* `version` Number
+
+> In a multi-site environment, the `origin` and `_id` path are used to retrieve the file from the source server.
+
+
+## unlock
+Unlock a locked asset.
+
+__unlock( `id`, [`callback`] )__
+
+* `id` asset node index string
+* `callback` _(optional)_ (_js only_) function to call for asynchronous mode accepting a boolean argument
+* Returns true on success, false otherwise
+
+> If the asset is not locked or locked for someone else (`lock` key value != authenticated user name) it returns false. If it was successfully unlocked, returns true.
+
+
+# Authentication
+
+Please refer to the dedicated [Authentication](Authentication) page to have more details about how the implemented JSON web token based authentication works.
+
+## /api/signIn
+Sign in using the server embeded authentication system
+
+__signIn( `username`, `password`, [`callback`])__
+
+* `username` string
+* `password` the user secret password string
+* `callback` (js_only, optional) function to call for asynchronous mode
+* returns an object containing an authentication token on success, false otherwise
+
+## /api/signOut
+__signOut([`callback`])__
+* `callback` (js_only, optional) function to call for asynchronous mode
+* returns true on success, false otherwise
+
+## /api/verify
+Check if the authentication is valid
+__verify([`callback`])__
+* `callback` (js_only, optional) function to call for asynchronous mode
+* returns true on success, false otherwise
+
 
 # CRUD methods
 
@@ -168,33 +260,6 @@ __delete( `ids`, [`callback`] )__
 damas.delete(id);
 ```
 
-
-# Authentication
-
-Please refer to the dedicated [Authentication](Authentication) page to have more details about how the implemented JSON web token based authentication works.
-
-## /api/signIn
-Sign in using the server embeded authentication system
-
-__signIn( `username`, `password`, [`callback`])__
-
-* `username` string
-* `password` the user secret password string
-* `callback` (js_only, optional) function to call for asynchronous mode
-* returns an object containing an authentication token on success, false otherwise
-
-## /api/signOut
-__signOut([`callback`])__
-* `callback` (js_only, optional) function to call for asynchronous mode
-* returns true on success, false otherwise
-
-## /api/verify
-Check if the authentication is valid
-__verify([`callback`])__
-* `callback` (js_only, optional) function to call for asynchronous mode
-* returns true on success, false otherwise
-
-
 # Search Queries
 
 ## search
@@ -284,34 +349,8 @@ Recursively get all source nodes and edges connected to the specified node
 var sources = damas.graph("55687e68e040af7047ee1a53");
 ```
 
-# Asset management
-
-## lock
-Lock the asset for edition, for the current user.
-
-__lock( `id`, [`callback`] )__
-
-* `id` asset node index string
-* `callback` _(optional)_ (_js only_) function to call for asynchronous mode accepting a boolean argument
-* Returns true on success, false otherwise
-
-> Sets a `lock` key on the node, with the authenticated username as value. If the asset is already locked, it will return false.
-
-## unlock
-Unlock a locked asset.
-
-__unlock( `id`, [`callback`] )__
-
-* `id` asset node index string
-* `callback` _(optional)_ (_js only_) function to call for asynchronous mode accepting a boolean argument
-* Returns true on success, false otherwise
-
-> If the asset is not locked or locked for someone else (`lock` key value != authenticated user name) it returns false. If it was successfully unlocked, returns true.
-
 <!--
-## publish
-__publish( `nodes` )__
--->
+
 
 ## version
 Insert a new file as a new version of an existing asset, wearing the specified keys.
@@ -343,7 +382,6 @@ __link( `target`, `sources`, `keys`, [`callback`] )__
 project.link("/bbb/production/chars/bird.blend",["/bbb/production/chars/textures/butterflywings.png","/bbb/production/chars/textures/bird_eye.png"],{"link_type":"texture"})
 ```
 
-<!--
 ## Trees, based on a #parent key
 
 - damas.ancestors( id )
