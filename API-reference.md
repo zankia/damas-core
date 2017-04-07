@@ -6,7 +6,7 @@ Types
 > The client modules use the native language data types: Python nodes are returned as dictionaries or JavaScript objects according to the language used. Python `None`, `True`, `False`, are equivalent to JavaScript `null`, `true`, `false`, and are translated to/from JSON to communicate with the server.
 
 Sync / Async
-> The JavaScript API supports both synchronous and asynchronous requests. If the optional callback is provided as argument to the API calls, the request is ran asynchronously and the response is given as an argument to the specified callback. If the callback is not provided, the request is made synchronously and the return value holds the response. The Python API supports only synchronous requests (for now). 
+> The JavaScript API supports both synchronous and asynchronous requests. If the optional callback is provided as argument to the API calls, the request is ran asynchronously and the response is given as an argument to the specified callback. If the callback is not provided, the request is made synchronously and the return value holds the response. The Python API uses synchronous requests (a bit of work is required to make them async ready). 
 
 Graphs
 > Since version 2.3, edges (the directed links between nodes) are also considered as nodes, with the special attributes `src_id` and `tgt_id` referring the `_id` of the other nodes to link.
@@ -26,7 +26,7 @@ Contributing
 - [`signOut`](#signOut)
 - [`verify`](#verify)
 
-[**CRUD methods**](#crud-methods)
+[**Generic CRUD**](#generic-crud)
 - [`create`](#create)
 - [`read`](#read)
 - [`update`](#update)
@@ -51,8 +51,21 @@ Contributing
 
 # Asset management
 
+The assets are described as JSON nodes where _id key (identifier) is the path of the file
+```json
+{
+    "_id": "/project/path/to/file",
+    "author": "username who published the file",
+    "comment": "author text when published",
+    "file_mtime": 1491503965000,
+    "file_size": 21419055,
+    "lock": "username who locked the file",
+    "time": 1491692123000
+}
+```
+
 ## lock
-Lock assets for edition, for the current user.
+Nominative lock on assets for the current user (sets `lock` key equals to authenticated username)
 
 __lock( `ids`, [`callback`] )__
 
@@ -85,7 +98,7 @@ __publish( `nodes`, [`callback`] )__
 
 ```json
 {
-  "_id": "/root/folder/file",
+  "_id": "/project/path/to/new_file",
   "comment": "text",
   "origin": "sitename"
 }
@@ -105,9 +118,9 @@ optional keys (these keys are not mandatory but could ease multi sites configura
 ## unlock
 Unlock a locked asset.
 
-__unlock( `id`, [`callback`] )__
+__unlock( `ids`, [`callback`] )__
 
-* `id` asset node index string
+* `ids` a node identifier string (to unlock one asset), or an array of identifiers
 * `callback` _(optional)_ (_js only_) function to call for asynchronous mode accepting a boolean argument
 * Returns true on success, false otherwise
 
@@ -117,6 +130,16 @@ __unlock( `id`, [`callback`] )__
 # Authentication
 
 Please refer to the dedicated [Authentication](Authentication) page to have more details about how the implemented JSON web token based authentication works.
+
+```json
+{
+    "class": "user",
+    "email": "usermail@address.com",
+    "fullname": "Firstname Lastname String",
+    "password": "13d3a2a16c0cd2f7bf115d471999377e",
+    "username": "userlogin",
+}
+```
 
 ## /api/signIn
 Sign in using the server embeded authentication system
@@ -140,7 +163,7 @@ __verify([`callback`])__
 * returns true on success, false otherwise
 
 
-# CRUD methods
+# Generic CRUD
 
 These are the low-level methods to handle the generic nodes and edges entities and their attributes. The nodes and edges are identified by unique identifiers, stored in the reserved `_id` key.
 
