@@ -87,6 +87,8 @@ project.lock(['/project/path/to/file1', '/project/another_file_path'])
 ```
 
 ## publish
+Add files to the index
+
 __publish( `nodes`, [`callback`] )__
 
 * `nodes` an object or array of objects to insert in the database
