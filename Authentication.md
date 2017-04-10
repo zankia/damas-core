@@ -70,6 +70,26 @@ The configuration options of this module are located in the configuration file `
 
 `jwt.secret` the secret passphrase used to encode and decode tokens
 
+## Permissions
+Users can be assigned to a group with the `class` key.
+Possible values are `guest` (default), `user`, `editor` and `admin`
+
+|              | Guest | User | Editor | Admin |
+|--------------|-------|------|--------|-------|
+|    create    |       |      |    X   |   X   |
+|     read     |   X   |   X  |    X   |   X   |
+|    update    |       |      |    X   |   X   |
+|    delete    |       |      |    X   |   X   |
+|     lock     |       |   X  |    X   |   X   |
+|    unlock    |       |   X  |    X   |   X   |
+|    publish   |       |   X  |    X   |   X   |
+|    upload    |       |   X  |    X   |   X   |
+|    version   |       |   X  |    X   |   X   |
+|     file     |       |   X  |    X   |   X   |
+|     graph    |   X   |   X  |    X   |   X   |
+|    search    |   X   |   X  |    X   |   X   |
+| search_mongo |   X   |   X  |    X   |   X   |
+
 ## NodeJS
 
 The Express authentication middleware verifies tokens and permissions and stores the authenticated user node under the request object `req.user` and can be accessed in further processes which need to know the authenticated user properties (eg. the asset management part).
