@@ -72,6 +72,7 @@ The configuration options of this module are located in the configuration file `
 
 ## Permissions
 Users can be assigned to a group with the `class` key.
+
 Possible values are `guest` (default), `user`, `editor` and `admin`
 
 |              | Guest | User | Editor | Admin |
