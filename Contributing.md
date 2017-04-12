@@ -94,7 +94,7 @@ HTTP response status codes
 * Response `200` `application/json` array of string identifiers
 * Response `409` `text/html` error message
 
-##signIn
+## signIn
 * Request `POST` `/api/signIn/` `application/x-www-form-urlencoded` `username` `password`
 * Response `200` `application/json` user object
 * Response `401` `text/html` error message
@@ -158,7 +158,7 @@ If you have this error :
 ```
 then modify the shebang of the command (node_modules/{moduleName}/bin/{moduleName}) to `#!/usr/bin/env `**`nodejs`** or create an alias `node` -> `nodejs`
 
-##Tests results
+## Tests results
 
 Fun fact : Mocha did a really strange thing : it changes `'Foo'` into `{Foo:''}` when it is sent in POST
 
