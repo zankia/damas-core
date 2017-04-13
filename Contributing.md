@@ -92,9 +92,10 @@ HTTP Requests
 
 HTTP response status codes
 ```
-200 OK (node created)                      application/json    (object)
-400 Bad request (not formatted correctly)  text/html           (error message)
-404 Not Found (the node does not exist)    text/html           (error message)
+201 OK (node created)                                       application/json    (object)
+400 Bad request (not formatted correctly)                   text/html           (error message)
+403 Forbidden (the user does not have the right permission) text/html           (error message)
+404 Not Found (the node does not exist)                     text/html           (error message)
 ```
 
 ## search_one
