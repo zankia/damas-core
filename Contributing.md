@@ -84,6 +84,19 @@ HTTP response status codes
 404 Not Found (all the nodes do not exist) text/html        (error message)
 ```
 
+## comment
+Create new node under an already existing node. The new node represents the comment that is assigned to an asset.
+
+HTTP Requests
+* `POST` `/api/comment/` `application/json` object
+
+HTTP response status codes
+```
+200 OK (node created)                      application/json    (object)
+400 Bad request (not formatted correctly)  text/html           (error message)
+404 Not Found (the node does not exist)    text/html           (error message)
+```
+
 ## search_one
 * Request `GET` `/api/search_one/`query
 * Response `200` `application/json` node or null
