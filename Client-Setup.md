@@ -115,14 +115,6 @@ If the server uses JSON Web Tokens (`"auth" : "jwt"` in server config), you will
 
 The authentication token is stored in `/tmp/damas-<username>'. Only root and you can read it and it is removed whenever the system reboots
 
-### Go further
-
-Possible improvements are the following : 
-
-* Make json input easier to use (how?)
-* Make authentification automated like ssh
-* Set error code same as HTTP
-
 
 ## Curl Commands
 Command line access to the server using curl. Request an access token from the server:
