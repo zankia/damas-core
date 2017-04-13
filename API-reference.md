@@ -20,6 +20,7 @@ Contributing
 - [`lock`](#lock)
 - [`publish`](#publish)
 - [`unlock`](#unlock)
+- [`comment`](#comment)
 
 [**Authentication**](#authentication)
 - [`signIn`](#signIn)
@@ -128,6 +129,34 @@ __unlock( `ids`, [`callback`] )__
 
 > If the asset is not locked or locked for someone else (`lock` key value != authenticated user name) it returns false. If it was successfully unlocked, returns true.
 
+## comment
+Add a comment to an asset.
+
+__comment( `node`, [`callback`] )__
+
+* `node` an object specifying the asset's id and the string comment
+* `callback` _(optional)_ (_js only_) function to call for asynchronous mode
+* returns a unique node on success
+* `null` (Javascript) or `None` (Python) on failure
+
+> Sets a key `author` on the node, with the authenticated username as value, as well as a key `time`. 
+
+```python
+# Python
+>>> project.comment({"#parent" : "asset_id", "comment" : "text"})
+{u'author' : u'username', u'time' : 1480588505449, u'#parent' : u'asset_id', u'comment' : u'text'}
+```
+```js
+// Javascript
+damas.comment({'#parent' : "asset_id", comment : "text"});
+>> Object { author: "damas", time: 1480588505449, '#parent': "asset_id", comment: "text" }
+
+// comment using an asynchronous call
+damas.comment({'#parent' : "asset_id", comment : "text"}, function (node) {
+    // asynchronous mode
+    console.log(node.time);
+});
+```
 
 # Authentication
 
