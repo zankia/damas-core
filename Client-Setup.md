@@ -58,6 +58,7 @@ Include the library from a HTML document
     <head>
         <script type="text/javascript" src="damas.js"></script>
         <script type="text/javascript">
+            damas.server = "http://localhost/api/"; // your server URL
             // your code here
         </script>
     </head>
@@ -71,8 +72,7 @@ Include the library from a HTML document
 require('damas.js');
 damas.server = "/api"; // the server is on the localhost
 damas.signIn("demouser", "demouserpassword", function(res){
-    if(!res)
-    {
+    if (!res) {
         // login failed
         return;
     }
