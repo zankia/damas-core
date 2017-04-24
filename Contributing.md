@@ -85,17 +85,18 @@ HTTP response status codes
 ```
 
 ## comment
-Create new node under an already existing node. The new node represents the comment that is assigned to an asset.
+Create new node for each existing node. The new node represents the comment that is assigned to an asset or several assets. (one child node per existing node)
 
 HTTP Requests
 * `POST` `/api/comment/` `application/json` object
 
 HTTP response status codes
 ```
-201 OK (node created)                                       application/json    (object)
+201 OK (nodes created)                                      application/json    (object)
+207 Multi-Status (some nodes don't exist)                   application/json    (array of objects)
 400 Bad request (not formatted correctly)                   text/html           (error message)
 403 Forbidden (the user does not have the right permission) text/html           (error message)
-404 Not Found (the node does not exist)                     text/html           (error message)
+404 Not Found (the nodes do not exist)                      text/html           (error message)
 ```
 
 ## search_one
