@@ -130,21 +130,26 @@ __unlock( `ids`, [`callback`] )__
 > If the asset is not locked or locked for someone else (`lock` key value != authenticated user name) it returns false. If it was successfully unlocked, returns true.
 
 ## comment
-Add a comment to an asset.
+Add a comment to one or several asset(s).
 
-__comment( `node`, [`callback`] )__
+__comment( `nodes`, [`callback`] )__
 
-* `node` an object specifying the asset's id and the string comment
+* `nodes` an object  or array of objects specifying the assets' id and the string comment
 * `callback` _(optional)_ (_js only_) function to call for asynchronous mode
-* returns a unique node on success
+* returns a unique node or an array of nodes on success
 * `null` (Javascript) or `None` (Python) on failure
 
 > Sets a key `author` on the node, with the authenticated username as value, as well as a key `time`. 
 
 ```python
 # Python
+#single parent id
 >>> project.comment({"#parent" : "asset_id", "comment" : "text"})
 {u'author' : u'username', u'time' : 1480588505449, u'#parent' : u'asset_id', u'comment' : u'text'}
+
+#multiple parent ids
+>>> project.comment({"#parent" : ["asset_id1", "asset_id2"], "comment" : "text"})
+[{u'author' : u'username', u'time' : 1480588505449, u'#parent' : u'asset_id1', u'comment' : u'text'}, {u'author' : u'username', u'time' : 1480588505449, u'#parent' : u'asset_id2', u'comment' : u'text'}]
 ```
 ```js
 // Javascript
