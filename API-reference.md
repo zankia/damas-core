@@ -361,11 +361,15 @@ __damas.search_mongo(`query`, [`sort`, `limit`, `skip`, `callback`])__
 * `callback` _(optional)_ _(js only)_ function to call to perform an asynchronous search. If undefined, a synchronous read is performed.
 * returns arrays of matching indexes
 
-> In order to use regular expressions, and because the JSON format only accept strings and has no type for regular expressions, we use strings with the prefix REGEX_ to indicate to the server that it must convert it to a RegExp object before executing the Mongo query.
+> In order to use regular expressions, and because the JSON format only accept strings and has no type for regular expressions, we use strings with the prefix REGEX_ to indicate to the server that it must convert it to a RegExp object before executing the Mongo query. To add options to regular expressions, prefer the syntax RX_`expression`_RX`options`.
 
     For example: the /.*/ regular expression.
 
     is written "REGEX_.*" as string format in the JSON messages
+
+    Example with case-insensitive option: /.*/i
+
+    is written "RX_.*_RXi" as string format in the JSON messages
 
 ```py
 # Python
