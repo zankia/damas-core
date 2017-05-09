@@ -88,13 +88,13 @@ project.lock(['/project/path/to/file1', '/project/another_file_path'])
 ```
 
 ## publish
-Add files to the index
+Add files to the index. For each node published, a child node is created to keep track of the original state of each node upon publish.
 
 __publish( `nodes`, [`callback`] )__
 
 * `nodes` an object or array of objects to insert in the database
 * `callback` (_js only_) if specified, the request is asynchronous
-* returns a unique node or an array of nodes (depending on the input) on success
+* returns an array of nodes (containing parent nodes and child nodes) on success
 * returns `null` (Javascript) or `None` (Python) on failure
 
 > same specifications as /api/create, except that it is accessible to the user class or above, and that it is expecting specific keys.
@@ -102,6 +102,15 @@ __publish( `nodes`, [`callback`] )__
 ```json
 {
   "_id": "/project/path/to/new_file",
+  "comment": "text",
+  "origin": "sitename"
+}
+```
+Child node :
+```json
+{
+  "_id": "55ae0b1ed81e88357d77d0e9",
+  "#parent" : "/project/path/to/new_file",
   "comment": "text",
   "origin": "sitename"
 }
