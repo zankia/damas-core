@@ -70,6 +70,20 @@ HTTP response status codes
 ```
 > The input accepts arrays for _id keys to perform updates of the same kind on multiple nodes. Unspecified keys will be unchanged in the database. A key with null value deletes the key.
 
+## upsert
+Updates existing nodes and/or creates new nodes
+
+HTTP Requests
+* `POST` `/api/upsert/` `application/json` node or array of nodes
+
+HTTP response status codes
+```
+200 OK (nodes updated)                                      `application/json` (object or array of objects)
+400 Bad Request (not formatted correctly)                   `text/html`        (error message)
+403 Forbidden (the user does not have the right permission) `text/html`        (error message)
+```
+> The input accepts arrays for _id keys, as well as values "null".
+
 ## delete
 Delete nodes
 
