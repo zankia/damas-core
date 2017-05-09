@@ -31,6 +31,7 @@ Contributing
 - [`create`](#create)
 - [`read`](#read)
 - [`update`](#update)
+- [`upsert`](#upsert)
 - [`delete`](#delete)
 
 [**Search queries**](#search-queries)
@@ -88,7 +89,7 @@ project.lock(['/project/path/to/file1', '/project/another_file_path'])
 ```
 
 ## publish
-Add files to the index. For each node published, a child node is created to keep track of the original state of each node upon publish.
+Add files to the index. A child node is created to keep track of the original state of each node upon publish.
 
 __publish( `nodes`, [`callback`] )__
 
@@ -313,6 +314,59 @@ project.create({'a':'a', 'b':'b'})
 project.update(['56017b3053f58ea107dea5f7', '56017b3853f58ea107dea5f8'], {'a':'A', 'b':None})
 # [{u'a': u'A', u'_id': u'56017b3053f58ea107dea5f7', u'time': 1442937648390, u'author': u'demo'}, {u'a': u'A', u'_id': u'56017b3853f58ea107dea5f8', u'time': 1442937656258, u'author': u'demo'}]
 ```
+
+
+## upsert
+Create nodes and/or update existing nodes if Id is specified and found
+
+__upsert( `nodes`, [`callback`] )__
+
+* `nodes` an object or array of objects to insert and/or update in the database
+* `callback` (_js only_) if specified, the request is asynchronous
+* returns a unique node or an array of nodes (depending on the input) on success
+* returns `null` (Javascript) or `None` (Python) on failure
+
+```python
+# Python
+# create a new node with a specified id
+>>> project.upsert({"_id":"55ae0b1ed81e88357d77d0e9"})
+{u'time': 1437469470133, u'_id': u'55ae0b1ed81e88357d77d0e9', u'author': u'demo'}
+
+# update a node
+>>> project.upsert([{"_id":"55ae0b1ed81e88357d77d0e9", "additional_key":"value"}])
+{u'additional_key': u'value', u'time': 1437469470133, u'_id': u'55ae0b1ed81e88357d77d0e9', u'author': u'demo'}
+
+# create a new node without specifying id
+>>> project.upsert({"_id":"null"})
+{u'_id': u'57ae0b1ed81e88357d77d0b4', u'time': 1480586620449, u'author': u'demo'}
+
+# create and update
+>>> project.upsert([{"_id":["55ae0b1ed81e88357d77d0e9", "null"], "additional_key":"hello"}])
+[{u'additional_key': u'hello', u'time': 1437469470133, u'_id': u'55ae0b1ed81e88357d77d0e9', u'author': u'demo'}, {u'additional_key': u'hello', u'_id': u'56ae0b1ed81e88357d77d0f9', u'time': 1480586620449, u'author': u'demo'}]
+```
+
+```js
+// Javascript
+// create a new node
+damas.upsert({_id: "null"});
+>> Object { author: "damas", time: 1480588505449, _id: "583ffcd947e759beb73bde39" }
+
+// update a node
+damas.upsert({_id: "583ffcd947e759beb73bde39", a : "test"})
+>> Object { a : "test", author: "damas", time: 1480588505449, _id: "583ffcd947e759beb73bde39" }
+
+//create and update
+damas.upsert({_id: ["583ffcd947e759beb73bde39", "null"], a : "damas"})
+>> Object { a : "damas", author: "damas", time: 1480588505449, _id: "583ffcd947e759beb73bde39" }
+>> Object { a : "damas", author: "damas", time: 1480588505449, _id: "583ffcd947e759beb73ple85" }
+
+// create a new node using an asynchronous call
+damas.upsert({key1: "value2"}, function (node) {
+    // asynchronous mode
+    console.log(node.time);
+});
+```
+
 
 ## delete
 Recursively delete the specified node
