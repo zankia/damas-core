@@ -280,27 +280,30 @@ var nodes = damas.read(["55ae0b1ed81e88357d77d0e9", "560061f2d4cb24441ed88aa4"])
 ## update
 Modify the keys on the specified node(s).
 
-__update( `ids`, `keys`, [`callback`] )__
+__update( `nodes`, [`callback`] )__
 
-* `ids` a node identifier string (to update one node), or an array of identifiers
-* `keys` key:value pairs
+* `nodes` an object or an array of objects to update
 * `callback` _(optional)_ (_js only_) function to call for asynchronous mode
-* returns the modified nodes on success, false otherwise
+* returns the modified node(s) on success, false otherwise
 
 > The specified keys overwrite the existing keys on the server. Other, unspecified keys, are left untouched on the server. A null value removes the key.
 
 > If multiple nodes are specified, the resulting array is sorted in the same order as the input array of identifiers.
 
+> Each object can accept an array of ids
+
 ```js
 // Javascript
-// Create a set of keys for our node
-var keys = {name:'test2',newKey:'name'};
+// Create a node
+damas.create({_id:"55ae0b1ed81e88357d77d0e9"});
+>> Object { author: "demo", time: 1480588505449, _id: "55ae0b1ed81e88357d77d0e9" }
 
-// Update the node id with this set of keys
-var node = damas.update(id, keys);
+// Update the node
+damas.update({_id:"55ae0b1ed81e88357d77d0e9", key: "value");
+>> Object { author: "demo", time: 1480588505449, key: "value", _id: "55ae0b1ed81e88357d77d0e9" }
 ```
 
-In __Python__, identifiers can be specified as a string (for a unique index) or a Python list. The None value is used to remove a key.
+In __Python__, the None value is used to remove a key.
 
 ```py
 # Python
@@ -310,9 +313,9 @@ project.create({'a':'a', 'b':'b'})
 project.create({'a':'a', 'b':'b'})
 # {u'a': u'a', u'_id': u'56017b3853f58ea107dea5f8', u'b': u'b', u'time': 1442937656258, u'author': u'demo'}
 
-# Then we modify the 'a' key and remove the 'b' key on both nodes using one query
-project.update(['56017b3053f58ea107dea5f7', '56017b3853f58ea107dea5f8'], {'a':'A', 'b':None})
-# [{u'a': u'A', u'_id': u'56017b3053f58ea107dea5f7', u'time': 1442937648390, u'author': u'demo'}, {u'a': u'A', u'_id': u'56017b3853f58ea107dea5f8', u'time': 1442937656258, u'author': u'demo'}]
+# Update the created nodes
+project.update([{'_id':'56017b3053f58ea107dea5f7', 'a':'A'}, {'_id':'56017b3853f58ea107dea5f8', 'b':None}])
+# [{u'a': u'A', u'_id': u'56017b3053f58ea107dea5f7', u'b': u'b', u'time': 1442937648390, u'author': u'demo'}, {u'a': u'a', u'_id': u'56017b3853f58ea107dea5f8', u'time': 1442937656258, u'author': u'demo'}]
 ```
 
 
