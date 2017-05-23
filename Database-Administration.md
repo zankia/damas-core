@@ -26,6 +26,28 @@ target="/path/to/db/backupdir"
 mkdir -p $target
 /usr/bin/mysqldump -u$db_user -p$db_pass $db_name | /bin/bzip2 > $target/${db_name}_`/bin/date +%y%m%d-%H:%M`.sql.bz2
 ```
+#### JSON dump and restore
+##### restore a JSON dump using Python:
+```py
+#!/bin/python
+#
+# put your server URL here,
+# then call with
+# python damas-restore.py <db.json>
+#
+import damas
+import json
+import sys
+
+project = damas.http_connection('http://localhost:8092/api')
+file = open(sys.argv[1],"r")
+j = json.loads(file.readline())
+i = 0
+while i < len(j):
+    project.create(j[i:i+50])
+    i = i+50
+    print i,"/",len(j)
+```
 
 ### Database Queries Examples
 
