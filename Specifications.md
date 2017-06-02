@@ -6,17 +6,22 @@ The communication protocol is built over HTTP. This chapter describes the servic
 
 |METHOD|PATH|
 |-----|---|
-| POST | [/api/comment/](#comment) |
+|| CRUDS |
 | POST | [/api/create/](#create) |
 | DELETE | [/api/delete/](#delete) |
-| POST | [/api/publish/](#publish) |
 | GET, POST | [/api/read/](#read) |
 | GET | [/api/search/](#search) |
 | POST | [/api/search_mongo/](#search_mongo) |
-| POST | [/api/signIn/](#signIn) |
-| POST | [/api/signOut/](#signOut) |
 | PUT | [/api/update/](#update) |
 | POST | [/api/upsert/](#upsert) |
+|| DAM |
+| POST | [/api/comment/](#comment) |
+| PUT | [/api/lock/](#lock) |
+| POST | [/api/publish/](#publish) |
+| PUT | [/api/unlock/](#unlock) |
+|| AUTH |
+| POST | [/api/signIn/](#signIn) |
+| POST | [/api/signOut/](#signOut) |
 | GET | [/api/verify/](#verify) |
 
 ## create
@@ -141,10 +146,18 @@ HTTP response status codes
 * Request `/api/signOut/`
 * Response
 
-## /api/verify
+## verify
 * Request `GET` `/api/verify/`
 * Response `200` `application/json` the authenticated user object
 * Response `401`
+
+## lock
+HTTP Requests
+* `PUT` `/api/lock/` `application/json` node identifier or array of node identifiers
+
+## unlock
+HTTP Requests
+* `PUT` `/api/unlock/` `application/json` node identifier or array of node identifiers
 
 # the following operations are drafts (out of specification for now)
 
