@@ -4,6 +4,21 @@
 # Protocol Specifications
 The communication protocol is built over HTTP. This chapter describes the service operations, the possible responses and error codes to built consistent and compatible implementations of damas clients and servers.
 
+|METHOD|PATH|
+|-----|---|
+| POST | [/api/comment/](#comment) |
+| POST | [/api/create/](#create) |
+| DELETE | [/api/delete/](#delete) |
+| POST | [/api/publish/](#publish) |
+| GET, POST | [/api/read/](#read) |
+| GET | [/api/search/](#search) |
+| POST | [/api/search_mongo/](#search_mongo) |
+| POST | [/api/signIn/](#signIn) |
+| POST | [/api/signOut/](#signOut) |
+| PUT | [/api/update/](#update) |
+| POST | [/api/upsert/](#upsert) |
+| GET | [/api/verify/](#verify) |
+
 ## create
 Insert new nodes
 
@@ -21,7 +36,7 @@ HTTP response status codes
 > In case of a successful multiple node creation, the returned json is a list of nodes ordered using the same order as the provided input.
 
 ## read
-Retrieve the specified nodes
+Retrieve the node(s) specified by identifier(s). POST method is available to avoid limitation of URL length.
 
 HTTP Requests
 * `GET` `/api/read/id1,id2`
@@ -72,7 +87,7 @@ HTTP response status codes
 Delete nodes
 
 HTTP Requests
-* `DELETE` `/api/ids` `application/json` node identifier or array of node identifiers
+* `DELETE` `/api/delete/` `application/json` node identifier or array of node identifiers
 
 HTTP response status codes
 ```
