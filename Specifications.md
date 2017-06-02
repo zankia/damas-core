@@ -132,6 +132,7 @@ HTTP response status codes
 409 Conflict (all nodes already exist with these identifiers)      text/html        (error message)
 ```
 
+## search
 ## search_mongo
 * Request `POST` `/api/search_mongo` `application/json` `query` `sort` `limit` `skip`
 * Response `200` `application/json` array of string identifiers
