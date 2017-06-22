@@ -20,7 +20,7 @@ If you need to generate a certificate, you can use certbot with the following co
 docker run --name certbot -p 80:80 -p 443:443 -v /etc/letsencrypt:/etc/letsencrypt certbot/certbot certonly -q --standalone --agree-tos -m YOUR@EMAIL.COM -d YOUR_DOMAIN_NAME
 ```
 
-If you don't want to use HTTPS, you can create fake files with `touch key.pem cert.pem`.
+If you don't want to use HTTPS, you can create fake files with `touch key.pem cert.pem`. Or you can remove `connection` part of the conf.json and it won't run the HTTPS server.
 
 ## Run
 To get damas running, you need to know a single command :
