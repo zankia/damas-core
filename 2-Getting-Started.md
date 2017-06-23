@@ -14,7 +14,7 @@ By default, the installation gives a public access without authentication. The f
 
 In the web browser, on the console page, start a web console (Ctrl+Shft+K) and type:
 ```js
-damas.create({username:"<your_user_name>", password:"<your_password>"});
+damas.create({username:"<your_user_name>", password:"<your_password>", class:"admin"});
 ```
 by default this password is an SHA1 encoded string (that is encoded on your side). To generate the encoded password, you can type this command in a shell:
 ```sh
@@ -25,14 +25,33 @@ You can change the hash encryption algorithm from `sha1` to `md5` and other opti
 
 ```javascript
 {
-    "auth" : "jwt",
-// ...
     "jwt" : {
+        // ...
+        "enable": true,
         "passwordHashAlgorithm" : "sha1",
-        "secret" : "webtokensecret",
-        "exp" : 1440
+        // ...
     },
-// ...
 }
 ```
 Then, restart the server to read the configuration file at startup and sign in using the newly created user. You can also read this [[documentation|Authentication]] about the JSON Web Token base authentification in DAMAS.
+
+## Permissions
+Users can be assigned to a group with the `class` key.
+
+Possible values are `guest` (default), `user`, `editor` and `admin`
+
+|              | Guest | User | Editor | Admin |
+|--------------|-------|------|--------|-------|
+|    create    |       |      |    X   |   X   |
+|     read     |   X   |   X  |    X   |   X   |
+|    update    |       |      |    X   |   X   |
+|    delete    |       |      |    X   |   X   |
+|     lock     |       |   X  |    X   |   X   |
+|    unlock    |       |   X  |    X   |   X   |
+|    publish   |       |   X  |    X   |   X   |
+|    upload    |       |   X  |    X   |   X   |
+|    version   |       |   X  |    X   |   X   |
+|     file     |       |   X  |    X   |   X   |
+|     graph    |   X   |   X  |    X   |   X   |
+|    search    |   X   |   X  |    X   |   X   |
+| search_mongo |   X   |   X  |    X   |   X   |
