@@ -18,7 +18,7 @@ damas.create({username:"<your_user_name>", password:"<your_password>"});
 ```
 by default this password is an SHA1 encoded string (that is encoded on your side). To generate the encoded password, you can type this command in a shell:
 ```sh
-$ echo -n "starwars" | sha1sum
+$ echo -n "yourpassword" | sha1sum
 327156ab287c6aa52c8670e13163fc1bf660add4  -
 ```
 You can change the hash encryption algorithm from `sha1` to `md5` and other options editing the server configuration file conf.json (as explained in server-nodejs/README.md) and enable the JSON Web Token authentication:
