@@ -2,14 +2,15 @@
 
 Welcome to the damas-core wiki.
 
-### Application Programming Interface
+### Main Chapters
+* [[1 Installation]] - Get a server running
+* [[2 Getting Started]] - Configure and set a new project up
+* [[3 API Reference]] - List of API methods
 
-* [[API Reference|3 API Reference]] - List of API methods
+
+### Additional information
 * [[Client Setup]] - Scripting guide to start accessing a damas-core server
-
-### Administration
-To install a server please read the README file in the server directory
-* [[Database Admin Cook Book|Database Administration]] - Some recipes for the administration of the underlying database
+* [[Database Admin|Database Administration]] -  Cook Book, some recipes for the administration of the underlying database
 * [[Authentication]] - Token based authentication implemented in server-nodejs 
 
 ### Implementation notes
