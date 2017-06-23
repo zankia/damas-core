@@ -1,10 +1,12 @@
-###  Run the server for the first time
+##  Access the server for the first time
 
-First, please make sure to follow the implementation specific installation in `server-nodejs/README.md`. Then you can connect to the server at the address:
+First, make sure you followed the instructions in [[Installation|1 Installation]].
 
-> localhost:8443/console.html
-
-Where `localhost` means it is running on the local machine and `8443` is the configured port.
+Then you can try to connect to the server using a web browser at URL:
+```
+https://localhost:8443
+```
+Where `localhost` means it is running on the local machine and `8443` is the configured https port
 
 ### Enable User Authentication
 
