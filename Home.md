@@ -4,7 +4,7 @@ Welcome to the damas-core wiki.
 
 ### Application Programming Interface
 
-* [[API Reference|API Reference]] - List of API methods
+* [[API Reference|3 API Reference]] - List of API methods
 * [[Client Setup]] - Scripting guide to start accessing a damas-core server
 
 ### Administration
