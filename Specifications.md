@@ -1,5 +1,6 @@
 # Table of Contents
 * [Protocol Specifications](#protocol-specifications)
+* [Drafts](#protocol-specifications-drafts)
 
 # Protocol Specifications
 The communication protocol is built over HTTP. This chapter describes the service operations, the possible responses and error codes to built consistent and compatible implementations of damas clients and servers.
@@ -160,7 +161,7 @@ HTTP Requests
 HTTP Requests
 * `PUT` `/api/unlock/` `application/json` node identifier or array of node identifiers
 
-# the following operations are drafts (out of specification for now)
+# Protocol Specifications Drafts
 
 ## version
 * Request `POST` `/api/version/id` `application/json`
