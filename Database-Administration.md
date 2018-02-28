@@ -27,7 +27,13 @@ mkdir -p $target
 /usr/bin/mysqldump -u$db_user -p$db_pass $db_name | /bin/bzip2 > $target/${db_name}_`/bin/date +%y%m%d-%H:%M`.sql.bz2
 ```
 #### JSON dump and restore
-##### restore a JSON dump using Python:
+
+Dump from Mongodb
+```sh
+mongoexport -d node -c node > db.json
+```
+
+##### Restore a JSON dump using Python:
 ```py
 #!/bin/python
 #
