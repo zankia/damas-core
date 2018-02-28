@@ -30,7 +30,7 @@ mkdir -p $target
 
 Dump from Mongodb
 ```sh
-mongoexport -d node -c node > db.json
+mongoexport --jsonArray -d node -c node > db.json
 ```
 
 ##### Restore a JSON dump using Python:
