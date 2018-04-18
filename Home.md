@@ -1,4 +1,4 @@
-<img src="http://damas-software.org/bin/damas_software_logo.svg" alt="damas software logo"/>
+<img src="http://damas-software.org/bin/damas-core_logo.svg" alt="damas-core logo"/>
 
 Welcome to the damas-core wiki.
 
@@ -6,7 +6,7 @@ Welcome to the damas-core wiki.
 * [[1 Installation]] - Get a server running
 * [[2 Getting Started]] - Configure and set a new project up
 * [[3 API Reference]] - List of API methods
-
+* [[4 Specifications]] - Protocol specifications
 
 ### Additional information
 * [[Client Setup]] - Scripting guide to start accessing a damas-core server
