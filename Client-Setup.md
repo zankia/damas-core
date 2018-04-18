@@ -1,4 +1,4 @@
-We provide the libraries for the Python and Javascript languages to access the damas-core server remotely, and interface its methods and the JSON results using the language native objects. Once you get a working environment for scripting, you can visit the [[API reference|API reference]] for a complete reference about the available methods.
+Here is a document to get a working environment for scripting.
 
 ## Contents
 * [Python](#python-client)
@@ -137,7 +137,7 @@ $ curl -k https://localhost:8445/api/verify -H "Authorization: Bearer eyJ0eXAiOi
 
 
 # Documentation
-The [[API documentation|API reference]] in this wiki is a reference for a complete list of the methods available in the API.
+The [[API documentation|3-API reference]] in this wiki is a reference for a complete list of the methods available in the API.
 
 <!--
 ## Web service
