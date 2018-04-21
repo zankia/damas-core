@@ -8,7 +8,7 @@ If you don't have it yet, you will need docker and docker-compose.
 Please use [this tutorial](https://docs.docker.com/compose/install) to install them.
 
 ### Download preset files
-You will also need our preset [config file](http://zankia.fr/damas/conf.json) and [docker-compose file](http://zankia.fr/damas/docker-compose.yml).
+You will also need our preset [config file](http://damas-software.org/docker/conf.json) and [docker-compose file](http://damas-software.org/docker/docker-compose.yml).
 
 docker-compose.yml goes into your project root directory and conf.json goes into a `conf/` directory inside the project root.
 
