@@ -11,8 +11,8 @@ Sync / Async
 Graphs
 > Since version 2.3, edges (the directed links between nodes) are also considered as nodes, with the special attributes `src_id` and `tgt_id` referring the `_id` of the other nodes to link.
 
-Contributing
-> The API implementations follow the specifications described in the [Contributing](Contributing) page to communicate with the server, that you could read if you would like have more details about the underlying architecture.
+Specifications
+> The API implementations follow the specifications described in the [[Specifications| 4 Specifications]] page to communicate with the server, that you could read if you would like have more details about the underlying architecture.
 
 ## Table of contents
 
