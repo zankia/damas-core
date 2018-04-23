@@ -10,17 +10,7 @@ Please use [this tutorial](https://docs.docker.com/compose/install) to install t
 ### Download preset files
 You will also need our preset [config file](http://damas-software.org/docker/conf.json) and [docker-compose file](http://damas-software.org/docker/docker-compose.yml).
 
-docker-compose.yml goes into your project root directory and conf.json goes into a `conf/` directory inside the project root.
-
-### Create SSL certificate
-Damas requires a SSL certificate to run. If you have one, please copy or link key.pem and cert.pem into `conf/`.
-
-If you need to generate a certificate, you can use certbot with the following command to generates keys in /etc/letsencrypt/config-dir/live/ :
-```shell
-docker run --name certbot -p 80:80 -p 443:443 -v /etc/letsencrypt:/etc/letsencrypt certbot/certbot certonly -q --standalone --agree-tos -m YOUR@EMAIL.COM -d YOUR_DOMAIN_NAME
-```
-
-If you don't want to use HTTPS, you can create fake files with `touch key.pem cert.pem`. Or you can remove `connection` part of the conf.json and it won't run the HTTPS server.
+Put docker-compose.yml and conf.json together in a directory.
 
 ## Run
 To get damas running, you need to know a single command :
@@ -152,7 +142,18 @@ The configuration of the core server is located at JSON root, whereas the option
 * `mongodb`: the options to connect to the database. Keep the default values to use a mongodb located on the same machine
 * `fileSystem`: the path to the indexed files root directory to serve assets from
 
+### Create SSL certificate
+the https requires a SSL certificate to run. If you have one, please copy or link key.pem and cert.pem into `conf/`.
+
+If you need to generate a certificate, you can use certbot with the following command to generates keys in /etc/letsencrypt/config-dir/live/ :
+```shell
+docker run --name certbot -p 80:80 -p 443:443 -v /etc/letsencrypt:/etc/letsencrypt certbot/certbot certonly -q --standalone --agree-tos -m YOUR@EMAIL.COM -d YOUR_DOMAIN_NAME
+```
+
+If you don't want to use HTTPS, you can keep the https directive disabled in conf.json, or create fake files with `touch key.pem cert.pem`.
+
 ## Extensions
+
 ### jwt
 JSON Web Token authentication
 * `passwordHashAlgorithm`: `sha1` or `md5`
