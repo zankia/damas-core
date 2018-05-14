@@ -25,6 +25,17 @@ cp conf_install.json conf.json
 npm install
 nodejs .
 ```
+More parameters
+```sh
+# debug mode
+DEBUG=app:* nodejs .
+
+# the server listens to port 8090 by default. You can specify different ports and debug options
+DEBUG=* HTTP_PORT=8091 HTTPS_PORT=8444 nodejs .
+
+# on windows:
+set DEBUG=app:* & node .
+```
 
 ## Configure
 The server reads its configuration from `server-nodejs/conf.json`. Copy the default configuration file `conf_install.json` to `conf.json` and edit it according to your needs:
@@ -57,23 +68,7 @@ The configuration is divided into sections:
 * `extensions`: modules to provide extensions to the core
 
 ## Run
-In the server-nodejs/ folder:
-```sh
-node .
-```
-Debug mode:
-```
-DEBUG=app:* node .
-```
-On windows:
-```
-set DEBUG=app:* & node .
-```
-The server listens to port 8090 by default. You can specify different ports and debug options:
-```
-DEBUG=* HTTP_PORT=8091 HTTPS_PORT=8444 nodejs .
-```
-Then open http://localhost:8090/api in a web browser to access the server located on the same machine
+Open http://localhost/api (docker) or http://localhost:8090/api (node) in a web browser to access the server located on the same machine
 
 ##  Next steps
 
