@@ -49,8 +49,7 @@ The server reads its configuration from `server-nodejs/conf.json`. Copy the defa
     }
 }
 ```
-The configuration of the core server is located at JSON root, whereas the optional code is organized as extensions. Extensions are disabled by default or can be disabled using the `"enable": false` key switch.
-
+The configuration is divided into sections:
 * `https`: SSL certificate to use
 * `db`: which Database Management System to use. Available: `debug`, `mongodb`
 * `mongodb`: Mongo database options Keep the default values to use a mongodb located on the same machine
@@ -75,31 +74,6 @@ The server listens to port 8090 by default. You can specify different ports and 
 DEBUG=* HTTP_PORT=8091 HTTPS_PORT=8444 nodejs .
 ```
 Then open http://localhost:8090/api in a web browser to access the server located on the same machine
-
-## Create SSL certificate
-By default the SSL is disabled in the configuration template.
-```json
-"https" : { 
-    "enable": false,
-    "cert": "cert.pem",
-    "key": "key.pem"
-}
-```  
-To enable SSL specify `"enable: true"` and the SSL certificate files tu use (usually `key.pem` and `cert.pem`) in conf.json.
-
-### Generate a certificate
-
-#### Letsencrypt  
-If you need to generate a certificate, you can use certbot with the following command to generates keys in /etc/letsencrypt/config-dir/live/ :
-```shell
-docker run --name certbot -p 80:80 -p 443:443 -v /etc/letsencrypt:/etc/letsencrypt certbot/certbot certonly -q --standalone --agree-tos -m YOUR@EMAIL.COM -d YOUR_DOMAIN_NAME
-```
-
-#### Self Signed  
-In case you need to quickly create a self signed SSL certificate in order to use https you may find this line useful
-```sh
-openssl req -new -x509 -days 9999 -nodes -out cert.pem -keyout key.pem
-```
 
 ##  Next steps
 
