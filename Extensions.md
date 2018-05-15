@@ -9,9 +9,37 @@ The extensions have different purposes, giving new behaviours to the server, ext
 [`prefer_https`](#prefer_https)
 [`static_routes`](#static_routes)
 
+## Abstract about extensions
+
+Adding an extension consists in:
+* adding a js
+* adding a configuration JSON
+
+In conf.json we have a `extensions` section holding the list of extensions to load at application startup:
 ```json
 {
     "extensions": {
+    }
+}
+```
+
+The format to define an extension in conf.json:
+```js
+"extension_name": {
+    "enable": true,
+    "path": "extension_dir/new_routes.js",
+    "conf": "extension_dir/config_file.json"
+}
+```
+The `enable` and `conf` keys are optional. Omitting them means that the extension is enabled and no configuration is needed. `path` and `conf` can be relative or absolute.
+
+The `conf` item can hold a JSON object for inline configuration or a string type which in that case will be included:  
+```js
+"forge": {
+    "enable": true,
+    "path": "forge/forge.js",
+    "conf": {
+        "apiKey": "________"
     }
 }
 ```
