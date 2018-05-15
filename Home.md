@@ -11,7 +11,8 @@ Welcome to the damas-core wiki.
 ### Additional information
 * [[Client Setup]] - Scripting guide to start accessing a damas-core server
 * [[Database Admin|Database Administration]] -  Cook Book, some recipes for the administration of the underlying database
-* [[Authentication]] - Token based authentication implemented in server-nodejs 
+* [[Authentication]] - Token based authentication implemented in server-nodejs
+* [[Extensions]] - Documentation about the provided extensions and their format
 
 ### Implementation notes
 * [[Contributing]] - Specifications for the communication protocol, documentation for unit testing and coding conventions
