@@ -41,8 +41,9 @@ The `conf` item can hold a JSON object for inline configuration or a string type
 }
 ```
 
-## es6-polyfills
-Provide polyfills if the code is ran in a NodeJS which is not ES6.
+## Extensions list
+### es6-polyfills
+Provide ES6 polyfills if the code is ran in a NodeJS which is not ES6.
 (NodeJS v0.10.29 for instance, on older systems)
 ```js
 "es6_polyfills": {
@@ -51,7 +52,7 @@ Provide polyfills if the code is ran in a NodeJS which is not ES6.
 }
 ```
 
-## jwt
+### jwt
 Implementation of JSON Web Token RFC7519 for user authentication https://jwt.io/  
 
 ```js
@@ -79,7 +80,7 @@ Implementation of JSON Web Token RFC7519 for user authentication https://jwt.io/
 New routes defined: `/api/signIn` and `/api/verify`  
 See [[Authentication]] documentation about this implementation.
 
-## noauth
+### noauth
 Provides basic user verification mechanisms when user authentication is disabled.
 ```js
 "noauth": {
@@ -89,7 +90,7 @@ Provides basic user verification mechanisms when user authentication is disabled
 ```
 New routes defined: `/api/verify`
 
-## restricted_keys
+### restricted_keys
 Replace keys by default ones if the user class is not in the whitelist. If the new value is defined as null, delete the key from the request
 
 ```js
@@ -103,7 +104,7 @@ Replace keys by default ones if the user class is not in the whitelist. If the n
 }
 ```
 
-## prefer_https
+### prefer_https
 Redirects http calls to https unless for letsencrypt authentication files (.well-known)
 ```js
 "prefer_https": {
@@ -111,7 +112,7 @@ Redirects http calls to https unless for letsencrypt authentication files (.well
     "path": "./extensions/prefer_https.js"
 }
 ```
-## static_routes
+### static_routes
 A list of relative or absolute paths to be served by the server. It contains server resources and possible HTML interfaces.
 ```js
 "static_routes": {
@@ -131,7 +132,7 @@ A list of relative or absolute paths to be served by the server. It contains ser
 ```
 An array as value for a directory means that it will look for a resource in each directory by order of appearance. 
 
-## https
+### https
 This is not a real extension as it is hard coded, so this section may move later on.
 By default the SSL is disabled in the configuration template.
 ```json
@@ -143,15 +144,15 @@ By default the SSL is disabled in the configuration template.
 ```  
 To enable SSL specify `"enable: true"` and the SSL certificate files to use (usually `key.pem` and `cert.pem`) in conf.json.
 
-### Generate a certificate
+#### Generate a certificate
 
-#### Letsencrypt  
+##### Letsencrypt  
 If you need to generate a certificate, you can use certbot with the following command to generates keys in /etc/letsencrypt/config-dir/live/ :
 ```shell
 docker run --name certbot -p 80:80 -p 443:443 -v /etc/letsencrypt:/etc/letsencrypt certbot/certbot certonly -q --standalone --agree-tos -m YOUR@EMAIL.COM -d YOUR_DOMAIN_NAME
 ```
 
-#### Self Signed  
+##### Self Signed  
 In case you need to quickly create a self signed SSL certificate in order to use https you may find this line useful
 ```sh
 openssl req -new -x509 -days 9999 -nodes -out cert.pem -keyout key.pem
