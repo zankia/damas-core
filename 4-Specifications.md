@@ -3,7 +3,7 @@
 * [Drafts](#protocol-specifications-drafts)
 
 # Protocol Specifications
-The communication protocol is built over HTTP. This chapter describes the service operations, the possible responses and error codes to built consistent and compatible implementations of damas clients and servers.
+The communication protocol is built over HTTP. This chapter describes the service operations calls, responses and error codes to built consistent and compatible implementations of damas clients and servers.
 
 |METHOD|PATH|
 |-----|---|
