@@ -1,10 +1,10 @@
 ## Using Docker
-Download [docker-compose.yml](http://damas-software.org/docker/docker-compose.yml) and [conf.json](http://damas-software.org/docker/conf.json) and copy them into a local directory.
+Copy [docker-compose.yml](http://damas-software.org/docker/docker-compose.yml) and [conf.json](http://damas-software.org/docker/conf.json) to a local directory then run:
 
 ```shell
 docker-compose up
 ```
-Your TTY will be attached with all server logs. So if you send SIGINT (ctrl+C) it will close the servers. In order to keep them running, you need to add `-d` argument (detach) to the command above.
+Add `-d` argument (detach) to the command above to keep the servers running after closing the console.
 
 To stop the server and remove the containers:
 ```shell
@@ -12,9 +12,9 @@ docker-compose down
 docker-compose rm
 ```
 
-To install docker and docker-compose you could follow [this tutorial](https://docs.docker.com/compose/install).
+To install docker and docker-compose you could follow [the official tutorial](https://docs.docker.com/compose/install).
 
-The images are hosted on Docker Hub [zankia/damas-node](https://hub.docker.com/r/zankia/damas-node) (the 3 tags correspond to github branches).
+The images are hosted on Docker Hub [zankia/damas-node](https://hub.docker.com/r/zankia/damas-node) (the 3 tags correspond to the git development branches).
 
 ## Installation without Docker
 
