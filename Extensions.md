@@ -1,21 +1,18 @@
-This page gives a list and additional information about the extensions provided in this repository. The extensions are defined in the main configuration file `conf.json` of the server under a `extensions` section and are loaded when the server starts by order of appearance in that file.
+The extensions have different purposes, giving new behaviours to the server: extending its api, providing more routes to express, or extending the data model. This page gives a list and additional information about the extensions provided in this repository.
 
-The extensions have different purposes, giving new behaviours to the server, extend its api, provide more routes to express, or extend the data model.
-
-[`es6-polyfill`](#es6-polyfill)
-[`jwt`](#jwt)
-[`noauth`](#noauth)
-[`restricted_keys`](#restricted_keys)
-[`prefer_https`](#prefer_https)
-[`static_routes`](#static_routes)
+Available extensions:
+* [`es6-polyfill`](#es6-polyfill) - polyfills for older systems
+* [`jwt`](#jwt) - JSON Web Token user authentication
+* [`noauth`](#noauth) - user verification mechanism when user authentication is disabled.
+* [`nodemailer`](#nodemailer) - send email using https://www.npmjs.com/package/nodemailer
+* [`restricted_keys`](#restricted_keys) - whitelist writable keys depending on user class
+* [`prefer_https`](#prefer_https) - redirect to HTTPS if HTTP is used
+* [`static_routes`](#static_routes) - files and folders to be served by the server
+* [`user_setup`](#user_setup) - manage user password reset
 
 ## Abstract about extensions
 
-Adding an extension consists in:
-* adding a js
-* adding a configuration JSON
-
-In conf.json the `extensions` section holds the list of extensions to load at application startup. The extensions are defined using a simple format:
+The extensions are listed in the main configuration file `conf.json` of the server under the `extensions` section and are loaded at startup by order of appearance in that file. The extensions are defined using a simple format:
 ```json
 {
     "extensions": {
@@ -27,6 +24,9 @@ In conf.json the `extensions` section holds the list of extensions to load at ap
     }
 }
 ```
+Adding an extension consists in:
+* adding a js
+* [adding a configuration JSON] (optional)
 
 The `enable` and `conf` keys are optional. Omitting them means that the extension is enabled and no configuration is needed. `path` and `conf` can be relative or absolute pathes.
 
@@ -77,8 +77,11 @@ Implementation of JSON Web Token RFC7519 for user authentication https://jwt.io/
 * `expressUse`: path to protect by authentication
 * `expressUnless`: path to exclude from authentication
 
-New routes defined: `/api/signIn` and `/api/verify`  
 See [[Authentication]] documentation about this implementation.
+
+* requires `jsonwebtoken` `express-jwt` `express-unless` `crypto` `cookie-parser`
+* new routes: `/api/signIn` and `/api/verify`
+
 
 ### noauth
 Provides basic user verification mechanisms when user authentication is disabled.
@@ -88,7 +91,26 @@ Provides basic user verification mechanisms when user authentication is disabled
     "path": "./extensions/auth-none.js"
 }
 ```
-New routes defined: `/api/verify`
+* new routes: `/api/verify`
+
+### nodemailer
+Send email using https://www.npmjs.com/package/nodemailer
+```
+"nodemailer": {
+    "enable": true,
+    "path": "./extensions/nodemailer.js",
+    "conf": {
+        "transporter":{
+            "host": "localhost",
+            "port": 25, 
+            "secure": false
+        },  
+        "from": "\"Sender\" <noreply@example.com>"
+    }   
+}  
+```
+* requires `nodemailer`
+* no route defined
 
 ### restricted_keys
 Replace keys by default ones if the user class is not in the whitelist. If the new value is defined as null, delete the key from the request
@@ -103,15 +125,20 @@ Replace keys by default ones if the user class is not in the whitelist. If the n
     }
 }
 ```
+* no route defined
 
 ### prefer_https
-Redirects http calls to https unless for letsencrypt authentication files (.well-known)
+Redirects http calls to https.
 ```js
 "prefer_https": {
     "enable": false,
     "path": "./extensions/prefer_https.js"
 }
 ```
+* no new route defined
+
+The /.well-known is not redirected, to allow letsencrypt authentication.
+
 ### static_routes
 A list of relative or absolute paths to be served by the server. It contains server resources and possible HTML interfaces.
 ```js
@@ -131,6 +158,19 @@ A list of relative or absolute paths to be served by the server. It contains ser
 }
 ```
 An array as value for a directory means that it will look for a resource in each directory by order of appearance. 
+* new routes are defined according to the configuration
+
+### user_setup
+Lost password procedure using email and token verification.
+
+```json
+"user_setup" : { 
+    "enable": true,
+    "path" : "./extensions/user_setup.js"
+}
+```
+* requires `crypto`
+* new routes: `/api/lostPassword` `/api/changePassword` `/api/resetPassword`
 
 ### https
 This is not a real extension as it is hard coded, so this section may move later on.
