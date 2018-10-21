@@ -4,8 +4,8 @@ Available extensions:
 * [`es6-polyfill`](#es6-polyfill) - polyfills for older systems
 * [`jwt`](#jwt) - JSON Web Token user authentication
 * [`noauth`](#noauth) - user verification mechanism when user authentication is disabled.
-* [`nodemailer`](#nodemailer) - send email using https://www.npmjs.com/package/nodemailer
-* [`restricted_keys`](#restricted_keys) - whitelist writable keys depending on user class
+* [`nodemailer`](#nodemailer) - send emails using https://www.npmjs.com/package/nodemailer
+* [`restricted_keys`](#restricted_keys) - whitelist of writable keys depending on user class
 * [`prefer_https`](#prefer_https) - redirect to HTTPS if HTTP is used
 * [`static_routes`](#static_routes) - files and folders to be served by the server
 * [`user_setup`](#user_setup) - manage user password reset
