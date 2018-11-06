@@ -1,6 +1,6 @@
 The extensions give new behaviors to the server: they can extend its api, provide more routes to express, and extend the data model. This page gives a list of the extensions provided in this repository:
 
-* [`es6-polyfill`](#es6-polyfill) - polyfills for older systems
+* [`es6-polyfills`](#es6-polyfills) - polyfills for older systems
 * [`jwt`](#jwt) - JSON Web Token user authentication
 * [`noauth`](#noauth) - user verification mechanism when user authentication is disabled.
 * [`nodemailer`](#nodemailer) - send emails using https://www.npmjs.com/package/nodemailer
@@ -72,7 +72,7 @@ See [[Authentication]] documentation about this implementation.
 
 
 ## noauth
-Provides basic user verification mechanisms when user authentication is disabled.
+Provides basic user verification mechanisms when authentication is disabled.
 ```js
 "noauth": {
     "enable": true,
