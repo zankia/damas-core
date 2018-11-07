@@ -1,9 +1,10 @@
-# Table of Contents
-* [Protocol Specifications](#protocol-specifications)
-* [Drafts](#protocol-specifications-drafts)
 
-# Protocol Specifications
-The communication protocol is built over HTTP. This chapter describes the service operations calls, responses and error codes to built consistent and compatible implementations of damas clients and servers.
+The HTTP communication protocol is used to access the server.
+
+[Protocol Specifications](#protocol-specifications)  
+[Drafts](#protocol-specifications-drafts)
+
+## Protocol Specifications
 
 |METHOD|PATH|
 |-----|---|
