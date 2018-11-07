@@ -30,7 +30,7 @@ The assets are described as JSON nodes where _id key (identifier) is the path of
     "time": 1491692123000
 }
 ```
-- [`lock`](#lock( `ids`, [`callback`] ))
+- [`lock`](#lock)
 - [`publish`](#publish)
 - [`unlock`](#unlock)
 - [`comment`](#comment)
