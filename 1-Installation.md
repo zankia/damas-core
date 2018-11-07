@@ -45,8 +45,8 @@ The server reads its configuration from `server-nodejs/conf.json`. Copy the defa
     "authorMode" : true,
     "https" : { 
         "enable": false,
-        "cert": "cert.pem",
-        "key": "key.pem"
+        "cert": "fullchain.pem",
+        "key": "privkey.pem"
     },  
     "db": "mongodb",
     "mongodb": {
