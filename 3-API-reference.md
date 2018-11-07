@@ -30,7 +30,7 @@ The assets are described as JSON nodes where _id key (identifier) is the path of
     "time": 1491692123000
 }
 ```
-- [`lock`](#lock)
+- [`lock`](#lock( `ids`, [`callback`] ))
 - [`publish`](#publish)
 - [`unlock`](#unlock)
 - [`comment`](#comment)
@@ -82,7 +82,7 @@ Handle the generic nodes and edges entities and their attributes. The nodes and 
 
 ## Functions list
 
-### lock ( `ids`, [`callback`] )
+### lock( `ids`, [`callback`] )
 
 * `ids` a node identifier string (to lock one asset), or an array of identifiers
 * `callback` _(optional)_ (_js only_) function to call for asynchronous mode accepting a boolean argument
