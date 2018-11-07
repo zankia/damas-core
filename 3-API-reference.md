@@ -1,8 +1,6 @@
-The damas-core API is implemented as modules for Python and Javascript programming languages. Please read the [[Client Setup]] guide to setup a scripting environment.
+The damas-core API is implemented as modules for Python and Javascript programming languages. Please read the [[Client Setup]] guide to setup a scripting environment, or try the demo site https://demo.damas.io
 
-## Notes about the API
-
-Types
+Notes on types
 > The client modules use the native language data types: Python nodes are returned as dictionaries or JavaScript objects according to the language used. Python `None`, `True`, `False`, are equivalent to JavaScript `null`, `true`, `false`, and are translated to/from JSON to communicate with the server.
 
 Sync / Async
