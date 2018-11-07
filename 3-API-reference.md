@@ -82,7 +82,7 @@ Handle the generic nodes and edges entities and their attributes. The nodes and 
 
 ## Functions list
 
-### __lock( `ids`, [`callback`] )__
+### lock( `ids`, [`callback`] )
 
 * `ids` a node identifier string (to lock one asset), or an array of identifiers
 * `callback` _(optional)_ (_js only_) function to call for asynchronous mode accepting a boolean argument
