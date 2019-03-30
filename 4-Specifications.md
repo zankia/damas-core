@@ -6,16 +6,16 @@ The communication protocol between damas-core clients and servers use [JSON](jso
 
 ## Protocol Specifications
 
-|PATH|METHOD|
-|---|-----|
+|PATH|METHOD||
+|---|-----|---|
 | CRUDS ||
-| [/api/create/](#create) | POST |
-| [/api/delete/](#delete) | DELETE |
-| [/api/read/](#read) | GET, POST |
+| [/api/create/](#create) | POST | 201, 207, 400, 403, 409 |
+| [/api/delete/](#delete) | DELETE | 200, 207, 400, 404 |
+| [/api/read/](#read) | GET, POST | 200, 207, 400, 403, 404 |
 | [/api/search/](#search) | GET |
 | [/api/search_mongo/](#search_mongo) | POST |
-| [/api/update/](#update) | PUT |
-| [/api/upsert/](#upsert) | POST |
+| [/api/update/](#update) | PUT | 200, 207, 400, 403, 404 |
+| [/api/upsert/](#upsert) | POST | 200, 400, 403 |
 | DAM ||
 | [/api/comment/](#comment) | POST |
 | [/api/lock/](#lock) | PUT |
