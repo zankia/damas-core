@@ -32,7 +32,7 @@ Insert new nodes
 HTTP Requests
 * `POST` `/api/create/` `application/json` object or array of objects
 
-HTTP response status codes
+HTTP Responses
 ```
 201 OK (node(s) created)                                           application/json (object or array of objects)
 207 Multi-Status (some nodes already exist with these identifiers) application/json (array of objects or null)
@@ -40,16 +40,17 @@ HTTP response status codes
 403 Forbidden (the user does not have the right permission)        text/html        (error message)
 409 Conflict (all nodes already exist with these identifiers)      text/html        (error message)
 ```
-> In case of a successful multiple node creation, the returned json is a list of nodes ordered using the same order as the provided input.
+> The _id key is the node identifier. If it is not provided in input, it will be set with a unique identifier.
+> In case of a multiple node creation, the returned json is a list of nodes ordered using the same order as the input array.
 
 ## read
-Retrieve the node(s) specified by identifier(s). POST method is available to avoid limitation of URL length.
+Retrieve the node(s) specified by identifier(s). A POST method is provided to avoid the limitation of the URL length.
 
 HTTP Requests
 * `GET` `/api/read/id1,id2`
 * `POST` `/api/read/` `application/json` node identifier or array of node identifiers
 
-HTTP response status codes
+HTTP Responses
 ```
 200 OK (nodes retrieved)                                    application/json (node identifier or array of node identifiers)
 207 Multi-Status (some nodes do not exist)                  application/json (array of node identifiers and null)
@@ -66,7 +67,7 @@ Update existing nodes
 HTTP Requests
 * `PUT` `/api/update/` `application/json` node or array of nodes
 
-HTTP response status codes
+HTTP Responses
 ```
 200 OK (nodes updated)                                      `application/json` (object or array of objects)
 207 Multi-Status (some nodes do not exist)                  `application/json` (array of objects or nulls)
@@ -82,7 +83,7 @@ Updates existing nodes and/or creates new nodes
 HTTP Requests
 * `POST` `/api/upsert/` `application/json` node or array of nodes
 
-HTTP response status codes
+HTTP Responses
 ```
 200 OK (nodes updated)                                      `application/json` (object or array of objects)
 400 Bad Request (not formatted correctly)                   `text/html`        (error message)
@@ -96,7 +97,7 @@ Delete nodes
 HTTP Requests
 * `DELETE` `/api/delete/` `application/json` node identifier or array of node identifiers
 
-HTTP response status codes
+HTTP Responses
 ```
 200 OK (nodes deleted or not found)        application/json (deleted node identifier or array of identifiers)
 207 Multi-Status (some nodes do not exist) application/json (array of deleted nodes identifiers or null)
@@ -110,7 +111,7 @@ Create new node for each existing node. The new node represents the comment that
 HTTP Requests
 * `POST` `/api/comment/` `application/json` object
 
-HTTP response status codes
+HTTP Responses
 ```
 201 OK (nodes created)                                      application/json    (object)
 207 Multi-Status (some nodes don't exist)                   application/json    (array of objects)
@@ -125,7 +126,7 @@ Insert new nodes. Similar to the generic create operation but accessible to the 
 HTTP Requests
 * `POST` `/api/publish/` `application/json` object or array of objects
 
-HTTP response status codes
+HTTP Responses
 ```
 201 OK (node(s) created)                                           application/json (object or array of objects)
 207 Multi-Status (some nodes already exist with these identifiers) application/json (array of objects or null)
