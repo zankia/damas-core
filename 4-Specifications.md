@@ -1,5 +1,5 @@
 
-The HTTP communication protocol is used to access the server.
+The communication protocol between damas-core clients and servers use [JSON](json.org) over HTTP.
 
 [Protocol Specifications](#protocol-specifications)  
 [Drafts](#protocol-specifications-drafts)
