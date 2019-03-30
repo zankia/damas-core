@@ -6,25 +6,25 @@ The communication protocol between damas-core clients and servers use [JSON](jso
 
 ## Protocol Specifications
 
-|METHOD|PATH|
-|-----|---|
-|| CRUDS |
-| POST | [/api/create/](#create) |
-| DELETE | [/api/delete/](#delete) |
-| GET, POST | [/api/read/](#read) |
-| GET | [/api/search/](#search) |
-| POST | [/api/search_mongo/](#search_mongo) |
-| PUT | [/api/update/](#update) |
-| POST | [/api/upsert/](#upsert) |
-|| DAM |
-| POST | [/api/comment/](#comment) |
-| PUT | [/api/lock/](#lock) |
-| POST | [/api/publish/](#publish) |
-| PUT | [/api/unlock/](#unlock) |
-|| AUTH |
-| POST | [/api/signIn/](#signIn) |
-| POST | [/api/signOut/](#signOut) |
-| GET | [/api/verify/](#verify) |
+|PATH|METHOD|
+|---|-----|
+| CRUDS ||
+| [/api/create/](#create) | POST |
+| [/api/delete/](#delete) | DELETE |
+| [/api/read/](#read) | GET, POST |
+| [/api/search/](#search) | GET |
+| [/api/search_mongo/](#search_mongo) | POST |
+| [/api/update/](#update) | PUT |
+| [/api/upsert/](#upsert) | POST |
+| DAM ||
+| [/api/comment/](#comment) | POST |
+| [/api/lock/](#lock) | PUT |
+| [/api/publish/](#publish) | POST |
+| [/api/unlock/](#unlock) | PUT |
+| AUTH ||
+| [/api/signIn/](#signIn) | POST |
+| [/api/signOut/](#signOut) | POST |
+| [/api/verify/](#verify) | GET |
 
 ## create
 Insert new nodes
