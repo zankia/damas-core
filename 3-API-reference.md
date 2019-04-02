@@ -35,7 +35,7 @@ A set of generic CRUD functions is provided to create, read, modify and delete e
 
 ### File Management
 
-The files are described as JSON objects where the _id key (identifier) is the path of the file using the UNIX path format using the `/` slash character as sub level delimiter.
+The files are described as JSON objects where the _id key (identifier) is the path of the file using the UNIX path format with `/` slash character as sub level delimiter.
 ```json
 {
     "_id": "/project/path/to/file",
@@ -88,137 +88,6 @@ The [Authentication](Authentication) page gives more details about the authentic
 -->
 
 ## Functions list
-
-### lock
-#### lock( `ids` [, `callback`] )
-
-* `ids` a node identifier string (to lock one asset), or an array of identifiers
-* `callback` _(optional)_ (_js only_) function to call for asynchronous mode accepting a boolean argument
-* returns true on success, false otherwise
-
-Nominative lock on assets for the current user (sets `lock` key equals to authenticated username)
-
-> Sets a `lock` key on the node, with the authenticated username as value. If the asset is already locked, it will return false.
-
-```py
-# Python
-# lock one asset
-project.lock('/project/path/to/file')
-# True
-
-# lock multiple assets in 1 request
-project.lock(['/project/path/to/file1', '/project/another_file_path'])
-# True
-```
-
-### publish
-#### publish( `nodes` [, `callback`] )
-
-* `nodes` an object or array of objects to insert in the database
-* `callback` (_js only_) if specified, the request is asynchronous
-* returns an array of nodes (containing parent nodes and child nodes) on success
-* returns `null` (Javascript) or `None` (Python) on failure
-
-Add files to the index. A child node is created to keep track of the original state of each node upon publish.
-
-> same specifications as /api/create, except that it is accessible to the user class or above, and that it is expecting specific keys.
-
-```json
-{
-  "_id": "/project/path/to/new_file",
-  "comment": "text",
-  "origin": "sitename"
-}
-```
-Child node :
-```json
-{
-  "_id": "55ae0b1ed81e88357d77d0e9",
-  "#parent" : "/project/path/to/new_file",
-  "comment": "text",
-  "origin": "sitename"
-}
-```
-
-* key `_id` can be a string path, or an array of string paths
-* key `origin` should be an alphanumerical name without space, for ease of use
-
-optional keys (these keys are not mandatory but could ease multi sites configurations and version control):
-* `file_mtime` Number (milliseconds since 1 Jan 1970 00:00)
-* `file_size` Number (number of bytes)
-* `version` Number
-
-> In a multi-site environment, the `origin` and `_id` path are used to retrieve the file from the source server.
-
-### unlock
-#### unlock( `ids` [, `callback`] )
-
-* `ids` a node identifier string (to unlock one asset), or an array of identifiers
-* `callback` _(optional)_ (_js only_) function to call for asynchronous mode accepting a boolean argument
-* Returns true on success, false otherwise
-
-Unlock a locked asset.
-
-> If the asset is not locked or locked for someone else (`lock` key value != authenticated user name) it returns false. If it was successfully unlocked, returns true.
-
-### comment
-#### comment( `nodes` [, `callback`] )
-
-* `nodes` an object  or array of objects specifying the assets' id and the string comment
-* `callback` _(optional)_ (_js only_) function to call for asynchronous mode
-* returns a unique node or an array of nodes on success
-* `null` (Javascript) or `None` (Python) on failure
-
-Add a comment to one or several asset(s).
-
-> Sets a key `author` on the node, with the authenticated username as value, as well as a key `time`. 
-
-```python
-# Python
-#single parent id
->>> project.comment({"#parent" : "asset_id", "comment" : "text"})
-{u'author' : u'username', u'time' : 1480588505449, u'#parent' : u'asset_id', u'comment' : u'text'}
-
-#multiple parent ids
->>> project.comment({"#parent" : ["asset_id1", "asset_id2"], "comment" : "text"})
-[{u'author' : u'username', u'time' : 1480588505449, u'#parent' : u'asset_id1', u'comment' : u'text'}, {u'author' : u'username', u'time' : 1480588505449, u'#parent' : u'asset_id2', u'comment' : u'text'}]
-```
-```js
-// Javascript
-damas.comment({'#parent' : "asset_id", comment : "text"});
->> Object { author: "damas", time: 1480588505449, '#parent': "asset_id", comment: "text" }
-
-// comment using an asynchronous call
-damas.comment({'#parent' : "asset_id", comment : "text"}, function (node) {
-    // asynchronous mode
-    console.log(node.time);
-});
-```
-
-### signin
-#### signIn( `username`, `password` [, `callback`] )
-
-* `username` string
-* `password` the user secret password string
-* `callback` (js_only, optional) function to call for asynchronous mode
-* returns an object containing an authentication token on success, false otherwise
-
-Sign in using the server embedded authentication system
-
-### signout
-#### signOut( [`callback`] )
-
-* `callback` (js_only, optional) function to call for asynchronous mode
-* returns true on success, false otherwise
-
-### verify
-#### verify( [`callback`] )
-
-* `callback` (js_only, optional) function to call for asynchronous mode
-* returns true on success, false otherwise
-
-Check if the authentication is valid
-
 
 ### create
 #### create(`nodes` [, `callback`] )
@@ -387,6 +256,138 @@ Recursively delete the specified node
 // Javascript
 damas.delete(id);
 ```
+
+
+
+### lock
+#### lock( `ids` [, `callback`] )
+
+* `ids` a node identifier string (to lock one asset), or an array of identifiers
+* `callback` _(optional)_ (_js only_) function to call for asynchronous mode accepting a boolean argument
+* returns true on success, false otherwise
+
+Nominative lock on assets for the current user (sets `lock` key equals to authenticated username)
+
+> Sets a `lock` key on the node, with the authenticated username as value. If the asset is already locked, it will return false.
+
+```py
+# Python
+# lock one asset
+project.lock('/project/path/to/file')
+# True
+
+# lock multiple assets in 1 request
+project.lock(['/project/path/to/file1', '/project/another_file_path'])
+# True
+```
+
+### publish
+#### publish( `nodes` [, `callback`] )
+
+* `nodes` an object or array of objects to insert in the database
+* `callback` (_js only_) if specified, the request is asynchronous
+* returns an array of nodes (containing parent nodes and child nodes) on success
+* returns `null` (Javascript) or `None` (Python) on failure
+
+Add files to the index. A child node is created to keep track of the original state of each node upon publish.
+
+> same specifications as /api/create, except that it is accessible to the user class or above, and that it is expecting specific keys.
+
+```json
+{
+  "_id": "/project/path/to/new_file",
+  "comment": "text",
+  "origin": "sitename"
+}
+```
+Child node :
+```json
+{
+  "_id": "55ae0b1ed81e88357d77d0e9",
+  "#parent" : "/project/path/to/new_file",
+  "comment": "text",
+  "origin": "sitename"
+}
+```
+
+* key `_id` can be a string path, or an array of string paths
+* key `origin` should be an alphanumerical name without space, for ease of use
+
+optional keys (these keys are not mandatory but could ease multi sites configurations and version control):
+* `file_mtime` Number (milliseconds since 1 Jan 1970 00:00)
+* `file_size` Number (number of bytes)
+* `version` Number
+
+> In a multi-site environment, the `origin` and `_id` path are used to retrieve the file from the source server.
+
+### unlock
+#### unlock( `ids` [, `callback`] )
+
+* `ids` a node identifier string (to unlock one asset), or an array of identifiers
+* `callback` _(optional)_ (_js only_) function to call for asynchronous mode accepting a boolean argument
+* Returns true on success, false otherwise
+
+Unlock a locked asset.
+
+> If the asset is not locked or locked for someone else (`lock` key value != authenticated user name) it returns false. If it was successfully unlocked, returns true.
+
+### comment
+#### comment( `nodes` [, `callback`] )
+
+* `nodes` an object  or array of objects specifying the assets' id and the string comment
+* `callback` _(optional)_ (_js only_) function to call for asynchronous mode
+* returns a unique node or an array of nodes on success
+* `null` (Javascript) or `None` (Python) on failure
+
+Add a comment to one or several asset(s).
+
+> Sets a key `author` on the node, with the authenticated username as value, as well as a key `time`. 
+
+```python
+# Python
+#single parent id
+>>> project.comment({"#parent" : "asset_id", "comment" : "text"})
+{u'author' : u'username', u'time' : 1480588505449, u'#parent' : u'asset_id', u'comment' : u'text'}
+
+#multiple parent ids
+>>> project.comment({"#parent" : ["asset_id1", "asset_id2"], "comment" : "text"})
+[{u'author' : u'username', u'time' : 1480588505449, u'#parent' : u'asset_id1', u'comment' : u'text'}, {u'author' : u'username', u'time' : 1480588505449, u'#parent' : u'asset_id2', u'comment' : u'text'}]
+```
+```js
+// Javascript
+damas.comment({'#parent' : "asset_id", comment : "text"});
+>> Object { author: "damas", time: 1480588505449, '#parent': "asset_id", comment: "text" }
+
+// comment using an asynchronous call
+damas.comment({'#parent' : "asset_id", comment : "text"}, function (node) {
+    // asynchronous mode
+    console.log(node.time);
+});
+```
+
+### signin
+#### signIn( `username`, `password` [, `callback`] )
+
+* `username` string
+* `password` the user secret password string
+* `callback` (js_only, optional) function to call for asynchronous mode
+* returns an object containing an authentication token on success, false otherwise
+
+Sign in using the server embedded authentication system
+
+### signout
+#### signOut( [`callback`] )
+
+* `callback` (js_only, optional) function to call for asynchronous mode
+* returns true on success, false otherwise
+
+### verify
+#### verify( [`callback`] )
+
+* `callback` (js_only, optional) function to call for asynchronous mode
+* returns true on success, false otherwise
+
+Ask the server for the authentication status and user
 
 ### search
 #### search( `string` [, `callback`] )
