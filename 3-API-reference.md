@@ -75,7 +75,7 @@ The [Authentication](Authentication) page gives more details about the authentic
 - [`graph`](#graph) - retrieve connected edges and nodes (recursive)
 - [`search`](#search) - find elements matching a query string
 - [`search_one`](#search_one) - find first element matching a query string
-- [`search_mongo`](#search_mongo) - find elements using a MongoDB query string (if MongoDB is the back-end)
+- [`search_mongo`](#search_mongo) - find elements using a MongoDB query object (if MongoDB is the back-end)
 
 <!--
 \* *Not implemented yet in NodeJS*
@@ -90,106 +90,148 @@ The [Authentication](Authentication) page gives more details about the authentic
 ## Functions list
 
 ### create
-#### create(`nodes` [, `callback`] )
+Create element(s) in the database. Elements have an `_id` key being their unique identifier in the database. This key can be specified during creation, but can't be updated afterwards without first deleting the element. The server may add some other arbitrary keys (like `author`, `time` at creation) depending on its configuration.
+```js
+create( elements [, callback] )
+```
+#### parameters
+* `elements` an object or array of objects to insert in the database
+* `callback` _(js only, optional)_ if specified, the request is asynchronous
 
-* `nodes` an object or array of objects to insert in the database
-* `callback` (_js only_) if specified, the request is asynchronous
-* returns a unique node or an array of nodes (depending on the input) on success
+#### return values
+* returns an object or an array of objects (depending on the input) on success
 * returns `null` (Javascript) or `None` (Python) on failure
 
-Create node(s) in the database. Nodes have an `_id` key being their unique identifier in the database. This key can be specified during creation, but can't be updated afterwards without first deleting the node.
-The server may add some other arbitrary keys (author, time) depending on its configuration.
-
+#### examples
 ```python
 # Python
-# create a new node
->>> project.create({"key1":"value1"})
+# create a new element
+>>> damas.create({"key1":"value1"})
 {u'key1': u'value1', u'time': 1437469470133, u'_id': u'55ae0b1ed81e88357d77d0e9', u'author': u'demo'}
 
-# create an asset node
->>> project.create({"_id":"/project/folder/to/file", "additional_key":"value"})
-{u'additional_key': u'value', u'_id': u'/project/folder/to/file', u'time': 1480586620449, u'author': u'demo'}
+# create a file element
+>>> damas.create({"_id":"/project/folder/file", "additional_key":"value"})
+{u'additional_key': u'value', u'_id': u'/project/folder/file', u'time': 1480586620449, u'author': u'demo'}
 
-# create multiple nodes
->>> project.create([{"label":"node1"}, {"label":"node2"}])
-[{u'_id': u'583ff5a747e759beb73bde32', u'time': 1480586663024, u'label': u'node1', u'author': u'demo'}, {u'_id': u'583ff5a747e759beb73bde33', u'time': 1480586663024, u'label': u'node2', u'author': u'demo'}]
+# create multiple elements
+>>> damas.create([{"label":"element1"}, {"label":"element2"}])
+[{u'_id': u'583ff5a747e759beb73bde32', u'time': 1480586663024, u'label': u'element1', u'author': u'demo'}, {u'_id': u'583ff5a747e759beb73bde33', u'time': 1480586663024, u'label': u'element2', u'author': u'demo'}]
 
-# create a new edge
->>> project.create({"src_id":"/project/folder/to/file1","tgt_id":"/project/folder/to/file2"})
+# create a new edge element
+>>> damas.create({"src_id":"/project/folder/file1","tgt_id":"/project/folder/file2"})
 {u'tgt_id': u'/project/folder/to/file2', u'_id': u'583ff67647e759beb73bde34', u'time': 1480586870826, u'src_id': u'/project/folder/to/file1', u'author': u'demo'}
 ```
-
 ```js
 // Javascript
-// create a new node
+// create a new element
 damas.create({key1: "value1"});
->> Object { author: "damas", time: 1480588505449, key1: "value1", _id: "583ffcd947e759beb73bde39" }
+▸ Object { author: "demo", time: 1437469470133, key1: "value1", _id: "55ae0b1ed81e88357d77d0e9" }
 
-// create a new node using an asynchronous call
-damas.create({key1: "value2"}, function (node) {
-    // asynchronous mode
-    console.log(node.time);
+// create a new element using an asynchronous call
+damas.create({key1: "value2"}, function (element) {
+    console.log(element.time);
 });
+
+// create a file element
+damas.create({"_id":"/project/folder/file", "additional_key":"value"});
+▸ Object {additional_key: "value", _id: "/project/folder/file", time: 1480586620449, author: "demo"}
+
+// create multiple elements
+damas.create([{"label":"element1"}, {"label":"element2"}]);
+▸ Array [{_id: "583ff5a747e759beb73bde32", time: 1480586663024, label: "element1", author: "demo"}, {_id: "583ff5a747e759beb73bde33", time: 1480586663024, label: "element2", author: "demo"}]
+
+// create a new edge element
+damas.create({"src_id":"/project/folder/file1","tgt_id":"/project/folder/file2"})
+▸ Object {tgt_id: "/project/folder/to/file2", _id: "583ff67647e759beb73bde34", time: 1480586870826, src_id: "/project/folder/to/file1", author: "demo"}
 ```
 
 ### read
-#### read(`ids` [, `callback`] )
-
+Retrieve one or more elements given their identifiers.
+```js
+read(ids [, callback] )
+```
+#### parameters
 * `ids` a string or array of strings containing the ids to read. In Python, can be a list, tuple or set.
-* `callback` (_js only_) if specified, the request is asynchronous
-* returns a unique node object or an array of nodes (depending on the input) on success
+* `callback` _(js only, optional)_ if specified, the request is asynchronous
+#### return values
+* returns an object or an array of objects (depending on the input) on success
 * returns `null` or `None` on failure
-
-Retrieve one or more nodes given their identifiers.
 
 > For multiple mode, The resulting array is sorted in the same order as the input array of identifiers. If some identifiers are not found, the result array is filled with None / null values for that position.
 
+#### examples
+```python
+# Python
+# read a file
+>>> damas.read("/project/folder/file")
+{u'additional_key': u'value', u'_id': u'/project/folder/file', u'time': 1480586620449, u'author': u'demo'}
+
+# read 2 elements
+>>> damas.read(["583ff5a747e759beb73bde32","583ff5a747e759beb73bde33"])
+[{u'_id': u'583ff5a747e759beb73bde32', u'time': 1480586663024, u'label': u'element1', u'author': u'demo'}, {u'_id': u'583ff5a747e759beb73bde33', u'time': 1480586663024, u'label': u'element2', u'author': u'demo'}]
+```
 ```js
+// Javascript
 // read an asset node identified by its path
-var node = damas.read("/project/folder/file");
-// read 2 nodes using their unique identifiers
-var nodes = damas.read(["55ae0b1ed81e88357d77d0e9", "560061f2d4cb24441ed88aa4"]);
+damas.read("/project/folder/file");
+▸ Object {additional_key: "value", _id: "/project/folder/file", time: 1480586620449, author: "demo"}
+
+// read 2 elements using their unique identifiers
+damas.read(["55ae0b1ed81e88357d77d0e9", "560061f2d4cb24441ed88aa4"]);
+▸ Array [_id: "583ff5a747e759beb73bde32", time: 1480586663024, label: "element1", author: "demo"}, {_id: "583ff5a747e759beb73bde33", time: 1480586663024, label: "element2", author: "demo"}]
 ```
 
 ### update
-#### update( `nodes` [, `callback`] )
+Modify and remove keys of the specified element(s).
+```js
+update( elements [, callback] )
+```
+#### parameters
+* `elements` an object or an array of objects to update
+* `callback` _(js only, optional)_ if specified, the request is asynchronous
 
-* `nodes` an object or an array of objects to update
-* `callback` _(optional)_ (_js only_) function to call for asynchronous mode
-* returns the modified node(s) on success, false otherwise
+#### return values
+* returns an object or an array of objects (depending on the input) on success
+* returns `null` (`None` in Python) on failure
+* returns an array of objects or null on mixed success/failures
 
-Set and remove keys of the specified element(s).
-
-> The specified keys overwrite the existing keys on the server. Other, unspecified keys, are left untouched on the server. A null value removes the key.
+> The specified keys overwrite the existing keys on the server. Unspecified keys are left untouched on the server. A `null` or `None` value removes the key.
 
 > If multiple nodes are specified, the resulting array is sorted in the same order as the input array of identifiers.
 
-> Each object can accept an array of ids
+> The `_id` key can accept an array of identifiers, which means that the update will be performed on each specified element
 
+#### examples
 ```js
 // Javascript
-// Create a node
-damas.create({_id:"55ae0b1ed81e88357d77d0e9"});
->> Object { author: "demo", time: 1480588505449, _id: "55ae0b1ed81e88357d77d0e9" }
+// update an element
+damas.update({_id: "55ae0b1ed81e88357d77d0e9", key1: null, newkey: "value2"});
+▸ Object { author: "demo", time: 1437469470133, newkey: "value2", _id: "55ae0b1ed81e88357d77d0e9" }
 
-// Update the node
-damas.update({_id:"55ae0b1ed81e88357d77d0e9", key: "value");
->> Object { author: "demo", time: 1480588505449, key: "value", _id: "55ae0b1ed81e88357d77d0e9" }
+// update multiple elements
+damas.update([{_id: "583ff5a747e759beb73bde32", "label":"elementA"}, {_id: "583ff5a747e759beb73bde33", "label":"elementB"}]);
+▸ Array [{_id: "583ff5a747e759beb73bde32", time: 1480586663024, label: "elementA", author: "demo"}, {_id: "583ff5a747e759beb73bde33", time: 1480586663024, label: "elementB", author: "demo"}]
+
+// update multiple elements, condensed
+damas.update({_id: ["583ff5a747e759beb73bde32","583ff5a747e759beb73bde33"], "newkey":"value"});
+▸ Array [{_id: "583ff5a747e759beb73bde32", time: 1480586663024, label: "elementA", author: "demo", newkey:"value"}, {_id: "583ff5a747e759beb73bde33", time: 1480586663024, label: "elementB", author: "demo", newkey:"value"}]
 ```
 
 In __Python__, the None value is used to remove a key.
 
 ```py
 # Python
-# We create 2 nodes...
-project.create({'a':'a', 'b':'b'})
-# {u'a': u'a', u'_id': u'56017b3053f58ea107dea5f7', u'b': u'b', u'time': 1442937648390, u'author': u'demo'}
-project.create({'a':'a', 'b':'b'})
-# {u'a': u'a', u'_id': u'56017b3853f58ea107dea5f8', u'b': u'b', u'time': 1442937656258, u'author': u'demo'}
+# update an element
+>>> damas.update({'_id': '55ae0b1ed81e88357d77d0e9', 'key1': None, 'newkey': 'value2'})
+{u'newkey': u'value2', u'time': 1437469470133, u'_id': u'55ae0b1ed81e88357d77d0e9', u'author': u'demo'}
 
-# Update the created nodes
-project.update([{'_id':'56017b3053f58ea107dea5f7', 'a':'A'}, {'_id':'56017b3853f58ea107dea5f8', 'b':None}])
-# [{u'a': u'A', u'_id': u'56017b3053f58ea107dea5f7', u'b': u'b', u'time': 1442937648390, u'author': u'demo'}, {u'a': u'a', u'_id': u'56017b3853f58ea107dea5f8', u'time': 1442937656258, u'author': u'demo'}]
+# update multiple elements
+damas.update([{'_id': '583ff5a747e759beb73bde32', 'label':'elementA'}, {'_id': '583ff5a747e759beb73bde33', 'label':'elementB'}])
+[{u'_id': u'583ff5a747e759beb73bde32', u'time': 1480586663024, u'label': u'elementA', u'author': u'demo'}, {u'_id': u'583ff5a747e759beb73bde33', u'time': 1480586663024, u'label': u'elementB', u'author': u'demo'}]
+
+# update multiple elements, condensed
+damas.update({'_id': ['583ff5a747e759beb73bde32','583ff5a747e759beb73bde33'], 'newkey':'value'})
+[{u'newkey': u'value', u'_id': u'583ff5a747e759beb73bde32', u'time': 1480586663024, u'label': u'elementA', u'author': u'demo'}, {u'newkey': u'value', u'_id': u'583ff5a747e759beb73bde33', u'time': 1480586663024, u'label': u'elementB', u'author': u'demo'}]
 ```
 
 ### upsert
