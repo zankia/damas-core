@@ -1,7 +1,7 @@
 The damas-core API is implemented as modules for Python and Javascript programming languages. Please read the [[Client Setup]] guide to setup a scripting environment, or try the demo site https://demo.damas.io
 
 Notes on types
-> The client modules use the built-in types: Python expose elements as dictionaries and JavaScript expose elements as Objects. Python `None`, `True`, `False`, are equivalent to JavaScript `null`, `true`, `false`, and are translated to/from JSON to communicate with the server.
+> The client modules use the built-in types: Python expose elements as dictionaries and JavaScript expose elements as Objects. Python `None`, `True`, `False`, are equivalent to JavaScript `null`, `true`, `false`, and are translated to/from JSON to communicate with the server. Python lists, tuples or sets can be used as arrays.
 
 Sync / Async
 > The JavaScript API supports both synchronous and asynchronous requests. If the optional callback argument is provided, the request will run asynchronously and the response will be given as an argument to the specified callback. If the callback is not provided, the request is made synchronously and the return value holds the response. The Python API uses synchronous requests only (a bit of work is required to make them async ready). 
@@ -92,7 +92,7 @@ The [Authentication](Authentication) page gives more details about the authentic
 ### create
 Create element(s) in the database. Elements have an `_id` key being their unique identifier in the database. This key can be specified during creation, but can't be updated afterwards without first deleting the element. The server may add some other arbitrary keys (like `author`, `time` at creation) depending on its configuration.
 ```js
-create( elements [, callback] )
+create ( elements [, callback] )
 ```
 #### parameters
 * `elements` an object or array of objects to insert in the database
@@ -148,10 +148,10 @@ damas.create({"src_id":"/project/folder/file1","tgt_id":"/project/folder/file2"}
 ### read
 Retrieve one or more elements given their identifiers.
 ```js
-read(ids [, callback] )
+read ( identifiers [, callback] )
 ```
 #### parameters
-* `ids` a string or array of strings containing the ids to read. In Python, can be a list, tuple or set.
+* `identifiers` string or array of identifiers strings to read
 * `callback` _(js only, optional)_ if specified, the request is asynchronous
 #### return values
 * returns an object or an array of objects (depending on the input) on success
@@ -172,19 +172,19 @@ read(ids [, callback] )
 ```
 ```js
 // Javascript
-// read an asset node identified by its path
+// read a file
 damas.read("/project/folder/file");
 ▸ Object {additional_key: "value", _id: "/project/folder/file", time: 1480586620449, author: "demo"}
 
-// read 2 elements using their unique identifiers
-damas.read(["55ae0b1ed81e88357d77d0e9", "560061f2d4cb24441ed88aa4"]);
+// read 2 elements
+damas.read(["583ff5a747e759beb73bde32", "583ff5a747e759beb73bde33"]);
 ▸ Array [_id: "583ff5a747e759beb73bde32", time: 1480586663024, label: "element1", author: "demo"}, {_id: "583ff5a747e759beb73bde33", time: 1480586663024, label: "element2", author: "demo"}]
 ```
 
 ### update
 Modify and remove keys of the specified element(s).
 ```js
-update( elements [, callback] )
+update ( elements [, callback] )
 ```
 #### parameters
 * `elements` an object or an array of objects to update
@@ -235,15 +235,17 @@ damas.update({'_id': ['583ff5a747e759beb73bde32','583ff5a747e759beb73bde33'], 'n
 ```
 
 ### upsert
-#### upsert( `nodes` [, `callback`] )
-
+Create nodes and/or update existing nodes if Id is specified and found
+```js
+upsert ( elements [, callback] )
+```
+#### parameters
 * `nodes` an object or array of objects to insert and/or update in the database
-* `callback` (_js only_) if specified, the request is asynchronous
+* `callback` _(js only, optional)_ if specified, the request is asynchronous
+#### return values
 * returns a unique node or an array of nodes (depending on the input) on success
 * returns `null` (Javascript) or `None` (Python) on failure
-
-Create nodes and/or update existing nodes if Id is specified and found
-
+#### examples
 ```python
 # Python
 # create a new node with a specified id
@@ -286,31 +288,36 @@ damas.upsert({key1: "value2"}, function (node) {
 ```
 
 ### delete
-#### delete( `ids` [, `callback`] )
-
-* `ids` a node index as string (for a unique index), or an array of string indexes
-* `callback` _(optional)_ (_js only_) function to call for asynchronous mode
+Permanently remove element(s) from the database
+```js
+delete ( identifiers [, callback] )
+```
+#### parameters
+* `identifiers` an identifier or an array of identifiers
+* `callback` _(js only, optional)_ if specified, the request is asynchronous
+#### return values
 * returns true on success, false otherwise
+* returns a boolean or an array of booleans (depending on the input)
 
-Recursively delete the specified node
-
+> the returned array is sorted as the input array
+#### examples
 ```js
 // Javascript
-damas.delete(id);
+damas.delete("55ae0b1ed81e88357d77d0e9");
+▸ true
 ```
 
-
-
 ### lock
-#### lock( `ids` [, `callback`] )
-
+Lock file(s) for edition. Sets a `lock` key on elements with current authenticated username as value).
+```js
+lock( ids [, callback] )
+```
+#### parameters
 * `ids` a node identifier string (to lock one asset), or an array of identifiers
-* `callback` _(optional)_ (_js only_) function to call for asynchronous mode accepting a boolean argument
+* `callback` _(js only, optional)_ if specified, the request is asynchronous
+#### return values
 * returns true on success, false otherwise
-
-Nominative lock on assets for the current user (sets `lock` key equals to authenticated username)
-
-> Sets a `lock` key on the node, with the authenticated username as value. If the asset is already locked, it will return false.
+* returns false if the element is already locked
 
 ```py
 # Python
@@ -324,10 +331,13 @@ project.lock(['/project/path/to/file1', '/project/another_file_path'])
 ```
 
 ### publish
-#### publish( `nodes` [, `callback`] )
+```js
+publish( elements [, callback] )
+```
+#### parameters
+* `elements` an object or array of objects to insert in the database
+* `callback` _(js only, optional)_ if specified, the request is asynchronous
 
-* `nodes` an object or array of objects to insert in the database
-* `callback` (_js only_) if specified, the request is asynchronous
 * returns an array of nodes (containing parent nodes and child nodes) on success
 * returns `null` (Javascript) or `None` (Python) on failure
 
@@ -363,27 +373,32 @@ optional keys (these keys are not mandatory but could ease multi sites configura
 > In a multi-site environment, the `origin` and `_id` path are used to retrieve the file from the source server.
 
 ### unlock
-#### unlock( `ids` [, `callback`] )
+Unlock a locked asset
+```js
+unlock ( identifiers [, callback] )
+```
+#### parameters
+* `identifiers` identifier or array of identifiers to unlock
+* `callback` _(js only, optional)_ if specified, the request is asynchronous
+#### return values
+* returns a boolean or an array of booleans (depending on the input)
 
-* `ids` a node identifier string (to unlock one asset), or an array of identifiers
-* `callback` _(optional)_ (_js only_) function to call for asynchronous mode accepting a boolean argument
-* Returns true on success, false otherwise
-
-Unlock a locked asset.
 
 > If the asset is not locked or locked for someone else (`lock` key value != authenticated user name) it returns false. If it was successfully unlocked, returns true.
 
 ### comment
-#### comment( `nodes` [, `callback`] )
-
-* `nodes` an object  or array of objects specifying the assets' id and the string comment
-* `callback` _(optional)_ (_js only_) function to call for asynchronous mode
-* returns a unique node or an array of nodes on success
+Add a comment to one or several element(s).
+```js
+comment ( elements [, callback] )
+```
+#### parameters
+* `elements` object or array of objects specifying the elements identifiers and comment string
+* `callback` _(js only, optional)_ if specified, the request is asynchronous
+#### return values
+* returns an element or an array of elements on success
 * `null` (Javascript) or `None` (Python) on failure
 
-Add a comment to one or several asset(s).
-
-> Sets a key `author` on the node, with the authenticated username as value, as well as a key `time`. 
+> Sets `author` key on elements with the authenticated username as value, as well as `time` key with the current time at creation.
 
 ```python
 # Python
@@ -408,70 +423,95 @@ damas.comment({'#parent' : "asset_id", comment : "text"}, function (node) {
 ```
 
 ### signin
-#### signIn( `username`, `password` [, `callback`] )
-
+```js
+signIn ( username, password [, callback] )
+```
+#### parameters
 * `username` string
 * `password` the user secret password string
-* `callback` (js_only, optional) function to call for asynchronous mode
+* `callback` _(js only, optional)_ if specified, the request is asynchronous
+#### return values
 * returns an object containing an authentication token on success, false otherwise
 
 Sign in using the server embedded authentication system
 
 ### signout
-#### signOut( [`callback`] )
-
-* `callback` (js_only, optional) function to call for asynchronous mode
+```js
+signOut ( [callback] )
+```
+#### parameters
+* `callback` _(js only, optional)_ if specified, the request is asynchronous
+#### return values
 * returns true on success, false otherwise
 
 ### verify
-#### verify( [`callback`] )
-
-* `callback` (js_only, optional) function to call for asynchronous mode
-* returns true on success, false otherwise
-
 Ask the server for the authentication status and user
+```js
+verify ( [callback] )
+```
+#### parameters
+* `callback` _(js only, optional)_ if specified, the request is asynchronous
+#### return values
+* returns the authenticated user element on success, false otherwise
 
 ### search
-#### search( `string` [, `callback`] )
-
-* @param {String} search query string
-* @param {function} [callback] - Function to call, boolean argument
-* @returns {Array} array of element indexes or null if no element found
-
 Find elements wearing the specified key(s) using a query string.
+```js
+search ( query [, callback] )
+```
+#### parameters
+* `query` query string
+* `callback` _(js only, optional)_ if specified, the request is asynchronous
+#### return values
+* returns an array of matching identifiers or null if no match was found
 
 * format: "keyname1:value keyname2:value"
 * operators list: `:`, `<`, `<=`, `>`, `>=`
 
 In case of `:` operator, you can use a regular expression as value.
-Next line lists every png file containing "floor" in the file name, case insensitive:
 
-> search("file:/floor.*png$/i")
+#### examples
+```python
+# Python
+# list every png file containing "floor" in the file name, case insensitive
+>>> damas.search("file:/floor.*png$/i")
 
-List every file containing the word rabbit and wearing the `type` key = `char`
-> search('file:/rabbit/ type:char');
+# List every file containing the word rabbit and wearing the `type` key = `char`
+>>> damas.search('file:/rabbit/ type:char')
+```
+```js
+// Javascript
+// list every png file containing "floor" in the file name, case insensitive
+damas.search("file:/floor.*png$/i");
+
+// List every file containing the word rabbit and wearing the `type` key = `char`
+damas.search('file:/rabbit/ type:char');
+```
 
 ### search_one
-#### search_one( `string` [, `callback`] )
-
-* @param {String} search query string
-* @param {function} [callback] - Function to call, boolean argument
-* @returns {Array} array of element indexes or null if no element found
-
 Search nodes, returning the first matching occurrence as a node object (not as index as in search). The search string format is the same as for the search method.
-
+```js
+search_one ( query [, callback] )
+```
+#### parameters
+* `query` query string
+* `callback` _(js only, optional)_ if specified, the request is asynchronous
+#### return values
+* returns the first matching identifier or null if no match was found
 
 ### search_mongo
-### search_mongo(`query` [, `sort`, `limit`, `skip`, `callback`] )
-
+We expose the MongoDB find and cursor methods here in order to provide a powerful search with many options. It is only available when the server runs a MongoDB database to store the data.
+```js
+search_mongo ( query [, sort, limit, skip, callback] )
+```
+#### parameters
 * `query` the query object https://docs.mongodb.org/v3.0/reference/method/db.collection.find/
 * `sort` _(optional)_ https://docs.mongodb.org/v3.0/reference/method/cursor.sort/
 * `limit` _(optional)_ https://docs.mongodb.org/v3.0/reference/method/cursor.limit/
 * `skip` _(optional)_ https://docs.mongodb.org/v3.0/reference/method/cursor.skip/
-* `callback` _(optional)_ _(js only)_ function to call to perform an asynchronous search. If undefined, a synchronous read is performed.
+* `callback` _(js only, optional)_ if specified, the request is asynchronous
+#### return values
 * returns arrays of matching indexes
-
-We expose the MongoDB find and cursor methods here in order to provide a powerful search with many options. It is only available when the server runs a MongoDB database to store the data.
 
 > In order to use regular expressions, and because the JSON format only accept strings and has no type for regular expressions, we use strings with the prefix REGEX_ to indicate to the server that it must convert it to a RegExp object before executing the Mongo query. To add options to regular expressions, prefer the syntax RX_`expression`_RX`options`.
 
@@ -486,7 +526,7 @@ We expose the MongoDB find and cursor methods here in order to provide a powerfu
 ```py
 # Python
 # get the 10 most recent files (having the higher `time` key on nodes)
->> project.search_mongo({"file":{"$exists": True}}, {"time":-1}, 10, 0)
+>> damas.search_mongo({"file":{"$exists": True}}, {"time":-1}, 10, 0)
 [u'56701f266899505c6d82ffc4', u'56701e2583cfa5c16c1a2f78', u'56701b791da266d26bc11126', u'56701cf1570a32f16be5bb60', u'56701923a26510e96969e277', u'5670305b40c1a51070f3356f', u'567026b69b2d56016f663242', u'56702671a86238e76e08f600', u'56701fb92fdef89f6dcb8c6c', u'55b36829cc6742a30da59b98']
 ```
 
@@ -513,16 +553,20 @@ damas.search_mongo({'time': {$exists:true}}, {"time":-1},200,0, function(res){
 ```
 
 ### graph
-#### graph( `ids` [, `callback`] )
-* @param {String} ids - Node indexes
-* @param {function} [callback] - Function to call, array argument
-* @returns {Array} array of element indexes
 Recursively get all source nodes and edges connected to the specified node
-
+```js
+graph ( identifiers, [, callback] )
+```
+#### parameters
+* `identifiers` string or array of identifiers strings to read
+* `callback` _(js only, optional)_ if specified, the request is asynchronous
+#### return values
+* @returns {Array} array of element indexes
+#### examples
 ```js
 // Javascript
-// This will return an array containing nodes (links are nodes too)
-var sources = damas.graph("55687e68e040af7047ee1a53");
+// retrieve graph as an array containing the elements (nodes and edges)
+damas.graph("55687e68e040af7047ee1a53");
 ```
 
 <!--
