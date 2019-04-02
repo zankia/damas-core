@@ -1,22 +1,41 @@
 The damas-core API is implemented as modules for Python and Javascript programming languages. Please read the [[Client Setup]] guide to setup a scripting environment, or try the demo site https://demo.damas.io
 
 Notes on types
-> The client modules use the native language data types: Python nodes are returned as dictionaries or JavaScript objects according to the language used. Python `None`, `True`, `False`, are equivalent to JavaScript `null`, `true`, `false`, and are translated to/from JSON to communicate with the server.
+> The client modules use the built-in types: Python expose elements as dictionaries and JavaScript expose elements as Objects. Python `None`, `True`, `False`, are equivalent to JavaScript `null`, `true`, `false`, and are translated to/from JSON to communicate with the server.
 
 Sync / Async
 > The JavaScript API supports both synchronous and asynchronous requests. If the optional callback argument is provided, the request will run asynchronously and the response will be given as an argument to the specified callback. If the callback is not provided, the request is made synchronously and the return value holds the response. The Python API uses synchronous requests only (a bit of work is required to make them async ready). 
 
 Graphs
-> Since version 2.3, edges (the directed links between nodes) are also considered as nodes, with the special attributes `src_id` and `tgt_id` referring the `_id` of the other nodes to link.
+> Since version 2.3, and in the NodeJS server, the edges (the directed links between nodes) are objects as nodes, wearing key/values, with the reserved keys `src_id` and `tgt_id` referring to the `_id` of the nodes to link.
 
 Specifications
 > The API implementations follow the specifications described in the [[Specifications| 4 Specifications]] page to communicate with the server, that you could read if you would like have more details about the underlying architecture.
 
 ## Table of contents
 
-### Asset Management
+### Generic elements
 
-The assets are described as JSON nodes where _id key (identifier) is the path of the file
+The elements are identified using unique identifiers stored in the reserved `_id` key. If the `_id` key is not provided at creation, a default unique value for `_id` is assigned. The other properties are stored next to it as key/value pairs using the [JSON](https://json.org/) types.
+```json
+{
+    "_id": "your_custom_id",
+    "number": 1234,
+    "string":"hello world",
+    "boolean": true
+}
+```
+A set of generic CRUD functions is provided to create, read, modify and delete elements:
+
+- [`create`](#create) - create element(s)
+- [`read`](#read) - retrieve element(s) using identifiers
+- [`update`](#update) - modify element(s)
+- [`upsert`](#upsert) - create or modify element(s)
+- [`delete`](#delete) - delete element(s)
+
+### File Management
+
+The files are described as JSON objects where the _id key (identifier) is the path of the file using the UNIX path format using the `/` slash character as sub level delimiter.
 ```json
 {
     "_id": "/project/path/to/file",
@@ -28,45 +47,35 @@ The assets are described as JSON nodes where _id key (identifier) is the path of
     "time": 1491692123000
 }
 ```
-- [`lock`](#lock)
-- [`publish`](#publish)
-- [`unlock`](#unlock)
-- [`comment`](#comment)
+- [`lock`](#lock) - lock file(s) for edition
+- [`publish`](#publish) - add file(s) to the index
+- [`unlock`](#unlock) - unlock file(s)
+- [`comment`](#comment) - add a comments to file(s)
 
-### Authentication
-
-
+### User Management
+The users are described as elements wearing some reserved keys: `username`, `password`, `class` plus optional keys.
 ```json
 {
     "class": "user",
     "email": "usermail@address.com",
     "fullname": "Firstname Lastname String",
     "password": "13d3a2a16c0cd2f7bf115d471999377e",
-    "username": "userlogin",
+    "username": "userlogin"
 }
 ```
 
-The [Authentication](Authentication) page details the authentication mechanism.
+The [Authentication](Authentication) page gives more details about the authentication mechanism.
 
-- [`signIn`](#signIn)
-- [`signOut`](#signOut)
-- [`verify`](#verify)
-
-### Generic CRUD
-
-Handle the generic nodes and edges entities and their attributes. The nodes and edges are identified by unique identifiers, stored in the reserved `_id` key.
-
-- [`create`](#create)
-- [`read`](#read)
-- [`update`](#update)
-- [`upsert`](#upsert)
-- [`delete`](#delete)
+- [`signIn`](#signIn)- request an authentication token from the server
+- [`signOut`](#signOut) - revoke a token
+- [`verify`](#verify) - ask the server for the authentication status and user
 
 ### Search queries
 
-- [`graph`](#graph)
-- [`search`](#search)
-- [`search_mongo`](#search_mongo)
+- [`graph`](#graph) - retrieve connected edges and nodes (recursive)
+- [`search`](#search) - find elements matching a query string
+- [`search_one`](#search_one) - find first element matching a query string
+- [`search_mongo`](#search_mongo) - find elements using a MongoDB query string (if MongoDB is the back-end)
 
 <!--
 \* *Not implemented yet in NodeJS*
@@ -80,7 +89,8 @@ Handle the generic nodes and edges entities and their attributes. The nodes and 
 
 ## Functions list
 
-### lock( `ids`, [`callback`] )
+### lock
+#### lock( `ids` [, `callback`] )
 
 * `ids` a node identifier string (to lock one asset), or an array of identifiers
 * `callback` _(optional)_ (_js only_) function to call for asynchronous mode accepting a boolean argument
@@ -101,7 +111,8 @@ project.lock(['/project/path/to/file1', '/project/another_file_path'])
 # True
 ```
 
-### __publish( `nodes`, [`callback`] )__
+### publish
+#### publish( `nodes` [, `callback`] )
 
 * `nodes` an object or array of objects to insert in the database
 * `callback` (_js only_) if specified, the request is asynchronous
@@ -139,7 +150,8 @@ optional keys (these keys are not mandatory but could ease multi sites configura
 
 > In a multi-site environment, the `origin` and `_id` path are used to retrieve the file from the source server.
 
-### __unlock( `ids`, [`callback`] )__
+### unlock
+#### unlock( `ids` [, `callback`] )
 
 * `ids` a node identifier string (to unlock one asset), or an array of identifiers
 * `callback` _(optional)_ (_js only_) function to call for asynchronous mode accepting a boolean argument
@@ -149,7 +161,8 @@ Unlock a locked asset.
 
 > If the asset is not locked or locked for someone else (`lock` key value != authenticated user name) it returns false. If it was successfully unlocked, returns true.
 
-### __comment( `nodes`, [`callback`] )__
+### comment
+#### comment( `nodes` [, `callback`] )
 
 * `nodes` an object  or array of objects specifying the assets' id and the string comment
 * `callback` _(optional)_ (_js only_) function to call for asynchronous mode
@@ -182,21 +195,24 @@ damas.comment({'#parent' : "asset_id", comment : "text"}, function (node) {
 });
 ```
 
-### __signIn( `username`, `password`, [`callback`])__
+### signin
+#### signIn( `username`, `password` [, `callback`] )
 
 * `username` string
 * `password` the user secret password string
 * `callback` (js_only, optional) function to call for asynchronous mode
 * returns an object containing an authentication token on success, false otherwise
 
-Sign in using the server embeded authentication system
+Sign in using the server embedded authentication system
 
-### __signOut([`callback`])__
+### signout
+#### signOut( [`callback`] )
 
 * `callback` (js_only, optional) function to call for asynchronous mode
 * returns true on success, false otherwise
 
-### __verify([`callback`])__
+### verify
+#### verify( [`callback`] )
 
 * `callback` (js_only, optional) function to call for asynchronous mode
 * returns true on success, false otherwise
@@ -204,7 +220,8 @@ Sign in using the server embeded authentication system
 Check if the authentication is valid
 
 
-### __create(`nodes`, [`callback`])__
+### create
+#### create(`nodes` [, `callback`] )
 
 * `nodes` an object or array of objects to insert in the database
 * `callback` (_js only_) if specified, the request is asynchronous
@@ -212,7 +229,7 @@ Check if the authentication is valid
 * returns `null` (Javascript) or `None` (Python) on failure
 
 Create node(s) in the database. Nodes have an `_id` key being their unique identifier in the database. This key can be specified during creation, but can't be updated afterwards without first deleting the node.
-The server may add some other arbitrary keys (author, time)
+The server may add some other arbitrary keys (author, time) depending on its configuration.
 
 ```python
 # Python
@@ -246,7 +263,9 @@ damas.create({key1: "value2"}, function (node) {
 });
 ```
 
-### __read(`ids`, [`callback`])__
+### read
+#### read(`ids` [, `callback`] )
+
 * `ids` a string or array of strings containing the ids to read. In Python, can be a list, tuple or set.
 * `callback` (_js only_) if specified, the request is asynchronous
 * returns a unique node object or an array of nodes (depending on the input) on success
@@ -263,13 +282,14 @@ var node = damas.read("/project/folder/file");
 var nodes = damas.read(["55ae0b1ed81e88357d77d0e9", "560061f2d4cb24441ed88aa4"]);
 ```
 
-### __update( `nodes`, [`callback`] )__
+### update
+#### update( `nodes` [, `callback`] )
 
 * `nodes` an object or an array of objects to update
 * `callback` _(optional)_ (_js only_) function to call for asynchronous mode
 * returns the modified node(s) on success, false otherwise
 
-Modify the keys on the specified node(s).
+Set and remove keys of the specified element(s).
 
 > The specified keys overwrite the existing keys on the server. Other, unspecified keys, are left untouched on the server. A null value removes the key.
 
@@ -303,7 +323,8 @@ project.update([{'_id':'56017b3053f58ea107dea5f7', 'a':'A'}, {'_id':'56017b3853f
 # [{u'a': u'A', u'_id': u'56017b3053f58ea107dea5f7', u'b': u'b', u'time': 1442937648390, u'author': u'demo'}, {u'a': u'a', u'_id': u'56017b3853f58ea107dea5f8', u'time': 1442937656258, u'author': u'demo'}]
 ```
 
-### __upsert( `nodes`, [`callback`] )__
+### upsert
+#### upsert( `nodes` [, `callback`] )
 
 * `nodes` an object or array of objects to insert and/or update in the database
 * `callback` (_js only_) if specified, the request is asynchronous
@@ -353,7 +374,8 @@ damas.upsert({key1: "value2"}, function (node) {
 });
 ```
 
-### __delete( `ids`, [`callback`] )__
+### delete
+#### delete( `ids` [, `callback`] )
 
 * `ids` a node index as string (for a unique index), or an array of string indexes
 * `callback` _(optional)_ (_js only_) function to call for asynchronous mode
@@ -366,7 +388,8 @@ Recursively delete the specified node
 damas.delete(id);
 ```
 
-### __search( `string`, [`callback`] )__
+### search
+#### search( `string` [, `callback`] )
 
 * @param {String} search query string
 * @param {function} [callback] - Function to call, boolean argument
@@ -385,7 +408,9 @@ Next line lists every png file containing "floor" in the file name, case insensi
 List every file containing the word rabbit and wearing the `type` key = `char`
 > search('file:/rabbit/ type:char');
 
-### __search_one( `string`, [`callback`] )__
+### search_one
+#### search_one( `string` [, `callback`] )
+
 * @param {String} search query string
 * @param {function} [callback] - Function to call, boolean argument
 * @returns {Array} array of element indexes or null if no element found
@@ -393,7 +418,8 @@ List every file containing the word rabbit and wearing the `type` key = `char`
 Search nodes, returning the first matching occurrence as a node object (not as index as in search). The search string format is the same as for the search method.
 
 
-### __damas.search_mongo(`query`, [`sort`, `limit`, `skip`, `callback`])__
+### search_mongo
+### search_mongo(`query` [, `sort`, `limit`, `skip`, `callback`] )
 
 * `query` the query object https://docs.mongodb.org/v3.0/reference/method/db.collection.find/
 * `sort` _(optional)_ https://docs.mongodb.org/v3.0/reference/method/cursor.sort/
@@ -443,7 +469,8 @@ damas.search_mongo({'time': {$exists:true}}, {"time":-1},200,0, function(res){
 });
 ```
 
-### __graph( `ids`, [`callback`] )__
+### graph
+#### graph( `ids` [, `callback`] )
 * @param {String} ids - Node indexes
 * @param {function} [callback] - Function to call, array argument
 * @returns {Array} array of element indexes
@@ -457,7 +484,8 @@ var sources = damas.graph("55687e68e040af7047ee1a53");
 
 <!--
 
-###__version( `id`, `keys`, [`callback`] )__
+### version
+#### version( `id`, `keys` [, `callback`] )
 
 Insert a new file as a new version of an existing asset, wearing the specified keys.
 
@@ -476,7 +504,8 @@ Insert a new file as a new version of an existing asset, wearing the specified k
 {u'comment': u'added requested elements and cleaned', u'author': u'demo', u'#parent': u'5601542f690375ccae0c1a3b', u'file': "/project/files/scene-150925121320.ma", u'time': 1443174266343, u'_id': u'5605177ad8b454a87e771b65'}
 ```
 
-### __link( `target`, `sources`, `keys`, [`callback`] )__
+### link
+#### link( `target`, `sources`, `keys` [, `callback`] )
 Create edges from the sources files to the target file wearing the specified keys. The sources and the target are specified as pathes to the corresponding files.
 ```py
 # Python
