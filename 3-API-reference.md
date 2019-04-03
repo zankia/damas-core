@@ -146,7 +146,7 @@ damas.create({"src_id":"/project/folder/file1","tgt_id":"/project/folder/file2"}
 ```
 
 ### read
-Retrieve one or more elements given their identifiers.
+Retrieve one or more elements given their identifiers
 ```js
 read ( identifiers [, callback] )
 ```
@@ -182,7 +182,7 @@ damas.read(["583ff5a747e759beb73bde32", "583ff5a747e759beb73bde33"]);
 ```
 
 ### update
-Modify and remove keys of the specified element(s).
+Modify and remove keys of the specified element(s)
 ```js
 update ( elements [, callback] )
 ```
@@ -235,15 +235,15 @@ damas.update({'_id': ['583ff5a747e759beb73bde32','583ff5a747e759beb73bde33'], 'n
 ```
 
 ### upsert
-Create nodes and/or update existing nodes if Id is specified and found
+Create or update element(s) when identifier(s) are specified and found
 ```js
 upsert ( elements [, callback] )
 ```
 #### parameters
-* `nodes` an object or array of objects to insert and/or update in the database
+* `elements` an object or array of objects to insert and/or update in the database
 * `callback` _(js only, optional)_ if specified, the request is asynchronous
 #### return values
-* returns a unique node or an array of nodes (depending on the input) on success
+* returns an object or an array of objects (depending on the input) on success
 * returns `null` (Javascript) or `None` (Python) on failure
 #### examples
 ```python
@@ -264,7 +264,6 @@ upsert ( elements [, callback] )
 >>> project.upsert([{"_id":["55ae0b1ed81e88357d77d0e9", "null"], "additional_key":"hello"}])
 [{u'additional_key': u'hello', u'time': 1437469470133, u'_id': u'55ae0b1ed81e88357d77d0e9', u'author': u'demo'}, {u'additional_key': u'hello', u'_id': u'56ae0b1ed81e88357d77d0f9', u'time': 1480586620449, u'author': u'demo'}]
 ```
-
 ```js
 // Javascript
 // create a new node
@@ -308,12 +307,12 @@ damas.delete("55ae0b1ed81e88357d77d0e9");
 ```
 
 ### lock
-Lock file(s) for edition. Sets a `lock` key on elements with current authenticated username as value).
+Lock file(s) for edition. Sets a `lock` key on elements with current authenticated username as value)
 ```js
-lock( ids [, callback] )
+lock( identifiers [, callback] )
 ```
 #### parameters
-* `ids` a node identifier string (to lock one asset), or an array of identifiers
+* `identifiers` string or array of identifiers strings to lock
 * `callback` _(js only, optional)_ if specified, the request is asynchronous
 #### return values
 * returns true on success, false otherwise
@@ -331,6 +330,7 @@ project.lock(['/project/path/to/file1', '/project/another_file_path'])
 ```
 
 ### publish
+Add files to the index
 ```js
 publish( elements [, callback] )
 ```
@@ -341,13 +341,12 @@ publish( elements [, callback] )
 * returns an array of nodes (containing parent nodes and child nodes) on success
 * returns `null` (Javascript) or `None` (Python) on failure
 
-Add files to the index. A child node is created to keep track of the original state of each node upon publish.
+> Same specifications as /api/create, except that it is expecting specific keys and a child element is created to keep track of the states upon publish
 
-> same specifications as /api/create, except that it is accessible to the user class or above, and that it is expecting specific keys.
-
+#### examples
 ```json
 {
-  "_id": "/project/path/to/new_file",
+  "_id": "/project/path/new_file",
   "comment": "text",
   "origin": "sitename"
 }
@@ -356,14 +355,13 @@ Child node :
 ```json
 {
   "_id": "55ae0b1ed81e88357d77d0e9",
-  "#parent" : "/project/path/to/new_file",
+  "#parent" : "/project/path/new_file",
   "comment": "text",
   "origin": "sitename"
 }
 ```
-
-* key `_id` can be a string path, or an array of string paths
-* key `origin` should be an alphanumerical name without space, for ease of use
+* `_id` path or an array of paths
+* key `origin` alphanumerical name without space, for ease of use. For multi-site.
 
 optional keys (these keys are not mandatory but could ease multi sites configurations and version control):
 * `file_mtime` Number (milliseconds since 1 Jan 1970 00:00)
@@ -378,16 +376,15 @@ Unlock a locked asset
 unlock ( identifiers [, callback] )
 ```
 #### parameters
-* `identifiers` identifier or array of identifiers to unlock
+* `identifiers` string or array of identifiers strings to lock
 * `callback` _(js only, optional)_ if specified, the request is asynchronous
 #### return values
 * returns a boolean or an array of booleans (depending on the input)
 
-
 > If the asset is not locked or locked for someone else (`lock` key value != authenticated user name) it returns false. If it was successfully unlocked, returns true.
 
 ### comment
-Add a comment to one or several element(s).
+Add a comment to one or several element(s)
 ```js
 comment ( elements [, callback] )
 ```
@@ -402,11 +399,11 @@ comment ( elements [, callback] )
 
 ```python
 # Python
-#single parent id
+# single parent id
 >>> project.comment({"#parent" : "asset_id", "comment" : "text"})
 {u'author' : u'username', u'time' : 1480588505449, u'#parent' : u'asset_id', u'comment' : u'text'}
 
-#multiple parent ids
+# multiple parent ids
 >>> project.comment({"#parent" : ["asset_id1", "asset_id2"], "comment" : "text"})
 [{u'author' : u'username', u'time' : 1480588505449, u'#parent' : u'asset_id1', u'comment' : u'text'}, {u'author' : u'username', u'time' : 1480588505449, u'#parent' : u'asset_id2', u'comment' : u'text'}]
 ```
