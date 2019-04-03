@@ -1,10 +1,4 @@
-
-The communication protocol between damas-core clients and servers use [JSON](json.org) over HTTP.
-
-[Protocol Specifications](#protocol-specifications)  
-[Drafts](#protocol-specifications-drafts)
-
-## Protocol Specifications
+The communication protocol used by damas-core clients and servers is based on [JSON data-interchange format](http://json.org) over [HTTP](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol).
 
 |PATH|METHOD||
 |---|-----|---|
@@ -27,112 +21,115 @@ The communication protocol between damas-core clients and servers use [JSON](jso
 | [/api/verify/](#verify) | GET |
 
 ## create
-Insert new nodes
+Insert new elements
 
-HTTP Requests
+### HTTP Requests
 * `POST` `/api/create/` `application/json` object or array of objects
 
-HTTP Responses
+### HTTP Responses
 ```
-201 OK (node(s) created)                                           application/json (object or array of objects)
-207 Multi-Status (some nodes already exist with these identifiers) application/json (array of objects or null)
-400 Bad Request (not formatted correctly)                          text/html        (error message)
-403 Forbidden (the user does not have the right permission)        text/html        (error message)
-409 Conflict (all nodes already exist with these identifiers)      text/html        (error message)
+201 OK (object(s) created)                                           application/json (object or array of objects)
+207 Multi-Status (some objects already exist with these identifiers) application/json (array of objects or null)
+400 Bad Request (not formatted correctly)                            text/html        (error message)
+403 Forbidden (the user does not have the right permission)          text/html        (error message)
+409 Conflict (all objects already exist with these identifiers)      text/html        (error message)
 ```
-> The _id key is the node identifier. If it is not provided in input, it will be set with a unique identifier.
-> In case of a multiple node creation, the returned json is a list of nodes ordered using the same order as the input array.
+> The _id key is used as unique object identifier string. If it is not provided in input, it will be set with a unique default identifier.
+> In case of a multiple object creation, the returned json is an array of objects ordered using the same order as the input array.
 
 ## read
-Retrieve the node(s) specified by identifier(s). A POST method is provided to avoid the limitation of the URL length.
+Retrieve object(s) by identifier(s). In addition to the GET method, a POST method is provided to avoid the limitation of the URL length.
 
-HTTP Requests
+#### HTTP Requests
 * `GET` `/api/read/id1,id2`
 * `POST` `/api/read/` `application/json` node identifier or array of node identifiers
 
-HTTP Responses
+#### HTTP Responses
 ```
-200 OK (nodes retrieved)                                    application/json (node identifier or array of node identifiers)
-207 Multi-Status (some nodes do not exist)                  application/json (array of node identifiers and null)
+200 OK (object(s) retrieved)                                application/json (objects or array of objects)
+207 Multi-Status (some objects do not exist)                application/json (array of objects and null)
 400 Bad request (not formatted correctly)                   text/html        (error message)
 403 Forbidden (the user does not have the right permission) text/html        (error message)
-404 Not Found (all the nodes do not exist)                  text/html        (error message)
+404 Not Found (object(s) do not exist)                      text/html        (error message)
 ```
 
-> The POST method is used in order to bypass the limits of the size of the URL (80KB for NodeJS). The GET method remains.
+> The HTTP headers are often limited by HTTP servers to a maximum size. NodeJS maximum header size is 80KB. The POST method is provided to avoid this limitation in order to read any number of identifiers.
 
 ## update
-Update existing nodes
+Modify existing object(s)
 
-HTTP Requests
+#### HTTP Requests
 * `PUT` `/api/update/` `application/json` node or array of nodes
 
-HTTP Responses
+#### HTTP Responses
 ```
-200 OK (nodes updated)                                      `application/json` (object or array of objects)
-207 Multi-Status (some nodes do not exist)                  `application/json` (array of objects or nulls)
+200 OK (object(s) updated)                                  `application/json` (object or array of objects)
+207 Multi-Status (some objects do not exist)                `application/json` (array of objects or nulls)
 400 Bad Request (not formatted correctly)                   `text/html`        (error message)
 403 Forbidden (the user does not have the right permission) `text/html`        (error message)
-404 Not Found (every nodes do not exist)                    `text/html`        (error message)
+404 Not Found (object(s) do not exist)                      `text/html`        (error message)
 ```
-> The input accepts arrays for _id keys to perform updates of the same kind on multiple nodes. Unspecified keys will be unchanged in the database. A key with null value deletes the key.
+
+> The specified keys overwrite the existing keys on the server. Unspecified keys are left untouched on the server. A null value removes the key.
+
+> The input accepts arrays for _id keys to perform updates of the same kind on multiple objects.
 
 ## upsert
-Updates existing nodes and/or creates new nodes
+Create or modify existing objects
 
-HTTP Requests
-* `POST` `/api/upsert/` `application/json` node or array of nodes
+#### HTTP Requests
+* `POST` `/api/upsert/` `application/json` object or array of objects
 
-HTTP Responses
+#### HTTP Responses
 ```
-200 OK (nodes updated)                                      `application/json` (object or array of objects)
+200 OK (object(s) updated)                                  `application/json` (object or array of objects)
 400 Bad Request (not formatted correctly)                   `text/html`        (error message)
 403 Forbidden (the user does not have the right permission) `text/html`        (error message)
 ```
 > The input accepts arrays for _id keys, as well as values "null".
 
 ## delete
-Delete nodes
+Delete objects
 
-HTTP Requests
-* `DELETE` `/api/delete/` `application/json` node identifier or array of node identifiers
+#### HTTP Requests
+* `DELETE` `/api/delete/` `application/json` object identifier or array of node identifiers
 
-HTTP Responses
+#### HTTP Responses
 ```
-200 OK (nodes deleted or not found)        application/json (deleted node identifier or array of identifiers)
-207 Multi-Status (some nodes do not exist) application/json (array of deleted nodes identifiers or null)
-400 Bad request (not formatted correctly)  text/html        (error message)
-404 Not Found (all the nodes do not exist) text/html        (error message)
+200 OK (object(s) are deleted)               application/json (deleted identifier or array of identifiers)
+207 Multi-Status (some objects do not exist) application/json (array of deleted identifiers or null)
+400 Bad request (not formatted correctly)    text/html        (error message)
+404 Not Found (object(s) do not exist)       text/html        (error message)
 ```
 
 ## comment
-Create new node for each existing node. The new node represents the comment that is assigned to an asset or several assets. (one child node per existing node)
+Add comments to object(s)
 
-HTTP Requests
+#### HTTP Requests
 * `POST` `/api/comment/` `application/json` object
 
-HTTP Responses
+#### HTTP Responses
 ```
-201 OK (nodes created)                                      application/json    (object)
-207 Multi-Status (some nodes don't exist)                   application/json    (array of objects)
+201 OK (object(s) created)                                  application/json    (object or array of objects)
+207 Multi-Status (some objects don't exist)                 application/json    (array of objects)
 400 Bad request (not formatted correctly)                   text/html           (error message)
 403 Forbidden (the user does not have the right permission) text/html           (error message)
-404 Not Found (the nodes do not exist)                      text/html           (error message)
+404 Not Found (object(s) do not exist)                      text/html           (error message)
 ```
 
 ## publish
-Insert new nodes. Similar to the generic create operation but accessible to the user class, and also performs some verifications of the keys provided as argument.
+Insert new objects. Similar to the generic create operation but accessible to the user class, and also performs some verifications of the keys provided as argument.
 
-HTTP Requests
+#### HTTP Requests
 * `POST` `/api/publish/` `application/json` object or array of objects
 
-HTTP Responses
+#### HTTP Responses
 ```
-201 OK (node(s) created)                                           application/json (object or array of objects)
-207 Multi-Status (some nodes already exist with these identifiers) application/json (array of objects or null)
-400 Bad Request (not formatted correctly)                          text/html        (error message)
-403 Forbidden (the user does not have the right permission)        text/html        (error message)
-409 Conflict (all nodes already exist with these identifiers)      text/html        (error message)
+201 OK (object(s) created)                                           application/json (object or array of objects)
+207 Multi-Status (some objects already exist with these identifiers) application/json (array of objects or null)
+400 Bad Request (not formatted correctly)                            text/html        (error message)
+403 Forbidden (the user does not have the right permission)          text/html        (error message)
+409 Conflict (all objects already exist with these identifiers)      text/html        (error message)
 ```
 
 ## search
@@ -156,11 +153,11 @@ HTTP Responses
 * Response `401`
 
 ## lock
-HTTP Requests
+#### HTTP Requests
 * `PUT` `/api/lock/` `application/json` node identifier or array of node identifiers
 
 ## unlock
-HTTP Requests
+#### HTTP Requests
 * `PUT` `/api/unlock/` `application/json` node identifier or array of node identifiers
 
 # Protocol Specifications Drafts
