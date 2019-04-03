@@ -2,14 +2,12 @@ The communication protocol used by damas-core clients and servers is based on [J
 
 |PATH|METHOD||
 |---|-----|---|
-| CRUDS ||
-| [/api/create/](#create) | POST | 201, 207, 400, 403, 409 |
-| [/api/delete/](#delete) | DELETE | 200, 207, 400, 404 |
-| [/api/read/](#read) | GET, POST | 200, 207, 400, 403, 404 |
-| [/api/search/](#search) | GET |
-| [/api/search_mongo/](#search_mongo) | POST |
-| [/api/update/](#update) | PUT | 200, 207, 400, 403, 404 |
-| [/api/upsert/](#upsert) | POST | 200, 400, 403 |
+| CRUD ||
+| [/api/create/](#create) | POST | 201, 207, 400, 403, 409, 500 |
+| [/api/read/](#read) | GET, POST | 200, 207, 400, 403, 404, 500 |
+| [/api/update/](#update) | PUT | 200, 207, 400, 403, 404, 500 |
+| [/api/upsert/](#upsert) | POST | 200, 400, 403, 500 |
+| [/api/delete/](#delete) | DELETE | 200, 207, 400, 404, 500 |
 | DAM ||
 | [/api/comment/](#comment) | POST |
 | [/api/lock/](#lock) | PUT |
@@ -19,6 +17,10 @@ The communication protocol used by damas-core clients and servers is based on [J
 | [/api/signIn/](#signIn) | POST |
 | [/api/signOut/](#signOut) | POST |
 | [/api/verify/](#verify) | GET |
+| SEARCH ||
+| [/api/search/](#search) | GET |
+| [/api/search_one/](#search_one) | GET |
+| [/api/search_mongo/](#search_mongo) | POST |
 
 ## create
 Insert new elements
@@ -27,15 +29,20 @@ Insert new elements
 * `POST` `/api/create/` `application/json` object or array of objects
 
 ### HTTP Responses
-```
-201 OK (object(s) created)                                           application/json (object or array of objects)
-207 Multi-Status (some objects already exist with these identifiers) application/json (array of objects or null)
-400 Bad Request (not formatted correctly)                            text/html        (error message)
-403 Forbidden (the user does not have the right permission)          text/html        (error message)
-409 Conflict (all objects already exist with these identifiers)      text/html        (error message)
+```http
+201 Created               application/json (object or array of objects) created object(s)        
+207 Multi-Status          application/json (array of objects and null) some objects already exist
+400 Bad Request           text/html (error message) not formatted correctly
+403 Forbidden             text/html (error message) the user does not have the right permission
+409 Conflict              text/html (error message) all objects already exist with these identifiers
+500 Internal Server Error text/html (error message) error while accessing the database
 ```
 > The _id key is used as unique object identifier string. If it is not provided in input, it will be set with a unique default identifier.
+
 > In case of a multiple object creation, the returned json is an array of objects ordered using the same order as the input array.
+
+> 207 Multi-Status happens when some specified identifiers already exist. A null value is returned in the array at corresponding position
+
 
 ## read
 Retrieve object(s) by identifier(s). In addition to the GET method, a POST method is provided to avoid the limitation of the URL length.
@@ -45,12 +52,13 @@ Retrieve object(s) by identifier(s). In addition to the GET method, a POST metho
 * `POST` `/api/read/` `application/json` node identifier or array of node identifiers
 
 #### HTTP Responses
-```
-200 OK (object(s) retrieved)                                application/json (objects or array of objects)
-207 Multi-Status (some objects do not exist)                application/json (array of objects and null)
-400 Bad request (not formatted correctly)                   text/html        (error message)
-403 Forbidden (the user does not have the right permission) text/html        (error message)
-404 Not Found (object(s) do not exist)                      text/html        (error message)
+```http
+200 OK                    application/json (objects or array of objects) requested object(s)
+207 Multi-Status          application/json (array of objects and null) some objects do not exist
+400 Bad request           text/html (error message) not formatted correctly
+403 Forbidden             text/html (error message) the user does not have the right permission
+404 Not Found             text/html (error message) object(s) do not exist
+500 Internal Server Error text/html (error message) error while accessing the database
 ```
 
 > The HTTP headers are often limited by HTTP servers to a maximum size. NodeJS maximum header size is 80KB. The POST method is provided to avoid this limitation in order to read any number of identifiers.
@@ -62,12 +70,13 @@ Modify existing object(s)
 * `PUT` `/api/update/` `application/json` node or array of nodes
 
 #### HTTP Responses
-```
-200 OK (object(s) updated)                                  `application/json` (object or array of objects)
-207 Multi-Status (some objects do not exist)                `application/json` (array of objects or nulls)
-400 Bad Request (not formatted correctly)                   `text/html`        (error message)
-403 Forbidden (the user does not have the right permission) `text/html`        (error message)
-404 Not Found (object(s) do not exist)                      `text/html`        (error message)
+```http
+200 OK                    application/json (object or array of objects) updated object(s)
+207 Multi-Status          application/json (array of objects or nulls) some objects do not exist
+400 Bad Request           text/html (error message) not formatted correctly
+403 Forbidden             text/html (error message) the user does not have the right permission
+404 Not Found             text/html (error message) object(s) do not exist
+500 Internal Server Error text/html (error message) error while accessing the database
 ```
 
 > The specified keys overwrite the existing keys on the server. Unspecified keys are left untouched on the server. A null value removes the key.
@@ -81,25 +90,27 @@ Create or modify existing objects
 * `POST` `/api/upsert/` `application/json` object or array of objects
 
 #### HTTP Responses
-```
-200 OK (object(s) updated)                                  `application/json` (object or array of objects)
-400 Bad Request (not formatted correctly)                   `text/html`        (error message)
-403 Forbidden (the user does not have the right permission) `text/html`        (error message)
+```http
+200 OK                    application/json (object or array of objects) updated/created object(s)
+400 Bad Request           text/html (error message) not formatted correctly
+403 Forbidden             text/html (error message) the user does not have the right permission
+500 Internal Server Error text/html (error message) error while accessing the database
 ```
 > The input accepts arrays for _id keys, as well as values "null".
 
 ## delete
-Delete objects
+Permanently remove objects from the database
 
 #### HTTP Requests
 * `DELETE` `/api/delete/` `application/json` object identifier or array of node identifiers
 
 #### HTTP Responses
-```
-200 OK (object(s) are deleted)               application/json (deleted identifier or array of identifiers)
-207 Multi-Status (some objects do not exist) application/json (array of deleted identifiers or null)
-400 Bad request (not formatted correctly)    text/html        (error message)
-404 Not Found (object(s) do not exist)       text/html        (error message)
+```http
+200 OK                    application/json (string or array of strings) deleted identifier(s)
+207 Multi-Status          application/json (array of strings or null) some objects do not exist
+400 Bad request           text/html (error message) not formatted correctly
+404 Not Found             text/html (error message) object(s) do not exist
+500 Internal Server Error text/html (error message) could not access the database
 ```
 
 ## comment
@@ -109,7 +120,7 @@ Add comments to object(s)
 * `POST` `/api/comment/` `application/json` object
 
 #### HTTP Responses
-```
+```http
 201 OK (object(s) created)                                  application/json    (object or array of objects)
 207 Multi-Status (some objects don't exist)                 application/json    (array of objects)
 400 Bad request (not formatted correctly)                   text/html           (error message)
@@ -124,7 +135,7 @@ Insert new objects. Similar to the generic create operation but accessible to th
 * `POST` `/api/publish/` `application/json` object or array of objects
 
 #### HTTP Responses
-```
+```http
 201 OK (object(s) created)                                           application/json (object or array of objects)
 207 Multi-Status (some objects already exist with these identifiers) application/json (array of objects or null)
 400 Bad Request (not formatted correctly)                            text/html        (error message)
