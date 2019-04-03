@@ -27,7 +27,7 @@ The elements are identified using unique identifiers stored in the reserved `_id
 ```
 A set of generic CRUD functions is provided to create, read, modify and delete elements:
 
-- [`create`](#create) - create element(s)
+- [`create`](#create) - insert new element(s)
 - [`read`](#read) - retrieve element(s) using identifiers
 - [`update`](#update) - modify element(s)
 - [`upsert`](#upsert) - create or modify element(s)
