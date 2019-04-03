@@ -16,8 +16,7 @@ To install docker and docker-compose you could follow [the official tutorial](ht
 
 The images are hosted on Docker Hub [zankia/damas-node](https://hub.docker.com/r/zankia/damas-node) (the 3 tags correspond to the git development branches).
 
-## Installation without Docker
-
+## Using NodeJS
 Clone the repository, and change directory to server-nodejs/.  
 Duplicate the template configuration file, install the packages, and run:
 ```sh
@@ -71,7 +70,6 @@ The configuration is divided into sections:
 Open http://localhost/api (docker) or http://localhost:8090/api (node) in a web browser to access the server located on the same machine
 
 ##  Next steps
+Now that you have a running server you can read [[2 Getting Started]] to setup a Python, JavaScript or Shell client environment and [[3 API Reference]].
 
 In case you encounter difficulties during the installation process you could create an issue describing the problem in this repository and we will try to resolve it.
-
-Now that you have a running server you can read the other pages to setup a client environment (Python, JavaScript, or Command-line)
