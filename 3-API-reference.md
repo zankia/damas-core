@@ -29,7 +29,7 @@ A set of generic CRUD functions is provided to create, read, modify and delete e
 
 - [`create`](#create) - insert new element(s)
 - [`read`](#read) - retrieve element(s) using identifiers
-- [`update`](#update) - modify element(s)
+- [`update`](#update) - modify existing element(s)
 - [`upsert`](#upsert) - create or modify element(s)
 - [`delete`](#delete) - delete element(s)
 
