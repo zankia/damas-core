@@ -18,6 +18,7 @@ The communication protocol used by damas-core clients and servers is based on [J
 | [/api/signOut/](#signOut) | POST |
 | [/api/verify/](#verify) | GET |
 | SEARCH ||
+| [/api/graph/](#graph) | GET | 200, 207, 400, 404, 500 |
 | [/api/search/](#search) | GET | 200, 400, 500 |
 | [/api/search_one/](#search_one) | GET | 200, 400, 500 |
 | [/api/search_mongo/](#search_mongo) | POST | 200, 500, 501 |
@@ -47,11 +48,11 @@ Insert new elements
 ## read
 Retrieve object(s) by identifier(s). In addition to the GET method, a POST method is provided to avoid the limitation of the URL length.
 
-#### HTTP Requests
+### HTTP Requests
 * `GET` `/api/read/id1,id2`
 * `POST` `/api/read/` `application/json` node identifier or array of node identifiers
 
-#### HTTP Responses
+### HTTP Responses
 ```http
 200 OK                    application/json (objects or array of objects) requested object(s)
 207 Multi-Status          application/json (array of objects and null) some objects do not exist
@@ -66,10 +67,10 @@ Retrieve object(s) by identifier(s). In addition to the GET method, a POST metho
 ## update
 Modify existing object(s)
 
-#### HTTP Requests
+### HTTP Requests
 * `PUT` `/api/update/` `application/json` node or array of nodes
 
-#### HTTP Responses
+### HTTP Responses
 ```http
 200 OK                    application/json (object or array of objects) updated object(s)
 207 Multi-Status          application/json (array of objects or nulls) some objects do not exist
@@ -86,10 +87,10 @@ Modify existing object(s)
 ## upsert
 Create or modify existing objects
 
-#### HTTP Requests
+### HTTP Requests
 * `POST` `/api/upsert/` `application/json` object or array of objects
 
-#### HTTP Responses
+### HTTP Responses
 ```http
 200 OK                    application/json (object or array of objects) updated/created object(s)
 400 Bad Request           text/html (error message) not formatted correctly
@@ -101,10 +102,10 @@ Create or modify existing objects
 ## delete
 Permanently remove objects from the database
 
-#### HTTP Requests
+### HTTP Requests
 * `DELETE` `/api/delete/` `application/json` object identifier or array of node identifiers
 
-#### HTTP Responses
+### HTTP Responses
 ```http
 200 OK                    application/json (string or array of strings) deleted identifier(s)
 207 Multi-Status          application/json (array of strings or null) some objects do not exist
@@ -116,10 +117,10 @@ Permanently remove objects from the database
 ## comment
 Add comments to object(s)
 
-#### HTTP Requests
+### HTTP Requests
 * `POST` `/api/comment/` `application/json` object
 
-#### HTTP Responses
+### HTTP Responses
 ```http
 201 OK (object(s) created)                                  application/json    (object or array of objects)
 207 Multi-Status (some objects don't exist)                 application/json    (array of objects)
@@ -131,10 +132,10 @@ Add comments to object(s)
 ## publish
 Insert new objects. Similar to the generic create operation but accessible to the user class, and also performs some verifications of the keys provided as argument.
 
-#### HTTP Requests
+### HTTP Requests
 * `POST` `/api/publish/` `application/json` object or array of objects
 
-#### HTTP Responses
+### HTTP Responses
 ```http
 201 OK (object(s) created)                                           application/json (object or array of objects)
 207 Multi-Status (some objects already exist with these identifiers) application/json (array of objects or null)
@@ -142,35 +143,56 @@ Insert new objects. Similar to the generic create operation but accessible to th
 403 Forbidden (the user does not have the right permission)          text/html        (error message)
 409 Conflict (all objects already exist with these identifiers)      text/html        (error message)
 ```
-
+## graph
+### HTTP Requests
+### HTTP Responses
 ## search
+### HTTP Requests
+### HTTP Responses
+## search_one
+### HTTP Requests
+* `GET` `/api/search_one/`query
+### HTTP Responses
+* Response `200` `application/json` node or null
+* Response `400` `409` `text/html` error message
+
 ## search_mongo
+### HTTP Requests
 * Request `POST` `/api/search_mongo` `application/json` `query` `sort` `limit` `skip`
+### HTTP Responses
 * Response `200` `application/json` array of string identifiers
 * Response `409` `text/html` error message
 
 ## signIn
+### HTTP Requests
 * Request `POST` `/api/signIn/` `application/x-www-form-urlencoded` `username` `password`
+### HTTP Responses
 * Response `200` `application/json` user object
 * Response `401` `text/html` error message
 
 ## signOut
+### HTTP Requests
+### HTTP Responses
 * Request `/api/signOut/`
 * Response
 
 ## verify
+### HTTP Requests
+### HTTP Responses
 * Request `GET` `/api/verify/`
 * Response `200` `application/json` the authenticated user object
 * Response `401`
 
 ## lock
-#### HTTP Requests
+### HTTP Requests
 * `PUT` `/api/lock/` `application/json` node identifier or array of node identifiers
-
+### HTTP Requests
+### HTTP Responses
 ## unlock
-#### HTTP Requests
+### HTTP Requests
 * `PUT` `/api/unlock/` `application/json` node identifier or array of node identifiers
-
+### HTTP Requests
+### HTTP Responses
 # Protocol Specifications Drafts
 
 ## version
@@ -180,8 +202,3 @@ Insert new objects. Similar to the generic create operation but accessible to th
 ## link
 * Request `POST` `/api/link` `application/json`
 * Response `200` `400` `401` `application/json`
-
-## search_one
-* Request `GET` `/api/search_one/`query
-* Response `200` `application/json` node or null
-* Response `400` `409` `text/html` error message
