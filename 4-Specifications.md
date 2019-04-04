@@ -18,9 +18,9 @@ The communication protocol used by damas-core clients and servers is based on [J
 | [/api/signOut/](#signOut) | POST |
 | [/api/verify/](#verify) | GET |
 | SEARCH ||
-| [/api/search/](#search) | GET |
-| [/api/search_one/](#search_one) | GET |
-| [/api/search_mongo/](#search_mongo) | POST |
+| [/api/search/](#search) | GET | 200, 400, 500 |
+| [/api/search_one/](#search_one) | GET | 200, 400, 500 |
+| [/api/search_mongo/](#search_mongo) | POST | 200, 500, 501 |
 
 ## create
 Insert new elements
