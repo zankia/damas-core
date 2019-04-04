@@ -1,6 +1,6 @@
 The communication protocol used by damas-core clients and servers is based on [JSON data-interchange format](http://json.org) over [HTTP](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol).
 
-|PATH|METHOD||
+|PATH|METHOD|RESPONSE STATUS CODE|
 |---|-----|---|
 | CRUD ||
 | [/api/create/](#create) | POST | 201, 207, 400, 403, 409, 500 |
