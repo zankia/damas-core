@@ -37,7 +37,7 @@ set DEBUG=app:* & node .
 ```
 
 ## Configure
-The server reads its configuration from `server-nodejs/conf.json`. Copy the default configuration file `conf_install.json` to `conf.json` and edit it according to your needs:
+The server reads its configuration from `server-nodejs/conf.json`. Copy the default configuration file `server-nodejs/conf_install.json` to `server-nodejs/conf.json` and edit it according to your needs:
 
 ```json
 {                                                                                                                     
