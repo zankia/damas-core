@@ -28,7 +28,7 @@ You can change the hash encryption algorithm from `sha1` to `md5` and other opti
     "jwt" : {
         // ...
         "enable": true,
-        "passwordHashAlgorithm" : "sha1",
+        "passwordHashAlgorithm" : "md5",
         // ...
     },
 }
