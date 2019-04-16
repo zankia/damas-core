@@ -14,7 +14,7 @@ By default, the installation gives a public access without authentication. The f
 
 In the web browser, on the console page, start a web console (Ctrl+Shft+K) and type:
 ```js
-damas.create({username:"<your_user_name>", password:"<your_password>", class:"admin"});
+damas.create({username:"your_user_name", password:"your_password", class:"admin"});
 ```
 by default this password is an SHA1 encoded string (that is encoded on your side). To generate the encoded password, you can type this command in a shell:
 ```sh
