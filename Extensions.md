@@ -119,7 +119,7 @@ Replace keys by default ones if the user class is not in the whitelist. If the n
 
 
 ## last_activity
-keep the last activity for current user.
+Keep the last activity for current user.
 ```js
 "last_activity": {
             "enable": true,
