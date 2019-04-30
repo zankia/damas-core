@@ -36,22 +36,28 @@ You can change the hash encryption algorithm from `sha1` to `md5` and other opti
 Then, restart the server to read the configuration file at startup and sign in using the newly created user. You can also read this [[documentation|Authentication]] about the JSON Web Token base authentification in DAMAS.
 
 ## Permissions
-Users can be assigned to a group with the `class` key.
 
-Possible values are `guest` (default), `user`, `editor` and `admin`
+We have different types of permissions:
 
-|              | Guest | User | Editor | Admin |
+* permissions for each /api/ operation based on the current user's `class` key: hard-coded in server-nodejs/routes/perms-tools.js
+* update permissions based on the key name to edit and the current user's `class` key. [extensions/restricted_keys.js](../Extensions#restricted_keys)
+* read permissions based on the `author` key. See conf.json `authorMode` directive. 
+
+The default available user classes are: `admin` `editor` `user` `guest`.
+
+
+|  Operation   | guest | user | editor | admin |
 |--------------|-------|------|--------|-------|
-|    create    |       |      |    X   |   X   |
-|     read     |   X   |   X  |    X   |   X   |
-|    update    |       |      |    X   |   X   |
-|    delete    |       |      |    X   |   X   |
-|     lock     |       |   X  |    X   |   X   |
-|    unlock    |       |   X  |    X   |   X   |
-|    publish   |       |   X  |    X   |   X   |
-|    upload    |       |   X  |    X   |   X   |
-|    version   |       |   X  |    X   |   X   |
-|     file     |       |   X  |    X   |   X   |
-|     graph    |   X   |   X  |    X   |   X   |
-|    search    |   X   |   X  |    X   |   X   |
-| search_mongo |   X   |   X  |    X   |   X   |
+|    create    |       |   x  |    x   |   x   |
+|     read     |   x   |   x  |    x   |   x   |
+|    update    |       |   k  |    x   |   x   |
+|    delete    |       |      |    x   |   x   |
+|     lock     |       |   x  |    x   |   x   |
+|    unlock    |       |   x  |    x   |   x   |
+|    publish   |       |   x  |    x   |   x   |
+|    upload    |       |   x  |    x   |   x   |
+|    version   |       |   x  |    x   |   x   |
+|     file     |       |   x  |    x   |   x   |
+|     graph    |   x   |   x  |    x   |   x   |
+|    search    |   x   |   x  |    x   |   x   |
+| search_mongo |   x   |   x  |    x   |   x   |
