@@ -1,4 +1,4 @@
-Extensions to give new behaviors to the nodejs-server: extend the api, manage user authentication, permissions. This page gives a list of the extensions which are provided in the repository.
+Extensions give new behaviors to the nodejs-server: extend the api, manage user authentication, permissions. This page gives a list of the extensions which are provided in the repository.
 
 * [`es6-polyfills`](#es6-polyfills) - polyfills for older systems
 * [`jwt`](#jwt) - JSON Web Token user authentication
