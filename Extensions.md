@@ -2,8 +2,8 @@ Extensions give new behaviors to the nodejs-server: extend the api, manage user 
 
 * [`es6-polyfills`](#es6-polyfills) - polyfills for older systems
 * [`jwt`](#jwt) - JSON Web Token user authentication
-* [`noauth`](#noauth) - user verification mechanism when user authentication is disabled.
 * [`last_activity`](#last_activity) - keep the last activity for current user.
+* [`noauth`](#noauth) - user verification mechanism when user authentication is disabled.
 * [`nodemailer`](#nodemailer) - send emails using https://www.npmjs.com/package/nodemailer
 * [`restricted_keys`](#restricted_keys) - whitelist of writable keys depending on user class
 * [`prefer_https`](#prefer_https) - redirect every HTTP queries to HTTPS
@@ -72,6 +72,17 @@ See [[Authentication]] documentation about this implementation.
 * new routes: `/api/signIn` and `/api/verify`
 
 
+## last_activity
+Keep the last activity for current user.
+```js
+"last_activity": {
+            "enable": true,
+            "path": "./extensions/last_activity.js"
+},
+```
+* no new route defined
+
+
 ## noauth
 Provides basic user verification mechanisms when authentication is disabled.
 ```js
@@ -116,16 +127,6 @@ Replace keys by default ones if the user class is not in the whitelist. If the n
 }
 ```
 * no route defined
-
-
-## last_activity
-Keep the last activity for current user.
-```js
-"last_activity": {
-            "enable": true,
-            "path": "./extensions/last_activity.js"
-},
-```
 
 
 ## prefer_https
