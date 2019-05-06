@@ -132,7 +132,7 @@ Replace keys in requests by default ones if the user class is not in the whiteli
   * `override` (object) keys and behaviors upon updates
 
 ## prefer_https
-Redirects http calls to https.
+Redirects http:// calls to https://.
 * default configuration:
 ```js
 "prefer_https": {
@@ -140,7 +140,7 @@ Redirects http calls to https.
     "path": "./extensions/prefer_https.js"
 }
 ```
-The /.well-known is not redirected, to allow letsencrypt authentication.
+The /.well-known is not redirected to allow letsencrypt authentication. See Express [res.redirect](https://expressjs.com/en/api.html#res.redirect)
 
 ## static_routes
 A list of relative or absolute paths to be served by the server. It contains server resources and possible HTML interfaces.
