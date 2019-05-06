@@ -34,6 +34,7 @@ The extensions are loaded at startup and are listed in the configuration file `c
 ## es6-polyfills
 Provide ES6 polyfills if the code is ran in a NodeJS which is not ES6.
 (NodeJS v0.10.29 for instance, on older systems)
+* default configuration:
 ```js
 "es6_polyfills": {
     "enable": true,
@@ -43,7 +44,9 @@ Provide ES6 polyfills if the code is ran in a NodeJS which is not ES6.
 
 ## jwt
 Implementation of JSON Web Token RFC7519 for user authentication https://jwt.io/  
-
+* requires `jsonwebtoken` `express-jwt` `express-unless` `crypto` `cookie-parser`
+* new routes: `/api/signIn` and `/api/verify`
+* default configuration:
 ```js
 "jwt": {
     "enable": false,
@@ -60,42 +63,38 @@ Implementation of JSON Web Token RFC7519 for user authentication https://jwt.io/
     }
 }
 ```
-* `passwordHashAlgorithm`: algorithm to store passwords on server. `sha1` or `md5`
-* `secret`:  encryption salt string
-* `exp`: token expiration time in seconds
-* `expressUse`: path to protect by authentication
-* `expressUnless`: path to exclude from authentication
+* configuration options:
+  * `passwordHashAlgorithm` (string) algorithm used to hash the passwords on server. `sha1` or `md5`
+  * `secret` (string)  encryption salt
+  * `exp` (number) token expiration time in seconds
+  * `expressUse` (string, regex or array) paths to protect with authentication
+  * `expressUnless` (object) paths and methods to exclude from authentication
 
-See [[Authentication]] documentation about this implementation.
-
-* requires `jsonwebtoken` `express-jwt` `express-unless` `crypto` `cookie-parser`
-* new routes: `/api/signIn` and `/api/verify`
-
-
+See [[Authentication]], [express.use syntax](https://expressjs.com/en/api.html#app.use), [express unless syntax](https://www.npmjs.com/package/express-unless).
 ## last_activity
 Keep the last activity for current user.
+* default configuration:
 ```js
 "last_activity": {
             "enable": true,
             "path": "./extensions/last_activity.js"
 },
 ```
-* no new route defined
-
-
 ## noauth
 Provides basic user verification mechanisms when authentication is disabled.
+* new routes: `/api/verify`
+* default configuration:
 ```js
 "noauth": {
     "enable": true,
     "path": "./extensions/auth-none.js"
 }
 ```
-* new routes: `/api/verify`
-
 
 ## nodemailer
 Send email using https://www.npmjs.com/package/nodemailer
+* requires `nodemailer`
+* default configuration:
 ```
 "nodemailer": {
     "enable": true,
@@ -110,12 +109,14 @@ Send email using https://www.npmjs.com/package/nodemailer
     }   
 }  
 ```
-* requires `nodemailer`
-* no route defined
+* configuration options:
+  * `transporter` (object) nodemailer configuration
+  * `from` (string) default sender email address
+See [nodemailer](https://www.npmjs.com/package/nodemailer)
 
 ## restricted_keys
-Replace keys by default ones if the user class is not in the whitelist. If the new value is defined as null, delete the key from the request
-
+Replace keys in requests by default ones if the user class is not in the whitelist. If the new value is defined as null, delete the key from the request
+* default configuration:
 ```js
 "restricted_keys": {
     "enable": true,
@@ -126,23 +127,25 @@ Replace keys by default ones if the user class is not in the whitelist. If the n
     }
 }
 ```
-* no route defined
-
+* configuration options:
+  * `whitelist` (array) user classes that are not affected by key restriction
+  * `override` (object) keys and behaviors upon updates
 
 ## prefer_https
 Redirects http calls to https.
+* default configuration:
 ```js
 "prefer_https": {
     "enable": false,
     "path": "./extensions/prefer_https.js"
 }
 ```
-* no new route defined
-
 The /.well-known is not redirected, to allow letsencrypt authentication.
 
 ## static_routes
 A list of relative or absolute paths to be served by the server. It contains server resources and possible HTML interfaces.
+* new routes are defined according to the configuration
+* default configuration:
 ```js
 "static_routes": {
     "enable": true,
@@ -159,17 +162,18 @@ A list of relative or absolute paths to be served by the server. It contains ser
      }
 }
 ```
+* configuration options:
+  * `routes` (object) route -> path pairs to define
 An array as value for a directory means that it will look for a resource in each directory by order of appearance. 
-* new routes are defined according to the configuration
 
 ## user_setup
 Lost password procedure using email and token verification.
-
+* requires `crypto`
+* new routes: `/api/lostPassword` `/api/changePassword` `/api/resetPassword`
+* default configuration:
 ```json
 "user_setup" : { 
     "enable": true,
     "path" : "./extensions/user_setup.js"
 }
 ```
-* requires `crypto`
-* new routes: `/api/lostPassword` `/api/changePassword` `/api/resetPassword`
