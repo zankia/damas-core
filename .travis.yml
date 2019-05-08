@@ -1,0 +1,8 @@
+language: node_js
+node_js:
+    - "node"
+before_install:
+    - cd server-nodejs
+install:
+    - cp conf_install.json conf.json
+    - npm install
