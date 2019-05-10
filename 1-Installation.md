@@ -22,15 +22,15 @@ Duplicate the template configuration file, install the packages, and run:
 ```sh
 cp conf_install.json conf.json
 npm install
-nodejs .
+node .
 ```
 More parameters
 ```sh
 # debug mode
-DEBUG=app:* nodejs .
+DEBUG=* node .
 
 # the server listens to port 8090 by default. You can specify different ports and debug options
-DEBUG=* HTTP_PORT=8091 HTTPS_PORT=8444 nodejs .
+DEBUG=* HTTP_PORT=8091 HTTPS_PORT=8444 node .
 
 # on windows:
 set DEBUG=app:* & node .
@@ -60,16 +60,25 @@ The server reads its configuration from `server-nodejs/conf.json`. Copy the defa
 }
 ```
 The configuration is divided into sections:
-* `https`: SSL certificate to use
-* `db`: which Database Management System to use. Available: `debug`, `mongodb`
+* `authorMode`: if enabled the users are able to edit their nodes
+* `https`: specify a certificate and enable TLS
+* `db`: which Database Management System to use. Available values: `debug`, `mongodb`
 * `mongodb`: Mongo database options Keep the default values to use a mongodb located on the same machine
 * `fileSystem`: the path to the root directory where files are indexed from
-* `extensions`: modules to provide extensions to the core
+* `extensions`: load modules to extend to the core. See [[Extensions]] page for available extensions.
 
 ## Run
-Open http://localhost/api (docker) or http://localhost:8090/api (node) in a web browser to access the server located on the same machine
+In a web browser, after the installation using Docker on the same machine, open
+```
+http://localhost
+```
+Or after an installation using NodeJS
+```
+http://localhost:8090
+```
+
 
 ##  Next steps
-Now that you have a running server you can read [[2 Getting Started]] to setup a Python, JavaScript or Shell client environment and [[3 API Reference]].
+Now that you have a running server you can read [[2 Getting Started]] to setup a Python, JavaScript or Shell client environment, and read [[3 API Reference]].
 
 In case you encounter difficulties during the installation process you could create an issue describing the problem in this repository and we will try to resolve it.
