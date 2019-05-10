@@ -9,9 +9,8 @@ Welcome to the damas-core wiki.
 * [[4 Specifications]] - Protocol specifications
 
 ### Additional information
-* [[Client Setup]] - Scripting guide to start accessing a damas-core server
-* [[Database Admin|Database Administration]] -  Cook Book, some recipes for the administration of the underlying database
 * [[Authentication]] - Token based authentication implemented in server-nodejs
+* [[Database Admin|Database Administration]] -  Cook Book, some recipes for the administration of the underlying database
 * [[Extensions]] - Documentation about the provided extensions and their format
 
 ### Implementation notes
