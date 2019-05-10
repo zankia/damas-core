@@ -13,6 +13,3 @@ Welcome to the damas-core wiki.
 * [[Database Admin|Database Administration]] -  Cook Book, some recipes for the administration of the underlying database
 * [[Extensions]] - Documentation about the provided extensions and their format
 * [[Contributing]] - Documentation for coding conventions and unit testing
-
----
-<img src="http://damas-software.com/img/primcode_softwareengineeringcompany_logo.svg" alt="PRIMCODE software engineering company logo" align="right"/>
