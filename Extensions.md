@@ -52,7 +52,7 @@ Implementation of JSON Web Token RFC7519 for user authentication https://jwt.io/
     "enable": false,
     "path": "./extensions/auth-jwt-node.js",
     "conf": {
-        "required": false,
+        "required": true,
         "passwordHashAlgorithm": "md5",
         "secret": "webtokensecret",
         "exp": 1440,
@@ -64,6 +64,7 @@ Implementation of JSON Web Token RFC7519 for user authentication https://jwt.io/
 }
 ```
 * configuration options:
+  * `required` (boolean) if false, unauthenticated users are considered as guests with read access
   * `passwordHashAlgorithm` (string) algorithm used to hash the passwords on server. `sha1` or `md5`
   * `secret` (string)  encryption salt
   * `exp` (number) token expiration time in seconds
