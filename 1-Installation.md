@@ -63,9 +63,9 @@ The configuration is divided into sections:
 * `authorMode`: if enabled the users are able to edit their nodes
 * `https`: specify a certificate and enable TLS
 * `db`: which Database Management System to use. Available values: `debug`, `mongodb`
-* `mongodb`: Mongo database options Keep the default values to use a mongodb located on the same machine
-* `fileSystem`: the path to the root directory where files are indexed from
-* `extensions`: load modules to extend to the core. See [[Extensions]] page for available extensions.
+* `mongodb`: MongoDB options. Keep the default values to use a database located on the same machine
+* `fileSystem`: path to the file repository root from which the files are indexed from
+* `extensions`: modules list to extend the core. See the [[Extensions]] page for more details about the available extensions.
 
 ## Run
 In a web browser, after the installation using Docker on the same machine, open
