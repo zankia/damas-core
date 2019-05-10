@@ -12,9 +12,7 @@ Welcome to the damas-core wiki.
 * [[Authentication]] - Token based authentication implemented in server-nodejs
 * [[Database Admin|Database Administration]] -  Cook Book, some recipes for the administration of the underlying database
 * [[Extensions]] - Documentation about the provided extensions and their format
-
-### Implementation notes
-* [[Contributing]] - Specifications for the communication protocol, documentation for unit testing and coding conventions
+* [[Contributing]] - Documentation for coding conventions and unit testing
 
 ---
 <img src="http://damas-software.com/img/primcode_softwareengineeringcompany_logo.svg" alt="PRIMCODE software engineering company logo" align="right"/>
