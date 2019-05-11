@@ -53,6 +53,10 @@ Then you can enable the JSON Web Token authentication editing the server configu
 ```
 Then, restart the server to read the configuration file at startup and sign in using the newly created user. You can also read this [[documentation|Authentication]] about the JSON Web Token authentification in damas-core and to have more details about the authentication options.
 
+The `required` directive is used for hybrid cases where:
+* authentication is required for write accesses
+* unauthenticated users are still able to read the database and considered as `guest` class users
+
 ## Permissions
 
 We have different types of permissions:
