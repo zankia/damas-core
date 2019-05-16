@@ -50,7 +50,7 @@ Implementation of JSON Web Token RFC7519 for user authentication https://jwt.io/
 ```js
 "jwt": {
     "enable": false,
-    "path": "./extensions/auth-jwt-node.js",
+    "path": "./extensions/jwt.js",
     "conf": {
         "required": true,
         "passwordHashAlgorithm": "md5",
