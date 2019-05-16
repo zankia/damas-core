@@ -73,7 +73,7 @@ Implementation of JSON Web Token RFC7519 for user authentication https://jwt.io/
 
 See [[Authentication]], [express.use syntax](https://expressjs.com/en/api.html#app.use), [express unless syntax](https://www.npmjs.com/package/express-unless).
 ## last_activity
-Keep the last activity for current user.
+Save the date when user makes a request.
 * default configuration:
 ```js
 "last_activity": {
