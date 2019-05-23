@@ -26,11 +26,16 @@ openssl req -new -x509 -days 9999 -nodes -out fullchain.pem -keyout privkey.pem
 
 By default, the installation gives a public access without authentication. The first thing you may want to do is to setup the authentication. For this, you need to create a new user. We don't provide a button for this so here is the procedure using the damas-core API to create a user node.
 
-To generate a SHA-1 encoded password, you can type this command in a shell:
+To generate a SHA-1 or MD5 encoded password, you can type this command in a shell:
 ```sh
 $ echo -n "yourpassword" | sha1sum
 327156ab287c6aa52c8670e13163fc1bf660add4  -
 ```
+```sh
+$ echo -n "yourpassword" | md5sum
+637b9adadf7acce5c70e5d327a725b13  -
+```
+
 
 In the web browser, on damas-core page, start a web console (Ctrl+Shift+K) and type:
 ```js
