@@ -51,7 +51,7 @@ Then you can enable the JSON Web Token authentication editing the server configu
         "conf": {
             "required": true,
             "secret": "webtokensecret",
-            "exp": 1440,
+            "exp": "1d",
         }
     },
 }
