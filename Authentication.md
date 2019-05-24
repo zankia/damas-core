@@ -25,7 +25,7 @@ During auhthentication, we detect the [hash method](https://github.com/remyla/da
 ## The Token
 The token is a string allowing to verify a user. Each token is genereted with a lifespan and some other information(see [JWT](https://jwt.io/introduction/) and [npm JSONWebToken](https://www.npmjs.com/package/jsonwebtoken)).
 #### Token lifespan
-By default, the lifespan is set to `exp` in conf.json. With signIn, we can inform `expiresIn` (liens vers signIn) to get an other lifespan. The possible values are specified here(liens vers ms). Special value: if expiresIn equals `"0"` the lifespan will be unlimited [#237](https://github.com/remyla/damas-core/issues/237). By changing password, this revokes previously obtained tokens.  
+By default, the lifespan is set to `exp` in conf.json. With signIn, we can inform `expiresIn` (see [signIn](https://github.com/remyla/damas-core/wiki/3-API-reference#signin)) to get an other lifespan. The possible values are specified [here](https://www.npmjs.com/package/ms). Special value: if expiresIn equals `"0"` the lifespan will be unlimited [#237](https://github.com/remyla/damas-core/issues/237). By changing password, this revokes previously obtained tokens.  
 #### Token salt
 The tokens are encrypted using salts (a secret passphrase on server). The salt is made with the user hashed password and the `secret` passphrasse specified in conf.json. If we change either one the previously obtained tokens will be revoked.
 
