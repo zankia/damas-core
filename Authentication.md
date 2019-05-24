@@ -19,7 +19,16 @@ else:
 ```
 The server compares the provided username and password with the pair available in the database. It is important to encrypt the communication (using https here) not to send the password as clear text.
 
+## Password Hash
+During auhthentication, we detect the [hash method](https://github.com/remyla/damas-core/wiki/2-Getting-Started#enable-user-authentication) stored in database. 
+
 ## The Token
+The token is a string allowing to verify a user. Each token is genereted with a lifespan and some other information(see [JWT](https://jwt.io/introduction/) and [npm JSONWebToken](https://www.npmjs.com/package/jsonwebtoken)).
+#### Token lifespan
+By default, the lifespan is set to `exp` in conf.json. With signIn, we can inform `expiresIn` (liens vers signIn) to get an other lifespan. The possible values are specified here(liens vers ms). Special value: if expiresIn equals `"0"` the lifespan will be unlimited [#237](https://github.com/remyla/damas-core/issues/237). By changing password, this revokes previously obtained tokens.  
+#### Token salt
+The tokens are encrypted using salts (a secret passphrase on server). The salt is made with the user hashed password and the `secret` passphrasse specified in conf.json. If we change either one the previously obtained tokens will be revoked.
+
 
 ```python
 # Python
@@ -41,6 +50,8 @@ else:
 
 ## User administration
 Users are regular nodes, we can create, update or delete them using the API.
+
+We store a property `disable` under the user node. If disable is true, the user will not be able to signIn or use his user account. By default, the users are not disabled.
 
 Creation of a user using Python:
 ```python
