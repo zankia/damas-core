@@ -421,11 +421,12 @@ damas.comment({'#parent' : "asset_id", comment : "text"}, function (node) {
 
 ### signin
 ```js
-signIn ( username, password [, callback] )
+signIn ( username, password [, expiresIn, callback] )
 ```
 #### parameters
-* `username` string
+* `username` the username or email string
 * `password` the user secret password string
+* `expiresIn` {String} time before a new connection is required 
 * `callback` _(js only, optional)_ if specified, the request is asynchronous
 #### return values
 * returns an object containing an authentication token on success, false otherwise
