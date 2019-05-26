@@ -36,12 +36,12 @@
         },
         "jwt": {
             "enable": false,
-            "path": "./extensions/auth-jwt-node.js",
+            "path": "./extensions/jwt.js",
             "conf": {
-                "required": false,
+                "required": true,
                 "passwordHashAlgorithm": "md5",
                 "secret": "webtokensecret",
-                "exp": 1440,
+                "exp": "1d",
                 "expressUse": "/api",
                 "expressUnless": {
                     "path": "/api/signIn"
