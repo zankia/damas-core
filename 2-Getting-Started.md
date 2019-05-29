@@ -1,6 +1,8 @@
 First, make sure you followed the instructions in [[Installation|1 Installation]].
 
-## Enable TLS
+## Security
+
+### Enable TLS
 For a server which will run on a network you should enable the security layer in conf.json:
 ```json
 {
@@ -21,9 +23,7 @@ Or generate a self signed certificate:
 openssl req -new -x509 -days 9999 -nodes -out fullchain.pem -keyout privkey.pem
 ```
 
-
-## Enable User Authentication
-
+### Enable User Authentication
 By default, the installation gives a public access without authentication. The first thing you may want to do is to setup the authentication. For this, you need to create a new user. We don't provide a button for this so here is the procedure using the damas-core API to create a user node.
 
 To generate a SHA-1 or MD5 encoded password, you can type this command in a shell:
@@ -62,7 +62,7 @@ The `required` directive is used for hybrid cases where:
 * authentication is required for write accesses
 * unauthenticated users are still able to read the database and considered as `guest` class users
 
-## Permissions
+### Permissions
 
 We have different types of permissions:
 
@@ -90,16 +90,17 @@ The default available user classes are: `admin` `editor` `user` `guest`.
 | search_mongo |   x   |   x  |    x   |   x   |
 
 
+## Clients
 
-## Python Client
-The _requests_ module needs to be installed.
-On a Debian operating system you can install it using this command line:
+https://demo.damas.io hosts a fresh damas-core server install on which you can test your clients.
 
-```
+### Python Client
+https://demo.damas.io/py/ gives explanations about the Python client and how to try it with the demo server.
+
+__damas.py__ is a module containing the damas-core client API for Python. It is located under `/py/damas.py` in the damas-core repository. It depends on the `requests` module. On a Debian operating system you can install the `request` module using this command line:
+```sh
 $ sudo apt install python-requests
 ```
-
-__damas.py__ is the Python module containing the damas-core API for Python, located in `/py/damas.py` in the damas-core repository.
 
 ```python
 # Example use in a Python console
@@ -111,10 +112,10 @@ Then connect to a running server and start working with the nodes:
 
 ```python
 # connect to your server
->>> project = damas.http_connection('http://localhost:8090/api')
+>>> project = damas.http_connection('http://localhost:8090')
 
-# get an authentication token if the server is requesting authentication
->>> project.signIn("demouser","demouserpassword")
+# if the server requires authentication
+>>> project.signIn("user","userpassword")
 
 # create a new node
 >>> project.create({"key1":"value1","key2":"value2"})
@@ -131,17 +132,19 @@ Then connect to a running server and start working with the nodes:
 ```
 
 
-## Javascript Client
-__damas.js__ is an AMD module containing the damas-core API for Javascript, located in `/js/damas.js` in the damas-core code repository. This module can be loaded in various environments.
+### Javascript Client
+https://demo.damas.io/js/ has the Javascript damas-core client API loaded and ready to try it with the demo server using a web browser.
 
-### In HTML Documents
+`/js/damas.js` in the damas-core repository is an AMD module containing the client API for Javascript. This module can be loaded in various environments.
+
+#### In HTML Documents
 Include the library from a HTML document
 ```html
 <html>
     <head>
-        <script type="text/javascript" src="damas.js"></script>
-        <script type="text/javascript">
-            damas.server = "http://localhost/api/"; // your server URL
+        <script src="damas.js"></script>
+        <script>
+            damas.server = ''; // your server URL
             // your code here
         </script>
     </head>
@@ -149,11 +152,12 @@ Include the library from a HTML document
     </body>
 </html>
 ```
+> damas.server is set to an empty string if your page is directly served by damas-core
 
-### Using requireJS
+#### Using requireJS
 ```js
 require('damas.js');
-damas.server = "/api"; // the server is on the localhost
+damas.server = ''; // the server is on the localhost
 damas.signIn("demouser", "demouserpassword", function(res){
     if (!res) {
         // login failed
@@ -161,45 +165,31 @@ damas.signIn("demouser", "demouserpassword", function(res){
     }
     damas.create({"key1":"value1","key2":"value2"});
 });
-
 ```
-
-
-## Command-line Interface
-
-### Setting up
-
-You can place `damas.sh` anywhere you want (for example `/usr/bin/damas`)
-
-In order to run it, you need to have a `.damas` directory in the root directory of your project (like git).
-In this directory, there to be a `config` file like this : 
-
-```bash
-URL="http://localhost:8090/api/"
+Under NodeJS, the `xmlhttprequest` module is required:
+```sh
+npm install xmlhttprequest
 ```
+Also, CustomEvent is used in this module. Comment the 2 lines invoking CustomEvent if needed under NodeJS. This module would become a ready-to-use npm module if we get more clients using NodeJS.  
 
-### Usage
+### Command-line Interface
+https://demo.damas.io/cli/ gives explanations about the bash client and how to try it with the demo server.
 
-All commands use the same syntax : `damas action --arguments files`
+#### Setting up
+The damas.sh command can be ran from anywhere. You can install it on your system:
+```sh
+cp cli/damas.sh /usr/bin/damas
+chmod +x /usr/bin/damas
+```
+It looks for `.damas` directory located in your project root (like git). `.damas/config` contains the client configuration: 
+```sh
+URL="http://localhost:8090"
+```
+The manual page of the command can be found at https://demo.damas.io/cli/ or in this repository under `/cli/README.md`.
 
-* `action` is listed with `damas --help`
-* `-j` or `--json` arguments has to be written like this : `'"key1": "value", "key2": ["array", "of", "elements"]'`
-* `-h` or `--human` is to get a human readable output
-* `files` is the path of the different files (absolute or not) separated by spaces. It supports wildcards
+If the server requires authentication (the demo server has no authentication) you can use `damas signin <username> <password>` command to get a token which is stored in `/tmp/damas-<username>'. Only root and you can read it and it is removed whenever the system reboots
 
-At the end, stdout is filled with a json object or nothing (if something went wrong or the action doesn't output anything)
-
-### Authentification
-
-If the server uses JSON Web Tokens (`"auth" : "jwt"` in server config), you will need to identify yourself in order to perform any action. There are two ways to authenticate : 
-
-* `damas signin <username> <password>`
-* By performing any action, you will be asked to authenticate by typing your username then your password
-
-The authentication token is stored in `/tmp/damas-<username>'. Only root and you can read it and it is removed whenever the system reboots
-
-
-## Curl Commands
+### Curl Commands
 Command line access to the server using curl. Request an access token from the server:
 
 ```sh
