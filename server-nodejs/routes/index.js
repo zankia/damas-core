@@ -2,7 +2,7 @@
  * Licensed under the GNU GPL v3
  */
 
-module.exports = function (app, express){
+module.exports = function (app, express) {
     var conf = app.locals.conf;
     var debug = require('debug')('app:body');
     require('./utils');
@@ -23,6 +23,6 @@ module.exports = function (app, express){
     require('./cruds')(app, routes);
     require('./dam')(app, routes);
     require('./upload')(app, routes);
-}
+};
 
 

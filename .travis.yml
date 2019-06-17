@@ -1,8 +1,10 @@
 language: node_js
 node_js:
-    - "node"
+    - "lts/*"
+env:
+    - CONF_FILE=server-nodejs/test/conf/minimal.conf.js
 before_install:
     - cd server-nodejs
 install:
-    - cp conf_install.json conf.json
+    - cp $CONF_FILE conf.json
     - npm install

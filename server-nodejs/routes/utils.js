@@ -32,7 +32,7 @@ if (typeof Object.assign != 'function') {
  */
 global.isArray = function (req) {
     if (req.params && req.params.id) {
-        return 1 < req.params.id.split(',');
+        return 1 < req.params.id.split(',').length;
     }
     return Array.isArray(req.body);
 };
@@ -63,7 +63,7 @@ global.getBodyIds = function (req) {
  * @return {array|false} - The ids of the request, false on failure
  */
 global.getRequestIds = function (req) {
-    if (req.params.id) {
+    if (req.params && req.params.id) {
         var ids = req.params.id.split(',');
         if (0 < ids.length) {
             return ids;

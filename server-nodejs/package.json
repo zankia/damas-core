@@ -9,7 +9,7 @@
     "url": "git://github.com/remyla/damas-core.git"
   },
   "scripts": {
-    "test": "mocha tests",
+    "test": "mocha --recursive",
     "start": "nodejs index.js"
   },
   "author": "Remy Lalanne <remy@primcode.com> http://primcode.com",

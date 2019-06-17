@@ -34,7 +34,7 @@ app.use(morgan('dev'));
 debug('Loading extensions');
 var debug = require('debug')('damas:extensions');
 app.locals.extensions = [];
-for(extname in conf.extensions) {
+for (let extname in conf.extensions) {
     if (false === conf.extensions[extname].enable){
         continue;
     }
