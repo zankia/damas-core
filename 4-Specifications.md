@@ -14,7 +14,7 @@ The communication protocol used by damas-core clients and servers is based on [J
 | [/api/publish/](#publish) | POST |
 | [/api/unlock/](#unlock) | PUT |
 | AUTH ||
-| [/api/signIn/](#signIn) | POST | 200, 401 |
+| [/api/signIn/](#signIn) | POST | 200, 401, 404 |
 | [/api/verify/](#verify) | GET | 200, 401 |
 | SEARCH ||
 | [/api/graph/](#graph) | GET | 200, 207, 400, 404, 500 |
@@ -181,7 +181,9 @@ Request a token from the sever
 ```http
 200 Ok             application/json        (object)
 401 Unauthorized   text/html error message
+404 Not Found      text/html error message
 ```
+> `404` error code is return if no authentication is required.
 
 ## verify
 Check if the user has a token
