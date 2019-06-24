@@ -14,9 +14,8 @@ The communication protocol used by damas-core clients and servers is based on [J
 | [/api/publish/](#publish) | POST |
 | [/api/unlock/](#unlock) | PUT |
 | AUTH ||
-| [/api/signIn/](#signIn) | POST |
-| [/api/signOut/](#signOut) | POST |
-| [/api/verify/](#verify) | GET |
+| [/api/signIn/](#signIn) | POST | 200, 401 |
+| [/api/verify/](#verify) | GET | 200, 401 |
 | SEARCH ||
 | [/api/graph/](#graph) | GET | 200, 207, 400, 404, 500 |
 | [/api/search/](#search) | GET | 200, 400, 500 |
@@ -56,7 +55,7 @@ Retrieve object(s) by identifier(s). In addition to the GET method, a POST metho
 ```http
 200 OK                    application/json (objects or array of objects) requested object(s)
 207 Multi-Status          application/json (array of objects and null) some objects do not exist
-400 Bad request           text/html (error message) not formatted correctly
+400 Bad Request           text/html (error message) not formatted correctly
 403 Forbidden             text/html (error message) the user does not have the right permission
 404 Not Found             text/html (error message) object(s) do not exist
 500 Internal Server Error text/html (error message) error while accessing the database
@@ -109,7 +108,7 @@ Permanently remove objects from the database
 ```http
 200 OK                    application/json (string or array of strings) deleted identifier(s)
 207 Multi-Status          application/json (array of strings or null) some objects do not exist
-400 Bad request           text/html (error message) not formatted correctly
+400 Bad Request           text/html (error message) not formatted correctly
 404 Not Found             text/html (error message) object(s) do not exist
 500 Internal Server Error text/html (error message) could not access the database
 ```
@@ -124,7 +123,7 @@ Add comments to object(s)
 ```http
 201 OK (object(s) created)                                  application/json    (object or array of objects)
 207 Multi-Status (some objects don't exist)                 application/json    (array of objects)
-400 Bad request (not formatted correctly)                   text/html           (error message)
+400 Bad Request (not formatted correctly)                   text/html           (error message)
 403 Forbidden (the user does not have the right permission) text/html           (error message)
 404 Not Found (object(s) do not exist)                      text/html           (error message)
 ```
@@ -146,53 +145,67 @@ Insert new objects. Similar to the generic create operation but accessible to th
 ## graph
 ### HTTP Requests
 ### HTTP Responses
+
 ## search
 ### HTTP Requests
 ### HTTP Responses
+
 ## search_one
+
 ### HTTP Requests
-* `GET` `/api/search_one/`query
+* `GET` `/api/search_one/` `query`
+
 ### HTTP Responses
-* Response `200` `application/json` node or null
-* Response `400` `409` `text/html` error message
+```http
+200 OK            application/json        (node or null)
+400 Bad Request   text/html error message
+409 Conflict      text/html error message
+```
 
 ## search_mongo
 ### HTTP Requests
-* Request `POST` `/api/search_mongo` `application/json` `query` `sort` `limit` `skip`
+* `POST` `/api/search_mongo` `application/json` `query` `sort` `limit` `skip`
 ### HTTP Responses
-* Response `200` `application/json` array of string identifiers
-* Response `409` `text/html` error message
+```http
+200 OK        application/json         (array of string identifiers)
+409 Conflict  text/html error message
+```
 
 ## signIn
-### HTTP Requests
-* Request `POST` `/api/signIn/` `application/x-www-form-urlencoded` `username` `password`
-### HTTP Responses
-* Response `200` `application/json` user object
-* Response `401` `text/html` error message
+Request a token from the sever
 
-## signOut
 ### HTTP Requests
+* `POST` `/api/signIn/` `application/x-www-form-urlencoded` `username` `password`
+
 ### HTTP Responses
-* Request `/api/signOut/`
-* Response
+```http
+200 Ok             application/json        (object)
+401 Unauthorized   text/html error message
+```
 
 ## verify
+Check if the user has a token
+
 ### HTTP Requests
+* `GET` `/api/verify/`
+
 ### HTTP Responses
-* Request `GET` `/api/verify/`
-* Response `200` `application/json` the authenticated user object
-* Response `401`
+```http
+200 OK             application/jso  (the authenticated user object)
+401 Unauthorized   text/html error message
+```
 
 ## lock
 ### HTTP Requests
 * `PUT` `/api/lock/` `application/json` node identifier or array of node identifiers
 ### HTTP Requests
 ### HTTP Responses
+
 ## unlock
 ### HTTP Requests
 * `PUT` `/api/unlock/` `application/json` node identifier or array of node identifiers
-### HTTP Requests
 ### HTTP Responses
+
 # Protocol Specifications Drafts
 
 ## version
