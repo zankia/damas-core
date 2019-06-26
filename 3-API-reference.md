@@ -622,8 +622,3 @@ Process the file upload
 * @returns {Boolean} true on success, false otherwise
 
 -->
-***
-
-***
-
-***
