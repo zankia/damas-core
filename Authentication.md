@@ -18,6 +18,7 @@ else:
     print "Invalid username or password"
 ```
 The server compares the provided username and password with the pair available in the database. It is important to encrypt the communication (using https here) not to send the password as clear text.
+If the module [jwt_delegate](https://github.com/remyla/damas-core/wiki/Extensions#jwt_delegate) is loaded, the request will be sent to the URL in conf.json.
 
 ## Password Hash
 During auhthentication, we detect the [hash method](https://github.com/remyla/damas-core/wiki/2-Getting-Started#enable-user-authentication) stored in database. 
