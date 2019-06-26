@@ -427,7 +427,7 @@ signIn ( username, password [, expiresIn, callback] )
 * `username` {string} : the username or email string
 * `password` {string} : the user secret password string
 * `expiresIn` {string} [optional] : time before a new connection is required 
-* `callback`  {function} [optional] _(js only)_ :  if specified, the request is asynchronous
+* `callback`  {function} [optional] : _(js only)_ if specified, the request is asynchronous
 #### return values
 * returns an object containing an authentication token on success, false otherwise
 
