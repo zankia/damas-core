@@ -95,8 +95,8 @@ Create element(s) in the database. Elements have an `_id` key being their unique
 create ( elements [, callback] )
 ```
 #### parameters
-* `elements` an object or array of objects to insert in the database
-* `callback` _(js only, optional)_ if specified, the request is asynchronous
+* `elements` {object | array} : object(s) to insert in the database
+* `callback` {function} _(js only, optional)_ : if specified, the request is asynchronous
 
 #### return values
 * returns an object or an array of objects (depending on the input) on success
@@ -151,8 +151,8 @@ Retrieve one or more elements given their identifiers
 read ( identifiers [, callback] )
 ```
 #### parameters
-* `identifiers` string or array of identifiers strings to read
-* `callback` _(js only, optional)_ if specified, the request is asynchronous
+* `identifiers` {string | array} : identifier(s) string(s) to read
+* `callback` {function} _(js only, optional)_ : if specified, the request is asynchronous
 #### return values
 * returns an object or an array of objects (depending on the input) on success
 * returns `null` or `None` on failure
@@ -187,8 +187,8 @@ Modify and remove keys of the specified element(s)
 update ( elements [, callback] )
 ```
 #### parameters
-* `elements` an object or an array of objects to update
-* `callback` _(js only, optional)_ if specified, the request is asynchronous
+* `elements` {object | array} : object(s) to update
+* `callback` {function} _(js only, optional)_ : if specified, the request is asynchronous
 
 #### return values
 * returns an object or an array of objects (depending on the input) on success
@@ -240,8 +240,8 @@ Create or update element(s) when identifier(s) are specified and found
 upsert ( elements [, callback] )
 ```
 #### parameters
-* `elements` an object or array of objects to insert and/or update in the database
-* `callback` _(js only, optional)_ if specified, the request is asynchronous
+* `elements` {object | array} : object(s) to insert and/or update in the database
+* `callback` {function} _(js only, optional)_ : if specified, the request is asynchronous
 #### return values
 * returns an object or an array of objects (depending on the input) on success
 * returns `null` (Javascript) or `None` (Python) on failure
@@ -292,8 +292,8 @@ Permanently remove element(s) from the database
 delete ( identifiers [, callback] )
 ```
 #### parameters
-* `identifiers` an identifier or an array of identifiers
-* `callback` _(js only, optional)_ if specified, the request is asynchronous
+* `identifiers` {string | array} : identifier(s) to delete from the database
+* `callback` {function} _(js only, optional)_ : if specified, the request is asynchronous
 #### return values
 * returns true on success, false otherwise
 * returns a boolean or an array of booleans (depending on the input)
@@ -312,8 +312,8 @@ Lock file(s) for edition. Sets a `lock` key on elements with current authenticat
 lock( identifiers [, callback] )
 ```
 #### parameters
-* `identifiers` string or array of identifiers strings to lock
-* `callback` _(js only, optional)_ if specified, the request is asynchronous
+* `identifiers` {string  | array} : identifier(s) string(s) to lock
+* `callback` {function} _(js only, optional)_ : if specified, the request is asynchronous
 #### return values
 * returns true on success, false otherwise
 * returns false if the element is already locked
@@ -335,9 +335,9 @@ Add files to the index
 publish( elements [, callback] )
 ```
 #### parameters
-* `elements` an object or array of objects to insert in the database
-* `callback` _(js only, optional)_ if specified, the request is asynchronous
-
+* `elements` {object | array} : object(s) to insert in the database
+* `callback` {functon} _(js only, optional)_ : if specified, the request is asynchronous
+#### return values
 * returns an array of nodes (containing parent nodes and child nodes) on success
 * returns `null` (Javascript) or `None` (Python) on failure
 
@@ -376,8 +376,8 @@ Unlock a locked asset
 unlock ( identifiers [, callback] )
 ```
 #### parameters
-* `identifiers` string or array of identifiers strings to lock
-* `callback` _(js only, optional)_ if specified, the request is asynchronous
+* `identifiers` {string | array} : identifier(s) string(s) to lock
+* `callback` {function} _(js only, optional)_ : if specified, the request is asynchronous
 #### return values
 * returns a boolean or an array of booleans (depending on the input)
 
@@ -389,8 +389,8 @@ Add a comment to one or several element(s)
 comment ( elements [, callback] )
 ```
 #### parameters
-* `elements` object or array of objects specifying the elements identifiers and comment string
-* `callback` _(js only, optional)_ if specified, the request is asynchronous
+* `elements` {object | array} : object(s) specifying the elements identifiers and comment string
+* `callback` {function} _(js only, optional)_ : if specified, the request is asynchronous
 #### return values
 * returns an element or an array of elements on success
 * `null` (Javascript) or `None` (Python) on failure
@@ -426,8 +426,8 @@ signIn ( username, password [, expiresIn, callback] )
 #### parameters
 * `username` {string} : the username or email string
 * `password` {string} : the user secret password string
-* `expiresIn` {string} [optional] : time before a new connection is required 
-* `callback`  {function} [optional] : _(js only)_ if specified, the request is asynchronous
+* `expiresIn` {string} _(optional)_ : time before a new connection is required 
+* `callback`  {function} _(js only, optional)_ : if specified, the request is asynchronous
 #### return values
 * returns an object containing an authentication token on success, false otherwise
 
@@ -438,7 +438,7 @@ Sign in using the server embedded authentication system
 signOut ( [callback] )
 ```
 #### parameters
-* `callback` _(js only, optional)_ if specified, the request is asynchronous
+* `callback` {function} _(js only, optional)_ : if specified, the request is asynchronous
 #### return values
 * returns true on success, false otherwise
 
@@ -448,7 +448,7 @@ Ask the server for the authentication status and user
 verify ( [callback] )
 ```
 #### parameters
-* `callback` _(js only, optional)_ if specified, the request is asynchronous
+* `callback` {function} _(js only, optional)_ : if specified, the request is asynchronous
 #### return values
 * returns the authenticated user element on success, false otherwise
 
@@ -458,8 +458,8 @@ Find elements wearing the specified key(s) using a query string.
 search ( query [, callback] )
 ```
 #### parameters
-* `query` query string
-* `callback` _(js only, optional)_ if specified, the request is asynchronous
+* `query` {string} : search query string
+* `callback` {function} _(js only, optional)_ : if specified, the request is asynchronous
 #### return values
 * returns an array of matching identifiers or null if no match was found
 
@@ -492,7 +492,7 @@ Search nodes, returning the first matching occurrence as a node object (not as i
 search_one ( query [, callback] )
 ```
 #### parameters
-* `query` query string
+* `query` {string}
 * `callback` _(js only, optional)_ if specified, the request is asynchronous
 #### return values
 * returns the first matching identifier or null if no match was found
@@ -503,11 +503,11 @@ We expose the MongoDB find and cursor methods here in order to provide a powerfu
 search_mongo ( query [, sort, limit, skip, callback] )
 ```
 #### parameters
-* `query` the query object https://docs.mongodb.org/v3.0/reference/method/db.collection.find/
-* `sort` _(optional)_ https://docs.mongodb.org/v3.0/reference/method/cursor.sort/
-* `limit` _(optional)_ https://docs.mongodb.org/v3.0/reference/method/cursor.limit/
-* `skip` _(optional)_ https://docs.mongodb.org/v3.0/reference/method/cursor.skip/
-* `callback` _(js only, optional)_ if specified, the request is asynchronous
+* `query` {object} : the query object https://docs.mongodb.org/v3.0/reference/method/db.collection.find/
+* `sort` _(optional)_ : https://docs.mongodb.org/v3.0/reference/method/cursor.sort/
+* `limit` _(optional)_ : https://docs.mongodb.org/v3.0/reference/method/cursor.limit/
+* `skip` _(optional)_ : https://docs.mongodb.org/v3.0/reference/method/cursor.skip/
+* `callback`{function}  _(js only, optional)_ : if specified, the request is asynchronous
 #### return values
 * returns arrays of matching indexes
 
@@ -556,8 +556,8 @@ Recursively get all source nodes and edges connected to the specified node
 graph ( identifiers, [, callback] )
 ```
 #### parameters
-* `identifiers` string or array of identifiers strings to read
-* `callback` _(js only, optional)_ if specified, the request is asynchronous
+* `identifiers` {string | array} : identifier(s) string(s) to read
+* `callback` {function} _(js only, optional)_ : if specified, the request is asynchronous
 #### return values
 * @returns {Array} array of element indexes
 #### examples
@@ -574,7 +574,7 @@ damas.graph("55687e68e040af7047ee1a53");
 
 Insert a new file as a new version of an existing asset, wearing the specified keys.
 
-* `id` asset node index string
+* `id` {string} : asset node index string
 * `keys` key:value pairs
     * `file` path string to the new version file
     * [`comment`] _(optional)_ a text message to comment the version 
