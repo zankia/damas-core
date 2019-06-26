@@ -18,7 +18,8 @@ else:
     print "Invalid username or password"
 ```
 The server compares the provided username and password with the pair available in the database. It is important to encrypt the communication (using https here) not to send the password as clear text.
-If the module [jwt_delegate](https://github.com/remyla/damas-core/wiki/Extensions#jwt_delegate) is loaded, the request will be sent to the URL in conf.json.
+
+The module [jwt_delegate](https://github.com/remyla/damas-core/wiki/Extensions#jwt_delegate) make a new request (after the signIn on the tracker) will be sent to the URL in conf.json. Jwt_delegate created a new query based on that of the user, with the username and password, to recover his user node and save it on the tracker database or update.  
 
 ## Password Hash
 During auhthentication, we detect the [hash method](https://github.com/remyla/damas-core/wiki/2-Getting-Started#enable-user-authentication) stored in database. 
