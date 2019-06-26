@@ -2,6 +2,7 @@ Extensions give new behaviors to the nodejs-server: extend the api, manage user 
 
 * [`es6-polyfills`](#es6-polyfills) - polyfills for older systems
 * [`jwt`](#jwt) - JSON Web Token user authentication
+* [`jwt_delegate`](#jwt_delegate) - centralizing authentication on a different server than the tracker
 * [`last_activity`](#last_activity) - keep the last activity for current user.
 * [`noauth`](#noauth) - user verification mechanism when user authentication is disabled.
 * [`nodemailer`](#nodemailer) - send emails using https://www.npmjs.com/package/nodemailer
@@ -72,13 +73,28 @@ Implementation of JSON Web Token RFC7519 for user authentication https://jwt.io/
   * `expressUnless` (object) paths and methods to exclude from authentication
 
 See [[Authentication]], [express.use syntax](https://expressjs.com/en/api.html#app.use), [express unless syntax](https://www.npmjs.com/package/express-unless).
+
+## jwt_delegate
+Centralizing authentication on a different server than the tracker
+* default configuration :
+```js
+"jwt_delegate": {
+    "enable": true,
+    "path": "./extensions/jwt_delegate.js",
+    "conf": { 
+        "server": "https://syncplanet.io/api/signIn/"
+    }
+},
+```
+* Create a new request and submit it to the server
+
 ## last_activity
 Save the date when user makes a request.
 * default configuration:
 ```js
 "last_activity": {
-            "enable": true,
-            "path": "./extensions/last_activity.js"
+    "enable": true,
+    "path": "./extensions/last_activity.js"
 },
 ```
 ## noauth
