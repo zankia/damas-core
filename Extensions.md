@@ -75,7 +75,8 @@ Implementation of JSON Web Token RFC7519 for user authentication https://jwt.io/
 See [[Authentication]], [express.use syntax](https://expressjs.com/en/api.html#app.use), [express unless syntax](https://www.npmjs.com/package/express-unless).
 
 ## jwt_delegate
-Centralizing authentication on a different server than the tracker
+Centralizing authentication on a different server than the tracker.
+The user node will be save in the tracker database or update. [(learn more)](https://github.com/remyla/damas-core/wiki/Authentication#signin)
 * default configuration :
 ```js
 "jwt_delegate": {
