@@ -424,10 +424,10 @@ damas.comment({'#parent' : "asset_id", comment : "text"}, function (node) {
 signIn ( username, password [, expiresIn, callback] )
 ```
 #### parameters
-* `username` the username or email string
-* `password` the user secret password string
-* `expiresIn` {String} time before a new connection is required 
-* `callback` _(js only, optional)_ if specified, the request is asynchronous
+* `username` {string} : the username or email string
+* `password` {string} : the user secret password string
+* `expiresIn` {string} [optional] : time before a new connection is required 
+* `callback`  {string} [optional] _(js only)_ :  if specified, the request is asynchronous
 #### return values
 * returns an object containing an authentication token on success, false otherwise
 
@@ -622,3 +622,8 @@ Process the file upload
 * @returns {Boolean} true on success, false otherwise
 
 -->
+***
+
+***
+
+***
