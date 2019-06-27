@@ -19,7 +19,7 @@ else:
 ```
 The server compares the provided username and password with the pair available in the database. It is important to encrypt the communication (using https here) not to send the password as clear text.
 
-The module [jwt_delegate](https://github.com/remyla/damas-core/wiki/Extensions#jwt_delegate) centralize authentications on the server in the file configuration : conf.json. When an user authenticates, the module creates a new request based on the request of the user, with the username and password and it will be sent to the server. The user node is registered in the tracker database or updated if it already exists. <!--This module works with a server version published in this commit.-->
+The module [jwt_delegate](https://github.com/remyla/damas-core/wiki/Extensions#jwt_delegate) centralize authentications on a delegated server in the file configuration : conf.json. When an user authenticates, the module creates a new request based on the request of the user, with the username and password and it will be sent to the delegated server. The user node is registered in the server (the origin of the request) database or updated if it already exists. <!--This module works with a server version published in this commit.-->
 
 ## Password Hash
 During auhthentication, we detect the [hash method](https://github.com/remyla/damas-core/wiki/2-Getting-Started#enable-user-authentication) stored in database. 
