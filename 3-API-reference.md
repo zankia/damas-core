@@ -312,7 +312,7 @@ Lock file(s) for edition. Sets a `lock` key on elements with current authenticat
 lock( identifiers [, callback] )
 ```
 #### parameters
-* `identifiers` {string  | array} : identifier(s) string(s) to lock
+* `identifiers` {string  | array} : identifier(s) string to lock
 * `callback` {function} _(js only, optional)_ : if specified, the request is asynchronous
 #### return values
 * returns true on success, false otherwise
