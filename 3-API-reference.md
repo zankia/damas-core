@@ -426,7 +426,7 @@ signIn ( username, password [, expiresIn, callback] )
 #### parameters
 * `username` {string} : the username or email string
 * `password` {string} : the user secret password string
-* `expiresIn` {string} _(optional)_ : time before a new connection is required 
+* `expiresIn` {string} _(optional)_ : time before a new connection is required [(learn more)](https://github.com/remyla/damas-core/wiki/Authentication#token-lifespan)
 * `callback`  {function} _(js only, optional)_ : if specified, the request is asynchronous
 #### return values
 * returns an object containing an authentication token on success, false otherwise
@@ -441,7 +441,12 @@ let callback = function (res) {
     console.log(res);
 }
 damas.signIn("axel", "password", callback());
->> Object { _id: "55ae0b1ed81e88357d77d0e9", address: "::ffff:127.0.0.1", class: "user", lastActivity: 1561237341643, lastlogin: 1561237340643, password: "e3386cf5daf845a525de5890a3bdf8fb", username: "marius" }
+>> Object { _id: "55ae0b1ed81e88357d77d0e9", address: "::ffff:127.0.0.1", class: "user", lastActivity: 1561237341643, lastlogin: 1561237340643, username: "axel" }
+
+// you can set token lifespan
+damas.signIn("axel", "password", "1d" ,callback());
+>> Object { _id: "55ae0b1ed81e88357d77d0e9", address: "::ffff:127.0.0.1", class: "user", lastActivity: 1561237341643, lastlogin: 1561237340643, username: "axel" }
+
 ```
 
 ### signout
