@@ -433,6 +433,17 @@ signIn ( username, password [, expiresIn, callback] )
 
 Sign in using the server embedded authentication system
 
+```js
+// Javascript
+// signIn using an asynchronous call
+// res is the user node (the result of authentication)
+let callback = function (res) {
+    console.log(res);
+}
+damas.signIn("axel", "password", callback());
+>> Object { _id: "55ae0b1ed81e88357d77d0e9", address: "::ffff:127.0.0.1", class: "user", lastActivity: 1561237341643, lastlogin: 1561237340643, password: "e3386cf5daf845a525de5890a3bdf8fb", username: "marius" }
+```
+
 ### signout
 ```js
 signOut ( [callback] )
