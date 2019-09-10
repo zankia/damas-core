@@ -541,6 +541,12 @@ search_mongo ( query [, sort, limit, skip, callback] )
 
     is written "RX_.*_RXi" as string format in the JSON messages
 
+```js
+// Javascript
+// Search every file paths starting with /DATABASE/02_ASSETS using a regular expression   
+damas.search_mongo({_id:"REGEX_/DATABASE/02_ASSETS.*"},{}, 0,0)
+```
+
 ```py
 # Python
 # get the 10 most recent files (having the higher `time` key on nodes)
