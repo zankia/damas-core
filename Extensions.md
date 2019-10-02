@@ -68,7 +68,7 @@ Implementation of JSON Web Token RFC7519 for user authentication https://jwt.io/
   * `required` (boolean) if false, unauthenticated users are considered as guests with read access
   * `passwordHashAlgorithm` (string) algorithm used to hash the passwords on server. `sha1` or `md5`
   * `secret` (string)  encryption salt
-  * `exp` (number) token expiration time in seconds
+  * `exp` (number) token default expiration time default is `1d` (options: https://www.npmjs.com/package/ms)
   * `expressUse` (string, regex or array) paths to protect with authentication
   * `expressUnless` (object) paths and methods to exclude from authentication
 
