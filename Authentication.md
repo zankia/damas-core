@@ -1,10 +1,18 @@
-# Token Based User Authentication [DRAFT]
+# JSON Web Token (RFC 7519) authentication and secure transmission
 
-[JSON web tokens](https://en.wikipedia.org/wiki/JSON_Web_Token) are used for the new user authentication scheme (2015, NodeJS).
+Documentation about the damas-core JWT implementation.
 
-User's passwords are stored as encoded strings in a `password` key under user nodes in the database.
+Resources:
+* [JSON Web Token](https://en.wikipedia.org/wiki/JSON_Web_Token) - Wikipedia page
+* [jwt.io](https://jwt.io/) - and [Introduction](https://jwt.io/introduction/)
+* [npm JSONWebToken](https://www.npmjs.com/package/jsonwebtoken) - JWT module for NodeJS
+
+Extensions:
+* [jwt.js](https://github.com/remyla/damas-core/wiki/Extensions#jwt)
 
 ## signIn
+User's passwords are stored as encoded strings in a `password` key under user nodes in the database.
+
 The `signIn()` method is used to request a token from the server:
 
 ```python
@@ -23,14 +31,14 @@ The server compares the provided username and password with the pair available i
 The module [jwt_delegate](https://github.com/remyla/damas-core/wiki/Extensions#jwt_delegate) centralize authentications on a delegated server in the file configuration : conf.json. When an user authenticates, the module creates a new request based on the request of the user, with the username and password and it will be sent to the delegated server. The user node is registered in the server (the origin of the request) database or updated if it already exists. <!--This module works with a server version published in this commit.-->
 
 ## Password Hash
-During auhthentication, we detect the [hash method](https://github.com/remyla/damas-core/wiki/2-Getting-Started#enable-user-authentication) stored in database. 
+During authentication, we detect the [hash method](https://github.com/remyla/damas-core/wiki/2-Getting-Started#enable-user-authentication) stored in database. 
 
 ## The Token
-The token is a string allowing to verify a user. Each token is genereted with a lifespan and some other information(see [JWT](https://jwt.io/introduction/) and [npm JSONWebToken](https://www.npmjs.com/package/jsonwebtoken)).
+The token is a string allowing to verify a user. Each token is generated with a lifespan and some other information(see [JWT](https://jwt.io/introduction/) and [npm JSONWebToken](https://www.npmjs.com/package/jsonwebtoken)).
 #### Token lifespan
 By default, the lifespan is set to `exp` in conf.json. With signIn, we can inform `expiresIn` (see [signIn](https://github.com/remyla/damas-core/wiki/3-API-reference#signin)) to get an other lifespan. The possible values are specified [here](https://www.npmjs.com/package/ms). Special value: if expiresIn equals `"0"` the lifespan will be unlimited [#237](https://github.com/remyla/damas-core/issues/237). By changing password, this revokes previously obtained tokens.  
 #### Token salt
-The tokens are encrypted using salts (a secret passphrase on server). The salt is made with the user hashed password and the `secret` passphrasse specified in conf.json. If we change either one the previously obtained tokens will be revoked.
+The tokens are encrypted using salts (a secret passphrase on server). The salt is made with the user hashed password and the `secret` passphrase specified in conf.json. If we change either one the previously obtained tokens will be revoked.
 
 
 ```python
