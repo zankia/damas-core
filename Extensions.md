@@ -45,7 +45,7 @@ Provide ES6 polyfills if the code is ran in a NodeJS which is not ES6.
 
 ## jwt
 Implementation of JSON Web Token RFC7519 for user authentication https://jwt.io/  
-* requires `jsonwebtoken` `express-jwt` `express-unless` `crypto` `cookie-parser`
+* requires `jsonwebtoken` `express-jwt` `express-unless` `crypto` `cookie-parser` `ms`
 * new routes: `/api/signIn` and `/api/verify`
 * default configuration:
 ```js
