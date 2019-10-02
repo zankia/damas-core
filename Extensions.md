@@ -2,7 +2,7 @@ Extensions give new behaviors to the nodejs-server: extend the api, manage user 
 
 * [`es6-polyfills`](#es6-polyfills) - polyfills for older systems
 * [`jwt`](#jwt) - JSON Web Token user authentication
-* [`jwt_delegate`](#jwt_delegate) - centralizing authentication on a different server than the tracker
+* [`jwt_delegate`](#jwt_delegate) - centralize authentication on a different server
 * [`last_activity`](#last_activity) - keep the last activity for current user.
 * [`noauth`](#noauth) - user verification mechanism when user authentication is disabled.
 * [`nodemailer`](#nodemailer) - send emails using https://www.npmjs.com/package/nodemailer
