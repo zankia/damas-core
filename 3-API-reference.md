@@ -117,7 +117,10 @@ create ( elements [, callback] )
 >>> damas.create([{"label":"element1"}, {"label":"element2"}])
 [{u'_id': u'583ff5a747e759beb73bde32', u'time': 1480586663024, u'label': u'element1', u'author': u'demo'}, {u'_id': u'583ff5a747e759beb73bde33', u'time': 1480586663024, u'label': u'element2', u'author': u'demo'}]
 
-# create a new edge element
+# create multiple elements with an _id array
+>>> damas.create({"_id":["identifier1","identifier2"],"key":"keyvalue"}])
+
+# create a new graph edge element
 >>> damas.create({"src_id":"/project/folder/file1","tgt_id":"/project/folder/file2"})
 {u'tgt_id': u'/project/folder/to/file2', u'_id': u'583ff67647e759beb73bde34', u'time': 1480586870826, u'src_id': u'/project/folder/to/file1', u'author': u'demo'}
 ```
@@ -140,7 +143,11 @@ damas.create({"_id":"/project/folder/file", "additional_key":"value"});
 damas.create([{"label":"element1"}, {"label":"element2"}]);
 ▸ Array [{_id: "583ff5a747e759beb73bde32", time: 1480586663024, label: "element1", author: "demo"}, {_id: "583ff5a747e759beb73bde33", time: 1480586663024, label: "element2", author: "demo"}]
 
-// create a new edge element
+
+// create multiple elements with an _id array
+damas.create({"_id":["identifier1","identifier2"],"key":"keyvalue"}]);
+
+// create a new graph edge element
 damas.create({"src_id":"/project/folder/file1","tgt_id":"/project/folder/file2"})
 ▸ Object {tgt_id: "/project/folder/to/file2", _id: "583ff67647e759beb73bde34", time: 1480586870826, src_id: "/project/folder/to/file1", author: "demo"}
 ```
