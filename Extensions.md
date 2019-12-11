@@ -3,8 +3,8 @@ Extensions give new behaviors to the nodejs-server: extend the api, manage user 
 * [`es6-polyfills`](#es6-polyfills) - polyfills for older systems
 * [`jwt`](#jwt) - JSON Web Token user authentication
 * [`jwt_delegate`](#jwt_delegate) - centralize authentication on a different server
-* [`last_activity`](#last_activity) - keep the last activity for current user.
-* [`noauth`](#noauth) - user verification mechanism when user authentication is disabled.
+* [`last_activity`](#last_activity) - keep the last activity time of users
+* [`noauth`](#noauth) - user verification mechanism when user authentication is disabled
 * [`nodemailer`](#nodemailer) - send emails using https://www.npmjs.com/package/nodemailer
 * [`restricted_keys`](#restricted_keys) - whitelist of writable keys depending on user class
 * [`prefer_https`](#prefer_https) - redirect every HTTP queries to HTTPS
@@ -16,12 +16,14 @@ The extensions are loaded at startup and are listed in the configuration file `c
 {
     "extensions": {
         "extension_name": {
+            "enable": true,
             "path": "extension_dir/extend.js",
+            "conf": {}
         }
     }
 }
 ```
-`enable` and `conf` keys are optional. Omitting them means that the extension is enabled and that it does not need configuration. `path` and `conf` can be relative paths or absolute paths:
+`enable` and `conf` keys are optional. Omitting them means that the extension is enabled and that it does not need configuration. `path` and `conf` can be relative paths or absolute paths, and `conf` could be either an object containing configuration keys, or a string containing a path to an external json.
 ```js
 "aforge": {
     "enable": true,
