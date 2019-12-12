@@ -1,5 +1,6 @@
 ## Using Docker
-Copy [docker-compose.yml](http://damas-software.org/docker/docker-compose.yml) and [conf.json](http://damas-software.org/docker/conf.json) to a local directory then run:
+* Copy [docker-compose.yml](http://damas-software.org/docker/docker-compose.yml) and [conf.json](http://damas-software.org/docker/conf.json) to a local directory
+* Run:
 
 ```shell
 docker-compose up
@@ -17,8 +18,8 @@ To install docker and docker-compose you could follow [the official tutorial](ht
 The images are hosted on Docker Hub [zankia/damas-node](https://hub.docker.com/r/zankia/damas-node) (the 3 tags correspond to the git development branches).
 
 ## Using NodeJS
-Clone the repository, and change directory to server-nodejs/.  
-Duplicate the template configuration file, install the packages, and run:
+* Clone the repository, and change directory to server-nodejs/
+* Duplicate the template configuration file, install the packages, and run:
 ```sh
 cp conf_install.json conf.json
 npm install
@@ -26,18 +27,18 @@ node .
 ```
 More parameters
 ```sh
-# debug mode
+# run debug mode
 DEBUG=* node .
 
 # the server listens to port 8090 by default. You can specify different ports and debug options
 DEBUG=* HTTP_PORT=8091 HTTPS_PORT=8444 node .
 
 # on windows:
-set DEBUG=app:* & node .
+set DEBUG=* & node .
 ```
 
 ## Configure
-The server reads its configuration from `server-nodejs/conf.json`. Copy the default configuration file `server-nodejs/conf_install.json` to `server-nodejs/conf.json` and edit it according to your needs:
+The server reads its configuration from `server-nodejs/conf.json`. You can edit it according to your needs:
 
 ```json
 {                                                                                                                     
@@ -67,7 +68,7 @@ The configuration is divided into sections:
 * `fileSystem`: path to the file repository root from which the files are indexed from
 * `extensions`: modules list to extend the core. See the [[Extensions]] page for more details about the available extensions.
 
-## Run
+## Connect
 In a web browser, after the installation using Docker on the same machine, open
 ```
 http://localhost
