@@ -8,11 +8,6 @@ The communication protocol used by damas-core clients and servers is based on [J
 | [/api/update/](#update) | PUT | 200, 207, 400, 403, 404, 500 |
 | [/api/upsert/](#upsert) | POST | 200, 400, 403, 500 |
 | [/api/delete/](#delete) | DELETE | 200, 207, 400, 404, 500 |
-| DAM ||
-| [/api/comment/](#comment) | POST |
-| [/api/lock/](#lock) | PUT |
-| [/api/publish/](#publish) | POST |
-| [/api/unlock/](#unlock) | PUT |
 | AUTH ||
 | [/api/signIn/](#signIn) | POST | 200, 401, 404 |
 | [/api/verify/](#verify) | GET | 200, 401 |
@@ -113,35 +108,6 @@ Permanently remove objects from the database
 500 Internal Server Error text/html (error message) could not access the database
 ```
 
-## comment
-Add comments to object(s)
-
-### HTTP Requests
-* `POST` `/api/comment/` `application/json` object
-
-### HTTP Responses
-```http
-201 OK (object(s) created)                                  application/json    (object or array of objects)
-207 Multi-Status (some objects don't exist)                 application/json    (array of objects)
-400 Bad Request (not formatted correctly)                   text/html           (error message)
-403 Forbidden (the user does not have the right permission) text/html           (error message)
-404 Not Found (object(s) do not exist)                      text/html           (error message)
-```
-
-## publish
-Insert new objects. Similar to the generic create operation but accessible to the user class, and also performs some verifications of the keys provided as argument.
-
-### HTTP Requests
-* `POST` `/api/publish/` `application/json` object or array of objects
-
-### HTTP Responses
-```http
-201 OK (object(s) created)                                           application/json (object or array of objects)
-207 Multi-Status (some objects already exist with these identifiers) application/json (array of objects or null)
-400 Bad Request (not formatted correctly)                            text/html        (error message)
-403 Forbidden (the user does not have the right permission)          text/html        (error message)
-409 Conflict (all objects already exist with these identifiers)      text/html        (error message)
-```
 ## graph
 ### HTTP Requests
 ### HTTP Responses
