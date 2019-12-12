@@ -162,24 +162,3 @@ Check if the user has a token
 200 OK             application/jso  (the authenticated user object)
 401 Unauthorized   text/html error message
 ```
-
-## lock
-### HTTP Requests
-* `PUT` `/api/lock/` `application/json` node identifier or array of node identifiers
-### HTTP Requests
-### HTTP Responses
-
-## unlock
-### HTTP Requests
-* `PUT` `/api/unlock/` `application/json` node identifier or array of node identifiers
-### HTTP Responses
-
-# Protocol Specifications Drafts
-
-## version
-* Request `POST` `/api/version/id` `application/json`
-* Response `200` `400` `401` `application/json`
-
-## link
-* Request `POST` `/api/link` `application/json`
-* Response `200` `400` `401` `application/json`
