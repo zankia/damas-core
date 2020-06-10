@@ -84,48 +84,48 @@ create ( elements [, callback] )
 * returns `null` (Javascript) or `None` (Python) on failure
 
 #### examples
+Python
 ```python
-# Python
-# create a new element
+# create a new element wearing an auto-generated unique identifier
 >>> damas.create({"key1":"value1"})
-{u'key1': u'value1', u'time': 1437469470133, u'_id': u'55ae0b1ed81e88357d77d0e9', u'author': u'demo'}
+{u'_id': u'55ae0b1ed81e88357d77d0e9', u'key1': u'value1', u'time': 1437469470133, u'author': u'demo'}
 
-# create a file element
+# create a new element with a specified identifier
 >>> damas.create({"_id":"/project/folder/file", "additional_key":"value"})
-{u'additional_key': u'value', u'_id': u'/project/folder/file', u'time': 1480586620449, u'author': u'demo'}
+{u'_id': u'/project/folder/file', u'additional_key': u'value', u'time': 1480586620449, u'author': u'demo'}
 
-# create multiple elements
+# create two elements
 >>> damas.create([{"label":"element1"}, {"label":"element2"}])
 [{u'_id': u'583ff5a747e759beb73bde32', u'time': 1480586663024, u'label': u'element1', u'author': u'demo'}, {u'_id': u'583ff5a747e759beb73bde33', u'time': 1480586663024, u'label': u'element2', u'author': u'demo'}]
 
-# create multiple elements with an _id array
+# create two elements using an array as _id
 >>> damas.create({"_id":["identifier1","identifier2"],"key":"keyvalue"}])
 
 # create a new graph edge element
 >>> damas.create({"src_id":"/project/folder/file1","tgt_id":"/project/folder/file2"})
 {u'tgt_id': u'/project/folder/to/file2', u'_id': u'583ff67647e759beb73bde34', u'time': 1480586870826, u'src_id': u'/project/folder/to/file1', u'author': u'demo'}
 ```
+Javacsript
 ```js
-// Javascript
 // create a new element
 damas.create({key1: "value1"});
 ▸ Object { author: "demo", time: 1437469470133, key1: "value1", _id: "55ae0b1ed81e88357d77d0e9" }
 
-// create a new element using an asynchronous call
+// create a new element wearing an auto-generated unique identifier (asynchronously)
 damas.create({key1: "value2"}, function (element) {
     console.log(element.time);
 });
 
-// create a file element
+// create a new element with a specified identifier
 damas.create({"_id":"/project/folder/file", "additional_key":"value"});
-▸ Object {additional_key: "value", _id: "/project/folder/file", time: 1480586620449, author: "demo"}
+▸ Object {_id: "/project/folder/file", additional_key: "value", time: 1480586620449, author: "demo"}
 
-// create multiple elements
+// create two elements
 damas.create([{"label":"element1"}, {"label":"element2"}]);
 ▸ Array [{_id: "583ff5a747e759beb73bde32", time: 1480586663024, label: "element1", author: "demo"}, {_id: "583ff5a747e759beb73bde33", time: 1480586663024, label: "element2", author: "demo"}]
 
 
-// create multiple elements with an _id array
+// create two elements with an array as _id
 damas.create({"_id":["identifier1","identifier2"],"key":"keyvalue"}]);
 
 // create a new graph edge element
@@ -148,8 +148,8 @@ read ( identifiers [, callback] )
 > For multiple mode, The resulting array is sorted in the same order as the input array of identifiers. If some identifiers are not found, the result array is filled with None / null values for that position.
 
 #### examples
+Python
 ```python
-# Python
 # read a file
 >>> damas.read("/project/folder/file")
 {u'additional_key': u'value', u'_id': u'/project/folder/file', u'time': 1480586620449, u'author': u'demo'}
@@ -158,8 +158,8 @@ read ( identifiers [, callback] )
 >>> damas.read(["583ff5a747e759beb73bde32","583ff5a747e759beb73bde33"])
 [{u'_id': u'583ff5a747e759beb73bde32', u'time': 1480586663024, u'label': u'element1', u'author': u'demo'}, {u'_id': u'583ff5a747e759beb73bde33', u'time': 1480586663024, u'label': u'element2', u'author': u'demo'}]
 ```
+Javascript
 ```js
-// Javascript
 // read a file
 damas.read("/project/folder/file");
 ▸ Object {additional_key: "value", _id: "/project/folder/file", time: 1480586620449, author: "demo"}
@@ -190,8 +190,8 @@ update ( elements [, callback] )
 > The `_id` key can accept an array of identifiers, which means that the update will be performed on each specified element
 
 #### examples
+Javascript
 ```js
-// Javascript
 // update an element
 damas.update({_id: "55ae0b1ed81e88357d77d0e9", key1: null, newkey: "value2"});
 ▸ Object { author: "demo", time: 1437469470133, newkey: "value2", _id: "55ae0b1ed81e88357d77d0e9" }
@@ -206,9 +206,8 @@ damas.update({_id: ["583ff5a747e759beb73bde32","583ff5a747e759beb73bde33"], "new
 ```
 
 In __Python__, the None value is used to remove a key.
-
+Python
 ```py
-# Python
 # update an element
 >>> damas.update({'_id': '55ae0b1ed81e88357d77d0e9', 'key1': None, 'newkey': 'value2'})
 {u'newkey': u'value2', u'time': 1437469470133, u'_id': u'55ae0b1ed81e88357d77d0e9', u'author': u'demo'}
@@ -240,7 +239,7 @@ upsert ( elements [, callback] )
 >>> project.upsert({"_id":"55ae0b1ed81e88357d77d0e9"})
 {u'time': 1437469470133, u'_id': u'55ae0b1ed81e88357d77d0e9', u'author': u'demo'}
 
-# update a node
+# update an existing node
 >>> project.upsert([{"_id":"55ae0b1ed81e88357d77d0e9", "additional_key":"value"}])
 {u'additional_key': u'value', u'time': 1437469470133, u'_id': u'55ae0b1ed81e88357d77d0e9', u'author': u'demo'}
 
@@ -252,8 +251,8 @@ upsert ( elements [, callback] )
 >>> project.upsert([{"_id":["55ae0b1ed81e88357d77d0e9", "null"], "additional_key":"hello"}])
 [{u'additional_key': u'hello', u'time': 1437469470133, u'_id': u'55ae0b1ed81e88357d77d0e9', u'author': u'demo'}, {u'additional_key': u'hello', u'_id': u'56ae0b1ed81e88357d77d0f9', u'time': 1480586620449, u'author': u'demo'}]
 ```
+Javascript
 ```js
-// Javascript
 // create a new node
 damas.upsert({_id: "null"});
 >> Object { author: "damas", time: 1480588505449, _id: "583ffcd947e759beb73bde39" }
@@ -288,8 +287,8 @@ delete ( identifiers [, callback] )
 
 > the returned array is sorted as the input array
 #### examples
+Javascript
 ```js
-// Javascript
 damas.delete("55ae0b1ed81e88357d77d0e9");
 ▸ true
 ```
@@ -309,8 +308,8 @@ signIn ( username, password [, expiresIn, callback] )
 
 Sign in using the server embedded authentication system
 
+Javascript
 ```js
-// Javascript
 // classic authentication
 damas.signIn("axel", "password");
 >> Object { _id: "55ae0b1ed81e88357d77d0e9", address: "::ffff:127.0.0.1", class: "user", lastActivity: 1561237341643, lastlogin: 1561237340643, username: "axel" }
@@ -365,16 +364,16 @@ search ( query [, callback] )
 In case of `:` operator, you can use a regular expression as value.
 
 #### examples
+Python
 ```python
-# Python
 # list every png file containing "floor" in the file name, case insensitive
 >>> damas.search("file:/floor.*png$/i")
 
 # List every file containing the word rabbit and wearing the `type` key = `char`
 >>> damas.search('file:/rabbit/ type:char')
 ```
+Javascript
 ```js
-// Javascript
 // list every png file containing "floor" in the file name, case insensitive
 damas.search("file:/floor.*png$/i");
 
@@ -417,21 +416,19 @@ search_mongo ( query [, sort, limit, skip, callback] )
 
     is written "RX_.*_RXi" as string format in the JSON messages
 
+Javascript
 ```js
-// Javascript
 // Search every file paths starting with /DATABASE/02_ASSETS using a regular expression   
 damas.search_mongo({_id:"REGEX_/DATABASE/02_ASSETS.*"},{}, 0,0)
 ```
-
+Python
 ```py
-# Python
 # get the 10 most recent files (having the higher `time` key on nodes)
 >> damas.search_mongo({"file":{"$exists": True}}, {"time":-1}, 10, 0)
 [u'56701f266899505c6d82ffc4', u'56701e2583cfa5c16c1a2f78', u'56701b791da266d26bc11126', u'56701cf1570a32f16be5bb60', u'56701923a26510e96969e277', u'5670305b40c1a51070f3356f', u'567026b69b2d56016f663242', u'56702671a86238e76e08f600', u'56701fb92fdef89f6dcb8c6c', u'55b36829cc6742a30da59b98']
 ```
-
+Javascript
 ```js
-// Javascript
 // get the 200 last indexed files, sorted by descending time key, and display a table in html format as output
 damas.search_mongo({'time': {$exists:true}}, {"time":-1},200,0, function(res){
     damas.read(res, function(assets){
@@ -463,8 +460,8 @@ graph ( identifiers, [, callback] )
 #### return values
 * @returns {Array} array of element indexes
 #### examples
+Javascript
 ```js
-// Javascript
 // retrieve graph as an array containing the elements (nodes and edges)
 damas.graph("55687e68e040af7047ee1a53");
 ```
