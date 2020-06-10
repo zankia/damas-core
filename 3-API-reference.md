@@ -105,7 +105,7 @@ Python
 >>> damas.create({"src_id":"/project/folder/file1","tgt_id":"/project/folder/file2"})
 {u'tgt_id': u'/project/folder/to/file2', u'_id': u'583ff67647e759beb73bde34', u'time': 1480586870826, u'src_id': u'/project/folder/to/file1', u'author': u'demo'}
 ```
-Javacsript
+Javascript
 ```js
 // create a new element
 damas.create({key1: "value1"});
