@@ -1,16 +1,24 @@
-The damas-core API is implemented as modules for Python and Javascript programming languages. You could read [[2 Getting Started]] to setup a scripting environment, or try the demo site https://demo.damas.io
+The damas-core API is available as modules for Python and Javascript programming languages. You could read [[2 Getting Started]] to setup a scripting environment, or try the demo site https://demo.damas.io
+
+Specification
+> The API implementation follows the [[specification| 4 Specifications]] to comply to the web service's methods, parameters and responses.
 
 Notes on types
-> The client modules use the built-in types: Python expose elements as dictionaries and JavaScript expose elements as Objects. Python `None`, `True`, `False`, are equivalent to JavaScript `null`, `true`, `false`, and are translated to/from JSON to communicate with the server. Python lists, tuples or sets can be used as arrays.
+> The Python module exposes the JSON data interchange format as built-in Python types and values:
+
+JSON   | Python
+-------|---------
+Object | Dictionary
+Array  | List or Tuple or Set
+null   | None
+true   | True
+false  | False
 
 Sync / Async
-> The JavaScript API supports both synchronous and asynchronous requests. If the optional callback argument is provided, the request will run asynchronously and the response will be given as an argument to the specified callback. If the callback is not provided, the request is made synchronously and the return value holds the response. The Python API uses synchronous requests only (a bit of work is required to make them async ready). 
+> The JavaScript module supports both synchronous and asynchronous requests. If an optional callback argument is provided, the request is ran asynchronously and the response is given as argument to the specified callback. If the callback is not provided, the request is made synchronously and the return value holds the response. The Python API uses synchronous requests only (a bit of work is required to make them async ready). 
 
 Graphs
 > Since version 2.3, and in the NodeJS server, the edges (the directed links between nodes) are objects as nodes, wearing key/values, with the reserved keys `src_id` and `tgt_id` referring to the `_id` of the nodes to link.
-
-Specifications
-> The API implementations follow the specifications described in the [[Specifications| 4 Specifications]] page to communicate with the server, that you could read if you would like have more details about the underlying architecture.
 
 ## Table of contents
 
