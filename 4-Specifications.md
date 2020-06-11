@@ -44,7 +44,7 @@ Retrieve object(s) by identifier(s). In addition to the GET method, a POST metho
 
 ### HTTP Requests
 * `GET` `/api/read/id1,id2`
-* `POST` `/api/read/` `application/json` node identifier or array of node identifiers
+* `POST` `/api/read/` `application/json` identifier string or array of identifier strings
 
 ### HTTP Responses
 ```http
@@ -62,7 +62,7 @@ Retrieve object(s) by identifier(s). In addition to the GET method, a POST metho
 Modify existing object(s)
 
 ### HTTP Requests
-* `PUT` `/api/update/` `application/json` node or array of nodes
+* `PUT` `/api/update/` `application/json` object or array of objects
 
 ### HTTP Responses
 ```http
@@ -97,7 +97,7 @@ Create or modify existing objects
 Permanently remove objects from the database
 
 ### HTTP Requests
-* `DELETE` `/api/delete/` `application/json` object identifier or array of node identifiers
+* `DELETE` `/api/delete/` `application/json` identifier string or array of identifier strings
 
 ### HTTP Responses
 ```http
@@ -123,7 +123,7 @@ Permanently remove objects from the database
 
 ### HTTP Responses
 ```http
-200 OK            application/json        (node or null)
+200 OK            application/json        (object or null)
 400 Bad Request   text/html error message
 409 Conflict      text/html error message
 ```
