@@ -1,10 +1,31 @@
-The damas-core API is available as modules for Python and Javascript programming languages. You could read [[2 Getting Started]] to setup a scripting environment, or try the demo site https://demo.damas.io
+The damas-core API is available for Python and Javascript.  
+Read the [[2 Getting Started]] documentation.  
+The demo site is available at https://demo.damas.io.
 
-Specification
-> The API implementation follows the [[specification| 4 Specifications]] to comply to the web service's methods, parameters and responses.
+## Functions
+### Generic elements
+- [`create`](#create) - insert new element(s)
+- [`read`](#read) - retrieve element(s) using identifiers
+- [`update`](#update) - modify existing element(s)
+- [`upsert`](#upsert) - create or modify element(s)
+- [`delete`](#delete) - delete element(s)
 
-Notes on types
-> The Python module exposes the JSON data interchange format as built-in Python types and values:
+### User Management
+- [`signIn`](#signIn)- request an authentication token from the server
+- [`signOut`](#signOut) - revoke a token
+- [`verify`](#verify) - ask the server for the authentication status and user
+
+### Search queries
+- [`graph`](#graph) - retrieve connected edges and nodes (recursive)
+- [`search`](#search) - find elements matching a query string
+- [`search_one`](#search_one) - find first element matching a query string
+- [`search_mongo`](#search_mongo) - find elements using a MongoDB query object (if MongoDB is the back-end)
+
+***
+
+The web service's methods, parameters and responses follow the [[specification| 4 Specifications]].
+
+#### JSON-Python correspondence table
 
 JSON   | Python
 -------|---------
@@ -14,57 +35,40 @@ null   | None
 true   | True
 false  | False
 
+> The Python module exposes the JSON data using Python built-in types
+
 Sync / Async
 > The JavaScript module supports both synchronous and asynchronous requests. If an optional callback argument is provided, the request is ran asynchronously and the response is given as argument to the specified callback. If the callback is not provided, the request is made synchronously and the return value holds the response. The Python API uses synchronous requests only (a bit of work is required to make them async ready). 
 
 Graphs
-> Since version 2.3, and in the NodeJS server, the edges (the directed links between nodes) are objects as nodes, wearing key/values, with the reserved keys `src_id` and `tgt_id` referring to the `_id` of the nodes to link.
+> The edges (the directed links between nodes) are objects as nodes, wearing key/values, with the reserved keys `src_id` and `tgt_id` referring to the `_id` of the nodes to link.
 
-## Table of contents
-
-### Generic elements
-
-The elements are identified using unique identifiers stored in the reserved `_id` key. If the `_id` key is not provided at creation, a default unique value for `_id` is assigned. The other properties are stored next to it as key/value pairs using the [JSON](https://json.org/) types.
+## Objects and Types
+Key/value pairs using [JSON](https://json.org/):
 ```json
 {
     "_id": "your_custom_id",
+    "boolean": true,
     "number": 1234,
-    "string":"hello world",
-    "boolean": true
+    "string":"hello world"
 }
 ```
-A set of generic CRUD functions is provided to create, read, modify and delete elements:
+The elements are identified using unique identifiers stored in the reserved `_id` key. If the `_id` key is not provided at creation, a default unique value for `_id` is assigned. 
 
-- [`create`](#create) - insert new element(s)
-- [`read`](#read) - retrieve element(s) using identifiers
-- [`update`](#update) - modify existing element(s)
-- [`upsert`](#upsert) - create or modify element(s)
-- [`delete`](#delete) - delete element(s)
 
-### User Management
 The users are described as elements wearing some reserved keys: `username`, `password`, `class` plus optional keys.
-```json
+```js
 {
     "class": "user",
-    "email": "usermail@address.com",
-    "fullname": "Firstname Lastname String",
-    "password": "13d3a2a16c0cd2f7bf115d471999377e",
+    "email": "usermail@address.com",                /* optional or email verification */
+    "fullname": "Firstname Lastname String",        /* optional */
+    "password": "13d3a2a16c0cd2f7bf115d471999377e", /* md5 or sha1 hashed */
     "username": "userlogin"
 }
 ```
 
 The [Authentication](Authentication) page gives more details about the authentication mechanism.
 
-- [`signIn`](#signIn)- request an authentication token from the server
-- [`signOut`](#signOut) - revoke a token
-- [`verify`](#verify) - ask the server for the authentication status and user
-
-### Search queries
-
-- [`graph`](#graph) - retrieve connected edges and nodes (recursive)
-- [`search`](#search) - find elements matching a query string
-- [`search_one`](#search_one) - find first element matching a query string
-- [`search_mongo`](#search_mongo) - find elements using a MongoDB query object (if MongoDB is the back-end)
 
 <!--
 \* *Not implemented yet in NodeJS*
@@ -77,7 +81,7 @@ The [Authentication](Authentication) page gives more details about the authentic
 -->
 
 ## Functions list
-
+A set of generic CRUD functions is provided to create, read, modify and delete elements:
 ### create
 Create element(s) in the database. Elements have an `_id` key being their unique identifier in the database. This key can be specified during creation, but can't be updated afterwards without first deleting the element. The server may add some other arbitrary keys (like `author`, `time` at creation) depending on its configuration.
 ```js
