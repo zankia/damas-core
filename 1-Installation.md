@@ -5,17 +5,13 @@
 ```shell
 docker-compose up
 ```
-Add `-d` argument (detach) to the command above to keep the servers running after closing the console.
-
-To stop the server and remove the containers:
+Add `-d` argument (detach) to the command above to keep the servers running after closing the console. To stop the server and remove the containers:
 ```shell
 docker-compose down
 docker-compose rm
 ```
 
 To install docker and docker-compose you could follow [the official tutorial](https://docs.docker.com/compose/install).
-
-The images are hosted on Docker Hub [zankia/damas-node](https://hub.docker.com/r/zankia/damas-node) (the 3 tags correspond to the git development branches).
 
 ## Using NodeJS
 * Clone the repository, and change directory to server-nodejs/
