@@ -138,7 +138,7 @@ damas.create([{"label":"element1"}, {"label":"element2"}]);
 
 
 // create two elements with an array as _id
-damas.create({"_id":["identifier1","identifier2"],"key":"keyvalue"}]);
+damas.create({"_id":["identifier1","identifier2"],"key":"keyvalue"});
 
 // create a new graph edge element
 damas.create({"src_id":"/project/folder/file1","tgt_id":"/project/folder/file2"})
