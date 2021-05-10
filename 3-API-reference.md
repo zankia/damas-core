@@ -111,7 +111,7 @@ Python
 [{u'_id': u'583ff5a747e759beb73bde32', u'time': 1480586663024, u'label': u'element1', u'author': u'demo'}, {u'_id': u'583ff5a747e759beb73bde33', u'time': 1480586663024, u'label': u'element2', u'author': u'demo'}]
 
 # create two elements using an array as _id
->>> damas.create({"_id":["identifier1","identifier2"],"key":"keyvalue"}])
+>>> damas.create({"_id":["identifier1","identifier2"],"key":"keyvalue"})
 
 # create a new graph edge element
 >>> damas.create({"src_id":"/project/folder/file1","tgt_id":"/project/folder/file2"})
