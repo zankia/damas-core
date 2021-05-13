@@ -181,6 +181,12 @@ The damas.sh command can be ran from anywhere. You can install it on your system
 cp cli/damas.sh /usr/bin/damas
 chmod +x /usr/bin/damas
 ```
+To install it directly from the repository on github :
+```sh
+wget https://raw.githubusercontent.com/remyla/damas-core/experimental/cli/damas.sh
+cp damas.sh /usr/bin/damas
+chmod +x /usr/bin/damas
+```
 It looks for `.damas` directory located in your project root (like git). `.damas/config` contains the client configuration: 
 ```sh
 URL="http://localhost:8090"
