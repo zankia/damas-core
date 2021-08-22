@@ -175,22 +175,20 @@ Also, CustomEvent is used in this module. Comment the 2 lines invoking CustomEve
 ### Command-line Interface
 https://demo.damas.io/cli/ gives explanations about the bash client and how to try it with the demo server.
 
-#### Setting up
-The damas.sh command can be ran from anywhere. You can install it on your system:
+#### Install the `damas` command on your system
+
+Install from this repository:
 ```sh
 cp cli/damas.sh /usr/bin/damas
 chmod +x /usr/bin/damas
 ```
-To install it directly from the repository on github :
+
+Install from the gitHub repository:
 ```sh
-wget https://raw.githubusercontent.com/remyla/damas-core/experimental/cli/damas.sh
-cp damas.sh /usr/bin/damas
+sudo curl -L "https://raw.githubusercontent.com/remyla/damas-core/experimental/cli/damas.sh)" -o /usr/bin/damas
 chmod +x /usr/bin/damas
 ```
-It looks for `.damas` directory located in your project root (like git). `.damas/config` contains the client configuration: 
-```sh
-URL="http://localhost:8090"
-```
+
 The manual page of the command can be found at https://demo.damas.io/cli/ or in this repository under `/cli/README.md`.
 
 If the server requires authentication (the demo server has no authentication) you can use `damas signin <username> <password>` command to get a token which is stored in `/tmp/damas-<username>'. Only root and you can read it and it is removed whenever the system reboots
