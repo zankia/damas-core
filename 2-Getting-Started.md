@@ -176,16 +176,16 @@ Also, CustomEvent is used in this module. Comment the 2 lines invoking CustomEve
 https://demo.damas.io/cli/ gives explanations about the bash client and how to try it with the demo server.
 
 #### Install the `damas` command on your system
-
 Install from this repository:
 ```sh
 cp cli/damas.sh /usr/bin/damas
-chmod +x /usr/bin/damas
 ```
-
 Install from the gitHub repository:
 ```sh
 sudo curl -L "https://raw.githubusercontent.com/remyla/damas-core/experimental/cli/damas.sh)" -o /usr/bin/damas
+```
+Then make the command executable:
+```sh
 chmod +x /usr/bin/damas
 ```
 
