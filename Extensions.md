@@ -1,15 +1,15 @@
 Extensions give new behaviors to the nodejs-server: extend the api, manage user authentication, permissions. This page gives a list of the extensions which are provided in the repository.
 
-* [`es6-polyfills`](#es6-polyfills) - polyfills for older systems
-* [`jwt`](#jwt) - JSON Web Token user authentication
-* [`jwt_delegate`](#jwt_delegate) - centralize authentication on a different server
-* [`last_activity`](#last_activity) - keep the last activity time of users
-* [`noauth`](#noauth) - user verification mechanism when user authentication is disabled
-* [`nodemailer`](#nodemailer) - send emails using https://www.npmjs.com/package/nodemailer
-* [`restricted_keys`](#restricted_keys) - whitelist of writable keys depending on user class
-* [`prefer_https`](#prefer_https) - redirect every HTTP queries to HTTPS
-* [`static_routes`](#static_routes) - files and folders to be served by the server
-* [`user_setup`](#user_setup) - manage user password reset
+* [`es6-polyfills`](#es6-polyfills) - Polyfills for older systems
+* [`jwt`](#jwt) - User authentication using JSON Web Token
+* [`jwt_delegate`](#jwt_delegate) - Centralize authentication on a different server
+* [`last_activity`](#last_activity) - Keep the time of users last activity
+* [`noauth`](#noauth) - A user verification mechanism when authentication is disabled
+* [`nodemailer`](#nodemailer) - Send emails using https://www.npmjs.com/package/nodemailer
+* [`restricted_keys`](#restricted_keys) - Whitelist of writable keys depending on user class
+* [`prefer_https`](#prefer_https) - Redirect every HTTP queries to HTTPS
+* [`static_routes`](#static_routes) - Files and folders to be served by the server
+* [`user_setup`](#user_setup) - Manage user password reset
 
 The extensions are loaded at startup and are listed in the configuration file `conf.json`. They are loaded by order of appearance in that file. The extensions are defined using a simple format:
 ```json
