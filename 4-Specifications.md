@@ -21,7 +21,7 @@ The communication protocol used by damas-core clients and servers is based on [J
 
 ## Details
 ### create
-Insert new elements
+Insert new element(s) in the database. The elements have an `_id` key being their unique string identifier in the database. This key can be specified during creation, but can't be updated afterwards without first deleting the element. If it is not provided, it will be set with a default unique identifier string. The server may add some other arbitrary keys (like `author`, `time`) at creation depending on its configuration. To create multiple elements you can provide an array of objects as input and also provide an array of strings as `_id` keys that will be unfolded at creation time.
 
 #### HTTP Requests
 * `POST` `/api/create/` `application/json` object or array of objects
@@ -35,19 +35,21 @@ Insert new elements
 409 Conflict              text/html (error message) all objects already exist with these identifiers
 500 Internal Server Error text/html (error message) error while accessing the database
 ```
-> The _id key is used as unique object identifier string. If it is not provided in input, it will be set with a unique default identifier.
 
-> In case of a multiple object creation, the returned json is an array of objects ordered using the same order as the input array.
+> Returns the created element or an array containing the created elements in case of a multiple creation request.
+
+> In case of a multiple element creation, the returned JSON is an array of objects ordered using the same order as the input array.
 
 > 207 Multi-Status happens when some specified identifiers already exist. A null value is returned in the array at corresponding position
 
-
 ### read
-Retrieve object(s) by identifier(s). In addition to the GET method, a POST method is provided to avoid the limitation of the URL length.
+Retrieve one or more elements giving their identifier(s). In addition to the GET method, a POST method is provided to avoid the limitation of the URL length.
 
 #### HTTP Requests
 * `GET` `/api/read/id1,id2`
 * `POST` `/api/read/` `application/json` identifier string or array of identifier strings
+
+> The HTTP headers are often limited by HTTP servers to a maximum size. NodeJS maximum header size is 80KB. The POST method is provided to avoid this limitation in order to read large numbers of identifiers.
 
 #### HTTP Responses
 ```http
@@ -59,10 +61,10 @@ Retrieve object(s) by identifier(s). In addition to the GET method, a POST metho
 500 Internal Server Error text/html (error message) error while accessing the database
 ```
 
-> The HTTP headers are often limited by HTTP servers to a maximum size. NodeJS maximum header size is 80KB. The POST method is provided to avoid this limitation in order to read any number of identifiers.
+> The requested element is returned if found. In case of a request for multiple elements, an array in same order as input is returned.
 
 ### update
-Modify existing object(s)
+Add, modify and remove keys on element(s) identified by their `_id` key. Keys are overwritten if they exist on the server. Specifying `null` as value removes the key. Unspecified keys are left untouched on the server. Providing an array of objects or an array of identifiers modify multiple elements with one request.
 
 #### HTTP Requests
 * `PUT` `/api/update/` `application/json` object or array of objects
@@ -77,12 +79,10 @@ Modify existing object(s)
 500 Internal Server Error text/html (error message) error while accessing the database
 ```
 
-> The specified keys overwrite the existing keys on the server. Unspecified keys are left untouched on the server. A null value removes the key.
-
-> The input accepts arrays for _id keys to perform updates of the same kind on multiple objects.
+> The modified element is returned. In case of a multiple element update an array in same order as input is returned.
 
 ### upsert
-Create or modify existing objects
+Create or modify existing element(s). The input can be a single object, an array, and can use arrays for `_id` keys (similar to update). If the element is not found in the database, it is created.
 
 #### HTTP Requests
 * `POST` `/api/upsert/` `application/json` object or array of objects
@@ -97,7 +97,7 @@ Create or modify existing objects
 > The input accepts arrays for _id keys, as well as values "null".
 
 ### delete
-Permanently remove objects from the database
+Permanently remove one or more elements from the database specifying their identifier(s).
 
 #### HTTP Requests
 * `DELETE` `/api/delete/` `application/json` identifier string or array of identifier strings
