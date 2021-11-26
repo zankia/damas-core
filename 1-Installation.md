@@ -1,5 +1,5 @@
 ## Using Docker
-* Copy [docker-compose.yml](http://damas-software.org/docker/docker-compose.yml) and [conf.json](http://damas-software.org/docker/conf.json) to a local directory
+* Copy [docker-compose.yml](https://raw.githubusercontent.com/remyla/damas-core/master/docker-compose.yml) and [conf.json](http://damas-software.org/docker/conf.json) to a local directory
 * Run:
 
 ```shell
