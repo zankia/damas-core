@@ -7,6 +7,8 @@ We provide three events:
 - `update`
 - `remove` (delete)
 
+## Javascript
+
 Here is a sample JavaScript client (see `js/damas-socket.js`):
 
 ```javascript
