@@ -24,43 +24,7 @@ openssl req -new -x509 -days 9999 -nodes -out fullchain.pem -keyout privkey.pem
 ```
 
 ### Enable User Authentication
-By default, the installation gives a public access without authentication. The first thing you may want to do is to setup the authentication. For this, you need to create a new user. We don't provide a button for this so here is the procedure using the damas-core API to create a user node.
-
-To generate a SHA-1 or MD5 encoded password, you can type this command in a shell:
-```sh
-$ echo -n "yourpassword" | sha1sum
-327156ab287c6aa52c8670e13163fc1bf660add4  -
-```
-```sh
-$ echo -n "yourpassword" | md5sum
-637b9adadf7acce5c70e5d327a725b13  -
-```
-
-
-In the web browser, on damas-core page, start a web console (Ctrl+Shift+K) and type:
-```js
-// Welcome to damas-core API
-damas.create({username:"yourusername", password:"327156ab287c6aa52c8670e13163fc1bf660add4", class:"admin"});
-```
-
-Then you can enable the JSON Web Token authentication editing the server configuration file conf.json:
-```js
-{
-    "jwt" : {
-        "enable": true,
-        "conf": {
-            "required": true,
-            "secret": "webtokensecret",
-            "exp": "1d",
-        }
-    },
-}
-```
-Then, restart the server to read the configuration file at startup and sign in using the newly created user. You can also read this [[documentation|Authentication]] about the JSON Web Token authentification in damas-core and to have more details about the authentication options.
-
-The `required` directive is used for hybrid cases where:
-* authentication is required for write accesses
-* unauthenticated users are still able to read the database and considered as `guest` class users
+Please see (JWT extension)[https://github.com/remyla/damas-core/wiki/Extensions#jwt]
 
 ### Permissions
 
