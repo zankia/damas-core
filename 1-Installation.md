@@ -1,37 +1,51 @@
 :information_source: This page explains how to install a new server. If you need to connect to an existing server, you can directly go to [[2 Connect]].
 
 ## Using Docker
-* Copy [docker-compose.yml](https://raw.githubusercontent.com/remyla/damas-core/master/docker-compose.yml) and [conf.json](http://damas-software.org/docker/conf.json) to a local directory
-* Run:
+> To install docker and docker-compose follow [the official tutorial](https://docs.docker.com/compose/install).
+
+Copy [docker-compose.yml](https://raw.githubusercontent.com/remyla/damas-core/master/docker-compose.yml) and [conf.json](http://damas-software.org/docker/conf.json) to a local directory then run:
 
 ```shell
 docker-compose up
 ```
-Add `-d` argument (detach) to the command above to keep the servers running after closing the console. To stop the server and remove the containers:
+Add `-d` argument (detach) to the command above to keep the servers running after closing the console. To stop the server and remove the containers, run:
 ```shell
 docker-compose down
 docker-compose rm
 ```
 
-To install docker and docker-compose you could follow [the official tutorial](https://docs.docker.com/compose/install).
-
 ## Using NodeJS
-* Clone the repository, and change directory to server-nodejs/
-* Duplicate the template configuration file, install the packages, and run:
+
+Clone this repository:
+```sh
+git clone https://github.com/remyla/damas-core.git
+```
+Change directory to server-nodejs
+```sh
+cd server-nodejs
+```
+Duplicate the template configuration file:
 ```sh
 cp conf_install.json conf.json
+```
+install the dependencies:
+```sh
 npm install
+```
+and run:
+```sh
 node .
 ```
-More parameters
+To enable debug, run:
 ```sh
-# run debug mode
 DEBUG=* node .
-
-# the server listens to port 8090 by default. You can specify different ports and debug options
-DEBUG=* HTTP_PORT=8091 HTTPS_PORT=8444 node .
-
-# on windows:
+```
+The server listens to port 8090 by default. To specify different ports, run:
+```sh
+HTTP_PORT=8091 HTTPS_PORT=8444 node .
+```
+To enable debug on windows, run:
+```sh
 set DEBUG=* & node .
 ```
 
@@ -52,8 +66,7 @@ The server reads its configuration from `server-nodejs/conf.json`. You can edit 
         "collection": "node",
         "port": 27017,
         "options": { "auto_reconnect": true }
-    },  
-    "fileSystem": "/PRODUCTIONS/",
+    },
     "extensions": {
     }
 }
@@ -63,7 +76,6 @@ The configuration is divided into sections:
 * `https`: specify a certificate and enable TLS
 * `db`: which Database Management System to use. Available values: `debug`, `mongodb`
 * `mongodb`: MongoDB options. Keep the default values to use a database located on the same machine
-* `fileSystem`: path to the file repository root from which the files are indexed from
 * `extensions`: modules list to extend the core. See the [[Extensions]] page for more details about the available extensions.
 
 ### Enable User Authentication
