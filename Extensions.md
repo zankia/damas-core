@@ -181,6 +181,33 @@ Redirects http:// calls to https://.
 ```
 The /.well-known is not redirected to allow letsencrypt authentication. See Express [res.redirect](https://expressjs.com/en/api.html#res.redirect)
 
+### Enable TLS
+For a server which will run on a network you should enable the security layer in conf.json:
+```json
+{
+    "https" : { 
+        "enable": true,
+        "cert": "fullchain.pem",
+        "key": "privkey.pem"
+    }
+}
+```
+You can use Let's Encrypt to obtain a certificate:
+```sh
+docker run --rm --name certbot -p 80:80 -p 443:443 -v /etc/letsencrypt:/etc/letsencrypt certbot/certbot certonly -q --standalone --agree-tos -m YOUR@EMAIL.COM -d YOUR_DOMAIN_NAME
+```
+
+Or generate a self signed certificate:
+```sh
+openssl req -new -x509 -days 9999 -nodes -out fullchain.pem -keyout privkey.pem
+```
+
+
+
+
+
+
+
 ## static_routes
 A list of relative or absolute paths to be served by the server. It contains server resources and possible HTML interfaces.
 * new routes are defined according to the configuration
