@@ -1,4 +1,4 @@
-This page explains how to connect to an existing server. https://demo.damas.io is a fresh damas-core server on which you can test the clients. Replace the URL with your server, and read [[Installation|1 Installation]] to setup a new server.
+This page explains how to connect to an existing server. https://demo.damas.io is a fresh damas-core server on which you can test the clients. To setup a new server, read [[Installation|1 Installation]] and replace the demo server URL with your server's URL. 
 
 ## Python
 https://demo.damas.io/py/ gives explanations about the Python client and how to try it with the demo server.
