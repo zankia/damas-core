@@ -1,64 +1,6 @@
-First, make sure you followed the instructions in [[Installation|1 Installation]].
+This page explains how to connect to an existing server. https://demo.damas.io is a fresh damas-core server on which you can test the clients. Replace the URL with your server, and read [[Installation|1 Installation]] to setup a new server.
 
-## Security
-
-### Enable TLS
-For a server which will run on a network you should enable the security layer in conf.json:
-```json
-{
-    "https" : { 
-        "enable": true,
-        "cert": "fullchain.pem",
-        "key": "privkey.pem"
-    }
-}
-```
-You can use Let's Encrypt to obtain a certificate:
-```sh
-docker run --rm --name certbot -p 80:80 -p 443:443 -v /etc/letsencrypt:/etc/letsencrypt certbot/certbot certonly -q --standalone --agree-tos -m YOUR@EMAIL.COM -d YOUR_DOMAIN_NAME
-```
-
-Or generate a self signed certificate:
-```sh
-openssl req -new -x509 -days 9999 -nodes -out fullchain.pem -keyout privkey.pem
-```
-
-### Enable User Authentication
-Please see [JWT extension](https://github.com/remyla/damas-core/wiki/Extensions#jwt)
-
-### Permissions
-
-We have different types of permissions:
-
-* permissions for each /api/ operation based on the current user's `class` key: hard-coded in server-nodejs/routes/perms-tools.js
-* update permissions based on the key name to edit and the current user's `class` key. [extensions/restricted_keys.js](../Extensions#restricted_keys)
-* read permissions based on the `author` key. See conf.json `authorMode` directive. 
-
-The default available user classes are: `admin` `editor` `user` `guest`.
-
-
-|  Operation   | guest | user | editor | admin |
-|--------------|-------|------|--------|-------|
-|    create    |       |   x  |    x   |   x   |
-|     read     |   x   |   x  |    x   |   x   |
-|    update    |       |   k  |    x   |   x   |
-|    delete    |       |      |    x   |   x   |
-|     lock     |       |   x  |    x   |   x   |
-|    unlock    |       |   x  |    x   |   x   |
-|    publish   |       |   x  |    x   |   x   |
-|    upload    |       |   x  |    x   |   x   |
-|    version   |       |   x  |    x   |   x   |
-|     file     |       |   x  |    x   |   x   |
-|     graph    |   x   |   x  |    x   |   x   |
-|    search    |   x   |   x  |    x   |   x   |
-| search_mongo |   x   |   x  |    x   |   x   |
-
-
-## Clients
-
-https://demo.damas.io hosts a fresh damas-core server install on which you can test your clients.
-
-### Python Client
+## Python
 https://demo.damas.io/py/ gives explanations about the Python client and how to try it with the demo server.
 
 __damas.py__ is a module containing the damas-core client API for Python. It is located under `/py/damas.py` in the damas-core repository. It depends on the `requests` module. On a Debian operating system you can install the `request` module using this command line:
@@ -96,12 +38,12 @@ Then connect to a running server and start working with the nodes:
 ```
 
 
-### Javascript Client
+## Javascript
 https://demo.damas.io/js/ has the Javascript damas-core client API loaded and ready to try it with the demo server using a web browser.
 
 `/js/damas.js` in the damas-core repository is an AMD module containing the client API for Javascript. This module can be loaded in various environments.
 
-#### In HTML Documents
+### In HTML Documents
 Include the library from a HTML document
 ```html
 <html>
@@ -118,7 +60,7 @@ Include the library from a HTML document
 ```
 > damas.server is set to an empty string if your page is directly served by damas-core
 
-#### Using requireJS
+### Using requireJS
 ```js
 require('damas.js');
 damas.server = ''; // the server is on the localhost
@@ -136,10 +78,11 @@ npm install xmlhttprequest
 ```
 Also, CustomEvent is used in this module. Comment the 2 lines invoking CustomEvent if needed under NodeJS. This module would become a ready-to-use npm module if we get more clients using NodeJS.  
 
-### Command-line Interface
+
+## Command-line Interface
 https://demo.damas.io/cli/ gives explanations about the bash client and how to try it with the demo server.
 
-#### Install the `damas` command on your system
+### Install the `damas` command on your system
 Install from this repository:
 ```sh
 cp cli/damas.sh /usr/bin/damas
@@ -157,7 +100,7 @@ The manual page of the command can be found at https://demo.damas.io/cli/ or in 
 
 If the server requires authentication (the demo server has no authentication) you can use `damas signin <username> <password>` command to get a token which is stored in `/tmp/damas-<username>'. Only root and you can read it and it is removed whenever the system reboots
 
-### Curl Commands
+## Curl Commands
 Command line access to the server using curl. Request an access token from the server:
 
 ```sh
@@ -176,7 +119,36 @@ $ curl https://localhost/api/verify -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLC
 {"_id":"56029d03dff07e50a860a09d","username":"remyla","iat":1454078652,"exp":1454165052}
 ```
 
+
+
+## Permissions
+
+We have different types of permissions:
+
+* permissions for each /api/ operation based on the current user's `class` key: hard-coded in server-nodejs/routes/perms-tools.js
+* update permissions based on the key name to edit and the current user's `class` key. [extensions/restricted_keys.js](../Extensions#restricted_keys)
+* read permissions based on the `author` key. See conf.json `authorMode` directive. 
+
+The default available user classes are: `admin` `editor` `user` `guest`.
+
+
+|  Operation   | guest | user | editor | admin |
+|--------------|-------|------|--------|-------|
+|    create    |       |   x  |    x   |   x   |
+|     read     |   x   |   x  |    x   |   x   |
+|    update    |       |   k  |    x   |   x   |
+|    delete    |       |      |    x   |   x   |
+|     lock     |       |   x  |    x   |   x   |
+|    unlock    |       |   x  |    x   |   x   |
+|    publish   |       |   x  |    x   |   x   |
+|    upload    |       |   x  |    x   |   x   |
+|    version   |       |   x  |    x   |   x   |
+|     file     |       |   x  |    x   |   x   |
+|     graph    |   x   |   x  |    x   |   x   |
+|    search    |   x   |   x  |    x   |   x   |
+| search_mongo |   x   |   x  |    x   |   x   |
+
 ## Next steps
 Now that you have a running server and client environments you could continue reading [[3 API Reference]] and [[4 Specifications]].
 
-If you encounter any difficulty during the setup process you could create an issue describing the problem in this repository and we will try to resolve it.
+If you encounter any difficulty you could create an issue describing the problem in this repository and we will try to solve it.
