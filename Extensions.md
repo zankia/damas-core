@@ -1,14 +1,16 @@
 Extensions give new behaviors to the nodejs-server: extend the api, manage user authentication, permissions. This page gives a list of the extensions which are provided in the repository.
 
-* [`es6-polyfills`](#es6-polyfills) - Polyfills for older systems
-* [`jwt`](#jwt) - User authentication using JSON Web Token
+* [`jwt`](#jwt) - Authentication using JSON Web Tokens
 * [`jwt_delegate`](#jwt_delegate) - Centralize authentication on a different server
-* [`last_activity`](#last_activity) - Keep the time of users last activity
+* [`last_activity`](#last_activity) - Keep the time of users' last activity
 * [`noauth`](#noauth) - A user verification mechanism when authentication is disabled
-* [`nodemailer`](#nodemailer) - Send emails using https://www.npmjs.com/package/nodemailer
 * [`restricted_keys`](#restricted_keys) - Whitelist of writable keys depending on user class
-* [`prefer_https`](#prefer_https) - Redirect every HTTP queries to HTTPS
 * [`static_routes`](#static_routes) - Files and folders to be served by the server
+
+Older extensions, less relevant but still operational 
+* [`es6-polyfills`](#es6-polyfills) - Polyfills for older systems
+* [`nodemailer`](#nodemailer) - Send emails using https://www.npmjs.com/package/nodemailer
+* [`prefer_https`](#prefer_https) - Redirect every HTTP queries to HTTPS
 * [`user_setup`](#user_setup) - Manage user password reset
 
 The extensions are loaded at startup and are listed in the configuration file `conf.json`. They are loaded by order of appearance in that file. The extensions are defined using a simple format:
@@ -56,18 +58,18 @@ Implementation of JSON Web Token RFC7519 for user authentication https://jwt.io/
     "path": "./extensions/jwt.js",
     "conf": {
         "required": true,
-        "passwordHashAlgorithm": "md5",
+        "passwordHashAlgorithm": "sha1",
         "secret": "webtokensecret",
-        "exp": 1440,
+        "exp": "1d",
         "expressUse": "/api",
         "expressUnless": {
-            "path": "/api/signIn"
+            "path": "/api/signIn/"
         }
     }
 }
 ```
 * configuration options:
-  * `required` (boolean) if false, unauthenticated users are considered as guests with read access
+  * `required` (boolean) if false, unauthenticated users are considered as `guest` users with read access
   * `passwordHashAlgorithm` (string) algorithm used to hash the passwords on server. `sha1` or `md5`
   * `secret` (string)  encryption salt
   * `exp` (number) token default expiration time default is `1d` (options: https://www.npmjs.com/package/ms)
@@ -75,6 +77,23 @@ Implementation of JSON Web Token RFC7519 for user authentication https://jwt.io/
   * `expressUnless` (object) paths and methods to exclude from authentication
 
 See [[Authentication]], [express.use syntax](https://expressjs.com/en/api.html#app.use), [express unless syntax](https://www.npmjs.com/package/express-unless).
+
+### Enable User Authentication
+By default, the installation gives a public access without user authentication. Here is the procedure to create a new user using the damas-core API and the damas command line interface:
+```sh
+$ echo -n "yourpassword" | sha1sum
+327156ab287c6aa52c8670e13163fc1bf660add4  -
+$ damas create '{"username":"yourusername", "password":"327156ab287c6aa52c8670e13163fc1bf660add4", "class":"admin"}'
+```
+Then enable the extension:
+```js
+{
+    "jwt" : {
+        "enable": true,
+    }
+}
+```
+And configure the options depending on the behavior you want. Restart the server and sign in using the newly created user. Read [[documentation|Authentication]] to have more details about the authentication options and implementation.
 
 ## jwt_delegate
 Centralizing authentication on a different server than the tracker.
