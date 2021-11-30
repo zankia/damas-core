@@ -24,7 +24,7 @@ openssl req -new -x509 -days 9999 -nodes -out fullchain.pem -keyout privkey.pem
 ```
 
 ### Enable User Authentication
-Please see (JWT extension)[https://github.com/remyla/damas-core/wiki/Extensions#jwt]
+Please see [JWT extension](https://github.com/remyla/damas-core/wiki/Extensions#jwt)
 
 ### Permissions
 
