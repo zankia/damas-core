@@ -78,9 +78,7 @@ The configuration is divided into sections:
 * `mongodb`: MongoDB options. Keep the default values to use a database located on the same machine
 * `extensions`: modules list to extend the core. See the [[Extensions]] page for more details about the available extensions.
 
-### Enable User Authentication
-Please see [JWT extension](https://github.com/remyla/damas-core/wiki/Extensions#jwt)
-
+Please see [JWT extension](https://github.com/remyla/damas-core/wiki/Extensions#jwt) to enable user authentication.
 
 ## Test the installation
 You could use a web browser to connect to the service:
