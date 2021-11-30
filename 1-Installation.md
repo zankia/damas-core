@@ -1,3 +1,5 @@
+:information_source: This page explains how to install a new server. If you need to connect to an existing server, you can directly go to [[2 Connect]].
+
 ## Using Docker
 * Copy [docker-compose.yml](https://raw.githubusercontent.com/remyla/damas-core/master/docker-compose.yml) and [conf.json](http://damas-software.org/docker/conf.json) to a local directory
 * Run:
@@ -64,8 +66,12 @@ The configuration is divided into sections:
 * `fileSystem`: path to the file repository root from which the files are indexed from
 * `extensions`: modules list to extend the core. See the [[Extensions]] page for more details about the available extensions.
 
-## Connect
-In a web browser, after the installation using Docker on the same machine, open
+### Enable User Authentication
+Please see [JWT extension](https://github.com/remyla/damas-core/wiki/Extensions#jwt)
+
+
+## Test the installation
+You could use a web browser to connect to the service:
 ```
 http://localhost
 ```
@@ -74,8 +80,7 @@ Or after an installation using NodeJS
 http://localhost:8090
 ```
 
-
 ##  Next steps
-Now that you have a running server you can read [[2 Getting Started]] to setup a Python, JavaScript or Shell client environment, and read [[3 API Reference]].
+Now that you have a running server you can read [[2 Connect]] to setup a Python, JavaScript or Shell client environment, and read [[3 API Reference]].
 
-In case you encounter difficulties during the installation process you could create an issue describing the problem in this repository and we will try to resolve it.
+In case you encounter some difficulties during the installation process you could create an issue describing the problem in this repository and we will try to solve it.
