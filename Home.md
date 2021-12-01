@@ -4,7 +4,7 @@ Welcome to the damas-core wiki.
 
 ### Main Chapters
 * [[1 Installation]] - Get a server running
-* [[2 Getting Started]] - Configure and set a new project up
+* [[2 Connect]] - Set up a client and connect to a server
 * [[3 API Reference]] - List of API methods
 * [[4 Specifications]] - Protocol specifications
 
