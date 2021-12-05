@@ -144,7 +144,7 @@ Permanently remove one or more elements from the database specifying their ident
 Request a token from the sever
 
 #### HTTP Requests
-* `POST` `/api/signIn/` `application/x-www-form-urlencoded` `username` `password`
+* `POST` `/api/signIn/` `application/x-www-form-urlencoded` `username` `password` `lifespan`
 
 #### HTTP Responses
 ```http
