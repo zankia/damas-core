@@ -84,7 +84,10 @@ The available user classes are: `admin` `editor` `user` `guest`.
 |    search    |   x   |   x  |    x   |   x   |
 | search_mongo |   x   |   x  |    x   |   x   |
 
-## Details about the Python implementation
+
+## Miscellaneous Information
+
+### Details about the Python implementation
 ```python
 # Python
 project.token['username']  # The user name used to log in
@@ -94,5 +97,24 @@ project.token['token_iat'] # The time when the token was generated
 project.token['_id']       # The user node id
 ```
 
-## Authentication delegation
-The [jwt_delegate](https://github.com/remyla/damas-core/wiki/Extensions#jwt_delegate) extension can be used to centralize the authentication on a different server. When an user signs in, instead of authenticating him against the local database, the extension creates a new request that is sent to the delegation server. Once the user is authenticated, its element is copied in the local server, as if the user was authenticated locally.
+### Another extension: authentication delegation
+The [jwt_delegate](https://github.com/remyla/damas-core/wiki/Extensions#jwt_delegate) extension can be additionally used to centralize the authentication on a different server. When an user signs in, instead of authenticating him against the local database, the extension creates a new request that is sent to the delegation server. Once the user is authenticated, its element is copied in the local server, as if the user was authenticated locally.
+
+
+### Use the token inside custom Curl Commands
+1. Request an access token from the server:
+```sh
+$ curl https://localhost/api/signIn -d "username=remyla&password=yyy" > /tmp/token
+```
+
+2. Read the token:
+```sh
+$ cat /tmp/token
+{"_id":"56029d03dff07e50a860a09d","username":"remyla","token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjAyOWQwM2RmZjA3ZTUwYTg2MGEwOWQiLCJ1x2VybmFtZSI6InJlbXlsYSIsImlhdCI6MTQ1NDA3ODY1MiwiZXhwIjoxNDU0MTY1MDUyfQ.5AhJIh6ReeS2y6H0Mpcx8fJralsTDSidJAniuaJiVP8","token_exp":1454165052,"token_iat":1454078652}
+```
+
+3. Use the token:
+```sh
+$ curl https://localhost/api/verify -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjAyOWQwM2RmZjA3ZTUwYTg2MGEwOWQiLCJ1x2VybmFtZSI6InJlbXlsYSIsImlhdCI6MTQ1NDA3ODY1MiwiZXhwIjoxNDU0MTY1MDUyfQ.5AhJIh6ReeS2y6H0Mpcx8fJralsTDSidJAniuaJiVP8"
+{"_id":"56029d03dff07e50a860a09d","username":"remyla","iat":1454078652,"exp":1454165052}
+```
