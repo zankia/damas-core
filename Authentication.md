@@ -10,37 +10,91 @@ Resources:
 Extensions:
 * [jwt.js](https://github.com/remyla/damas-core/wiki/Extensions#jwt)
 
-## signIn
-User's passwords are stored as encoded strings in a `password` key under user nodes in the database.
+Parameters:
+* `extensions.jwt.passwordHashAlgorithm` the hash algorithm used. `sha1` or `md5`.
+* `extensions.jwt.exp` the amount of time after which tokens expire (token lifespan) see below
+* `extensions.jwt.secret` the salt to encode and decode tokens
 
-The `signIn()` method is used to request a token from the server:
+## Web Tokens
+The tokens are delivered by the server using the [signIn](https://github.com/remyla/damas-core/wiki/4-Specifications#signIn) operation to authenticate users.
 
+### Lifespan
+The default value for tokens' lifespan can be set in the server's conf.json under `extensions.jwt.exp`, and its value is "1d" (1 day) by default. See the syntax and examples [here](https://www.npmjs.com/package/ms). This value can also be specified during signIn, using the `expiresIn` parameter, in order to retrieve a token with the desired lifespan. A value of "0" ask for a token with an unlimited lifespan (see [#237](https://github.com/remyla/damas-core/issues/237)). By changing password, this revokes previously obtained tokens.  
+
+### Revoke
+Changing the user's password revokes every tokens previously created. This is because the salt used to generate the tokens is also made of the user's hashed password value. This way, we provide a simple and secure way to revoke every tokens at once for a user without adding more complex operations.
+
+### Salt
+The tokens are encrypted using a salt composed of a secret passphrase specified on the server under `extension.jwt.secret`, and the users' hashed passwords. If we change either one, every previously obtained tokens is revoked.
+
+### Passwords
+The users' passwords are stored in the database under a `password` key for each user element. The passwords are stored as encoded strings, using the `sha1` or `md5` hash algorithms. You can specify the preferred algorithm in `extensions.jwt.passwordHashAlgorithm`. The algorithm is automatically detected at signIn (using the hash length) so a mix of methods could exist in the database (this is useful to migrate or merge multiple user databases that use different hash algorithms).
+
+### Users
+The users are regular elements we can create, update or delete using the API.
+```json
+{
+    "_id" : "usr/axel"
+    "class": "user",
+    "lastActivity": 1561237341643,
+    "lastlogin": 1561237340643,
+    "password" : "55ae0b1ed81e88357d77d0e9",
+    "username": "axel"
+}
+```
+Some keys can be added to users elements by the server, depending on its configuration: `lastActivity`, `lastLogin`.
+
+To create a new user using Python:
 ```python
-# Python
 import damas
-project = damas.http_connection("https://localhost:8443")
-if project.signIn("demo","demo"):
+import hashlib
+project = http_connection("http://localhost")
+p = hashlib.sha1()
+p.update('johnpassword')
+project.create({"username":"john", "password": p.hexdigest(), "email":"john@me.com" })
+```
+Delete this user (given his username):
+```python
+project.delete(project.search("username:john")[0])
+```
+Request a token for a user:
+```python
+if project.signIn("john","johnpassword"):
     # The token is automatically used in further API calls
-    new_node = project.create({"label":"test","key2":"test")
+    new_node = project.create({"key":"value")
 else:
     print "Invalid username or password"
 ```
-The server compares the provided username and password with the pair available in the database. It is important to encrypt the communication (using https here) not to send the password as clear text.
+:warning:  In case of a server running on Internet or untrusted network, use secure communication (https://). Else the password is sent as clear text.
 
-#### Authentication delegation 
-The module [jwt_delegate](https://github.com/remyla/damas-core/wiki/Extensions#jwt_delegate) centralize authentications on a delegated server in the file configuration : conf.json. When an user authenticates, the module creates a new request based on the request of the user, with the username and password and it will be sent to the delegated server. The user node is registered in the server (the origin of the request) database or updated if it already exists. <!--This module works with a server version published in this commit.-->
+Ask the server if the current authentication is still valid and didn't expire:
+```python
+# Python
+if project.verify():
+    print "ok"
+else:
+    print "token expired"
+```
 
-## Password Hash
-During authentication, we detect the [hash method](https://github.com/remyla/damas-core/wiki/2-Getting-Started#enable-user-authentication) stored in database. 
+## Classes & Permissions
+Different types of permissions are available:
+* hard-coded permissions for each /api/ operation based on the current user's `class` key (in server-nodejs/routes/perms-tools.js)
+* extension for update permissions based on the modified key name and the user's `class` key. [extensions/restricted_keys.js](../Extensions#restricted_keys)
+* read permissions based on the `author` key. See conf.json `authorMode` directive.
 
-## The Token
-The token is a string allowing to verify a user. Each token is generated with a lifespan and some other information(see [JWT](https://jwt.io/introduction/) and [npm JSONWebToken](https://www.npmjs.com/package/jsonwebtoken)).
-#### Token lifespan
-By default, the lifespan is set to `exp` in conf.json. With signIn, we can inform `expiresIn` (see [signIn](https://github.com/remyla/damas-core/wiki/3-API-reference#signin)) to get an other lifespan. The possible values are specified [here](https://www.npmjs.com/package/ms). Special value: if expiresIn equals `"0"` the lifespan will be unlimited [#237](https://github.com/remyla/damas-core/issues/237). By changing password, this revokes previously obtained tokens.  
-#### Token salt
-The tokens are encrypted using salts (a secret passphrase on server). The salt is made with the user hashed password and the `secret` passphrase specified in conf.json. If we change either one the previously obtained tokens will be revoked.
+The available user classes are: `admin` `editor` `user` `guest`.
 
+|  Operation   | guest | user | editor | admin |
+|--------------|-------|------|--------|-------|
+|    create    |       |   x  |    x   |   x   |
+|     read     |   x   |   x  |    x   |   x   |
+|    update    |       |   k  |    x   |   x   |
+|    delete    |       |      |    x   |   x   |
+|     graph    |   x   |   x  |    x   |   x   |
+|    search    |   x   |   x  |    x   |   x   |
+| search_mongo |   x   |   x  |    x   |   x   |
 
+## Details about the Python implementation
 ```python
 # Python
 project.token['username']  # The user name used to log in
@@ -50,49 +104,5 @@ project.token['token_iat'] # The time when the token was generated
 project.token['_id']       # The user node id
 ```
 
-You can ask the server if the current token is still valid and didn't expire:
-```python
-# Python
-if project.verify():
-    print "ok"
-else:
-    print "token expired"
-```
-
-## User administration
-Users are regular nodes, we can create, update or delete them using the API.
-
-We store a property `disable` under the user node. If disable is true, the user will not be able to signIn or use his user account. By default, the users are not disabled.
-
-Creation of a user using Python:
-```python
-# Python
-# Load the module for sha1 encryption
-import hashlib
-p = hashlib.sha1()
-p.update('johnpassword')
-# Create the user
-project.create({"username":"john", "password": p.hexdigest(), "email":"john@me.com" })
-```
-
-Delete a user using Python:
-```python
-# Python
-# Delete the user using its name
-project.delete(project.search("username:john")[0])
-```
-
-## Configuration
-
-The configuration options of this module are located in the configuration file `server-nodejs/conf.json` under the `jwt` section.
-
-`jwt.passwordHashAlgorithm` is the hash algorithm used to compare passwords. Possible values are `sha1` or `md5`.
-
-`jwt.exp` the number of minutes after which tokens expire
-
-`jwt.secret` the secret passphrase used to encode and decode tokens
-
-## NodeJS
-
-The Express authentication middleware verifies tokens and permissions and stores the authenticated user node under the request object `req.user` and can be accessed in further processes which need to know the authenticated user properties (eg. the asset management part).
-
+## Authentication delegation
+An extension [jwt_delegate](https://github.com/remyla/damas-core/wiki/Extensions#jwt_delegate) centralizes authentications on a delegated server. When an user signs in, instead of authenticating him against the local database, the extension creates a new request that is sent to the delegation server. Once the user is authenticated, its element is copied in the local server.
