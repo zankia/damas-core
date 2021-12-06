@@ -1,7 +1,7 @@
-This page explains how to connect to an existing server. https://demo.damas.io is a fresh damas-core server on which you can test the clients. To setup a new server, read [[Installation|1 Installation]] and replace the demo server URL with your server's URL. 
+This page explains how to connect to an existing server. https://demo.damas.io is a fresh damas-core server on which you can test the clients. To setup a new server, read [[Installation|1 Installation]]. Replace the demo server URL with your server's URL to connect to it. 
 
 ## Python
-https://demo.damas.io/py/ gives explanations about the Python client and how to try it with the demo server.
+Visit https://demo.damas.io/py/ for instructions how to connect to the demo server.
 
 __damas.py__ is a module containing the damas-core client API for Python. It is located under `/py/damas.py` in the damas-core repository. It depends on the `requests` module. On a Debian operating system you can install the `request` module using this command line:
 ```sh
@@ -17,24 +17,20 @@ $ sudo apt install python-requests
 Then connect to a running server and start working with the nodes:
 
 ```python
-# connect to your server
->>> project = damas.http_connection('http://localhost:8090')
+# connect to the server
+>>> project = damas.http_connection('https://demo.damas.io')
 
-# if the server requires authentication
->>> project.signIn("user","userpassword")
-
-# create a new node
+# create a new element
 >>> project.create({"key1":"value1","key2":"value2"})
 {u'key2': u'value2', u'key1': u'value1', u'time': 1437469470133, u'_id': u'55ae0b1ed81e88357d77d0e9', u'author': u'xxx.xxx.xxx.xxx'}
 
-# search for this node using a key it is wearing
+# search for this element using the key it is wearing
 >>> project.search("key1:value1")
 [u'55ae0b1ed81e88357d77d0e9']
 
 # read the node index
 >>> project.read('55ae0b1ed81e88357d77d0e9')
 [{u'key2': u'value2', u'key1': u'value1', u'time': 1437469470133, u'_id': u'55ae0b1ed81e88357d77d0e9', u'author': u'xxx.xxx.xxx.xxx'}]
-
 ```
 
 
@@ -118,35 +114,6 @@ Use the token:
 $ curl https://localhost/api/verify -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjAyOWQwM2RmZjA3ZTUwYTg2MGEwOWQiLCJ1x2VybmFtZSI6InJlbXlsYSIsImlhdCI6MTQ1NDA3ODY1MiwiZXhwIjoxNDU0MTY1MDUyfQ.5AhJIh6ReeS2y6H0Mpcx8fJralsTDSidJAniuaJiVP8"
 {"_id":"56029d03dff07e50a860a09d","username":"remyla","iat":1454078652,"exp":1454165052}
 ```
-
-
-
-## Permissions
-
-We have different types of permissions:
-
-* permissions for each /api/ operation based on the current user's `class` key: hard-coded in server-nodejs/routes/perms-tools.js
-* update permissions based on the key name to edit and the current user's `class` key. [extensions/restricted_keys.js](../Extensions#restricted_keys)
-* read permissions based on the `author` key. See conf.json `authorMode` directive. 
-
-The default available user classes are: `admin` `editor` `user` `guest`.
-
-
-|  Operation   | guest | user | editor | admin |
-|--------------|-------|------|--------|-------|
-|    create    |       |   x  |    x   |   x   |
-|     read     |   x   |   x  |    x   |   x   |
-|    update    |       |   k  |    x   |   x   |
-|    delete    |       |      |    x   |   x   |
-|     lock     |       |   x  |    x   |   x   |
-|    unlock    |       |   x  |    x   |   x   |
-|    publish   |       |   x  |    x   |   x   |
-|    upload    |       |   x  |    x   |   x   |
-|    version   |       |   x  |    x   |   x   |
-|     file     |       |   x  |    x   |   x   |
-|     graph    |   x   |   x  |    x   |   x   |
-|    search    |   x   |   x  |    x   |   x   |
-| search_mongo |   x   |   x  |    x   |   x   |
 
 ## Next steps
 Now that you have a running server and client environments you could continue reading [[3 API Reference]] and [[4 Specifications]].
