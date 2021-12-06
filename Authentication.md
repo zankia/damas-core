@@ -20,7 +20,7 @@ The tokens are encrypted using a salt composed of a secret passphrase specified 
 ### Passwords
 The users' passwords are stored in the database under a `password` key for each user element. The passwords are stored as encoded strings, using the `sha1` or `md5` hash algorithms. You can specify the preferred algorithm in `extensions.jwt.passwordHashAlgorithm`. The algorithm is automatically detected at signIn (using the hash length) so a mix of methods could exist in the database (this is useful to migrate or merge multiple user databases that use different hash algorithms).
 
-### Users
+## Users
 The users are regular elements we can create, update or delete using the API.
 ```json
 {
@@ -95,4 +95,4 @@ project.token['_id']       # The user node id
 ```
 
 ## Authentication delegation
-An extension [jwt_delegate](https://github.com/remyla/damas-core/wiki/Extensions#jwt_delegate) centralizes authentications on a delegated server. When an user signs in, instead of authenticating him against the local database, the extension creates a new request that is sent to the delegation server. Once the user is authenticated, its element is copied in the local server.
+The [jwt_delegate](https://github.com/remyla/damas-core/wiki/Extensions#jwt_delegate) extension can be used to centralize the authentication on a different server. When an user signs in, instead of authenticating him against the local database, the extension creates a new request that is sent to the delegation server. Once the user is authenticated, its element is copied in the local server, as if the user was authenticated locally.
