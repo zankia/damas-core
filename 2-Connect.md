@@ -96,25 +96,6 @@ The manual page of the command can be found at https://demo.damas.io/cli/ or in 
 
 If the server requires authentication (the demo server has no authentication) you can use `damas signin <username> <password>` command to get a token which is stored in `/tmp/damas-<username>'. Only root and you can read it and it is removed whenever the system reboots
 
-## Curl Commands
-Command line access to the server using curl. Request an access token from the server:
-
-```sh
-$ curl https://localhost/api/signIn -d "username=remyla&password=yyy" > /tmp/token
-```
-
-Read the token:
-```sh
-$ cat /tmp/token
-{"_id":"56029d03dff07e50a860a09d","username":"remyla","token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjAyOWQwM2RmZjA3ZTUwYTg2MGEwOWQiLCJ1x2VybmFtZSI6InJlbXlsYSIsImlhdCI6MTQ1NDA3ODY1MiwiZXhwIjoxNDU0MTY1MDUyfQ.5AhJIh6ReeS2y6H0Mpcx8fJralsTDSidJAniuaJiVP8","token_exp":1454165052,"token_iat":1454078652}
-```
-
-Use the token:
-```sh
-$ curl https://localhost/api/verify -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjAyOWQwM2RmZjA3ZTUwYTg2MGEwOWQiLCJ1x2VybmFtZSI6InJlbXlsYSIsImlhdCI6MTQ1NDA3ODY1MiwiZXhwIjoxNDU0MTY1MDUyfQ.5AhJIh6ReeS2y6H0Mpcx8fJralsTDSidJAniuaJiVP8"
-{"_id":"56029d03dff07e50a860a09d","username":"remyla","iat":1454078652,"exp":1454165052}
-```
-
 ## Next steps
 Now that you have a running server and client environments you could continue reading [[3 API Reference]] and [[4 Specifications]].
 
