@@ -17,9 +17,6 @@ Changing the user's password revokes every tokens previously created. This is be
 ### Salt
 The tokens are encrypted using a salt composed of a secret passphrase specified on the server under `extension.jwt.secret`, and the users' hashed passwords. If we change either one, every previously obtained tokens is revoked.
 
-### Passwords
-The users' passwords are stored in the database under a `password` key for each user element. The passwords are stored as encoded strings, using the `sha1` or `md5` hash algorithms. You can specify the preferred algorithm in `extensions.jwt.passwordHashAlgorithm`. The algorithm is automatically detected at signIn (using the hash length) so a mix of methods could exist in the database (this is useful to migrate or merge multiple user databases that use different hash algorithms).
-
 ## Users
 The users are regular elements we can create, update or delete using the API.
 ```json
@@ -33,6 +30,9 @@ The users are regular elements we can create, update or delete using the API.
 }
 ```
 Some keys can be added to users elements by the server, depending on its configuration: `lastActivity`, `lastLogin`.
+
+### Passwords
+The users' passwords are stored in the database under a `password` key for each user element. The passwords are stored as encoded strings, using the `sha1` or `md5` hash algorithms. You can specify the preferred algorithm in `extensions.jwt.passwordHashAlgorithm`. The algorithm is automatically detected at signIn (using the hash length) so a mix of methods could exist in the database (this is useful to migrate or merge multiple user databases that use different hash algorithms).
 
 To create a new user using Python:
 ```python
