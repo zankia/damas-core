@@ -1,19 +1,9 @@
-# JSON Web Token (RFC 7519) authentication and secure transmission
-
-Documentation about the damas-core JWT implementation.
-
-Resources:
+The authentication in damas-core is based upon the JSON Web Token (RFC 7519) authentication and secure transmission. You can find some resources here:
 * [JSON Web Token](https://en.wikipedia.org/wiki/JSON_Web_Token) - Wikipedia page
 * [jwt.io](https://jwt.io/) - and [Introduction](https://jwt.io/introduction/)
 * [npm JSONWebToken](https://www.npmjs.com/package/jsonwebtoken) - JWT module for NodeJS
 
-Extensions:
-* [jwt.js](https://github.com/remyla/damas-core/wiki/Extensions#jwt)
-
-Parameters:
-* `extensions.jwt.passwordHashAlgorithm` the hash algorithm used. `sha1` or `md5`.
-* `extensions.jwt.exp` the amount of time after which tokens expire (token lifespan) see below
-* `extensions.jwt.secret` the salt to encode and decode tokens
+The implementation of this RFC is found in the [jwt.js](https://github.com/remyla/damas-core/wiki/Extensions#jwt) damas-core extension. Please find below some documentation about it.
 
 ## Web Tokens
 The tokens are delivered by the server using the [signIn](https://github.com/remyla/damas-core/wiki/4-Specifications#signIn) operation to authenticate users.
