@@ -126,9 +126,10 @@ Permanently remove one or more elements from the database specifying their ident
 
 #### HTTP Responses
 ```http
-200 OK            application/json        (object or null)
-400 Bad Request   text/html error message
-409 Conflict      text/html error message
+200 OK                    application/json (object or null)
+400 Bad Request           text/html error message
+409 Conflict              text/html error message
+500 Internal Server Error text/html (error message) could not access the database
 ```
 
 ### search_mongo
@@ -136,8 +137,10 @@ Permanently remove one or more elements from the database specifying their ident
 * `POST` `/api/search_mongo` `application/json` `query` `sort` `limit` `skip`
 #### HTTP Responses
 ```http
-200 OK        application/json         (array of string identifiers)
-409 Conflict  text/html error message
+200 OK                    application/json (array of string identifiers)
+409 Conflict              text/html error message
+500 Internal Server Error text/html (error message) could not access the database
+501 Not Implemented       text/html (error message) the operation is not available
 ```
 
 ### signIn
@@ -148,7 +151,7 @@ Request a token from the sever
 
 #### HTTP Responses
 ```http
-200 Ok             application/json        (object)
+200 Ok             application/json (object)
 401 Unauthorized   text/html error message
 404 Not Found      text/html error message
 ```
