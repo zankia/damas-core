@@ -1,5 +1,5 @@
 The damas-core API is available for Python and Javascript.  
-Read the [[2 Getting Started]] documentation.  
+Read the [[2 Connect]] documentation to setup a client environment.
 The demo site is available at https://demo.damas.io.
 
 ## Functions
