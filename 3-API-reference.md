@@ -244,6 +244,9 @@ upsert ( elements [, callback] )
 #### return values
 * returns an object or an array of objects (depending on the input) on success
 * returns `null` (Javascript) or `None` (Python) on failure
+
+> :warning: the returned arrays in case of created and updated elements are not in the same order as the input array but: created elements first, then updated elements.
+
 #### examples
 ```python
 # Python
