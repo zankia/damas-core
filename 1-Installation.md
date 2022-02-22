@@ -20,19 +20,19 @@ Clone this repository:
 ```sh
 git clone https://github.com/remyla/damas-core.git
 ```
-Change directory to server-nodejs
+Change directory to server
 ```sh
-cd server-nodejs
+cd damas-core/server-nodejs
 ```
-Duplicate the template configuration file:
-```sh
-cp conf_install.json conf.json
-```
-install the dependencies:
+Install the dependencies:
 ```sh
 npm install
 ```
-and run:
+Copy the template configuration file:
+```sh
+cp conf_install.json conf.json
+```
+And run:
 ```sh
 node .
 ```
