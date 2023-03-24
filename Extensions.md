@@ -6,6 +6,7 @@ Extensions give new behaviors to the nodejs-server: extend the api, manage user 
 * [`noauth`](#noauth) - A user verification mechanism when authentication is disabled
 * [`restricted_keys`](#restricted_keys) - Whitelist of writable keys depending on user class
 * [`static_routes`](#static_routes) - Files and folders to be served by the server
+* [`ulid`](#ulid) - generate identifiers using ulid
 
 Older extensions, less relevant but still operational 
 * [`es6-polyfills`](#es6-polyfills) - Polyfills for older systems
@@ -231,6 +232,29 @@ A list of relative or absolute paths to be served by the server. It contains ser
 * configuration options:
   * `routes` (object) route -> path pairs to define
 An array as value for a directory means that it will look for a resource in each directory by order of appearance. 
+
+
+## ulid
+Generate identifiers using ulid (https://github.com/ulid/spec)
+* default configuration:
+```js
+"ulid": {
+    "enable": true,
+    "path": "./extensions/ulid.js",
+    "conf": {
+        "replacedPattern": "{#}"
+    }
+}
+```
+* configuration options:
+  * `replacedPattern` (string) the text pattern to replace with the generated ulid identifier
+* example:
+```js
+// create a new node, _id containing the pattern to replace by a ulid
+damas.create({_id:"node_{#}"});
+// return
+// Object { _id: "node_01GW9F73XCD5FHNJSHTQHAQNA5" }
+```
 
 ## user_setup
 Lost password procedure using email and token verification.
