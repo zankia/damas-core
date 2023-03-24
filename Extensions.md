@@ -6,7 +6,7 @@ Extensions give new behaviors to the nodejs-server: extend the api, manage user 
 * [`noauth`](#noauth) - A user verification mechanism when authentication is disabled
 * [`restricted_keys`](#restricted_keys) - Whitelist of writable keys depending on user class
 * [`static_routes`](#static_routes) - Files and folders to be served by the server
-* [`ulid`](#ulid) - generate identifiers using ulid
+* [`ulid`](#ulid) - Generate identifiers using ulid
 
 Older extensions, less relevant but still operational 
 * [`es6-polyfills`](#es6-polyfills) - Polyfills for older systems
