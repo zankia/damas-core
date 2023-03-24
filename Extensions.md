@@ -1,5 +1,28 @@
-Extensions give new behaviors to the nodejs-server: extend the api, manage user authentication, permissions. This page gives a list of the extensions which are provided in the repository.
+Extensions give new behaviors to the nodejs-server: extend the api, manage user authentication, permissions. This page gives a list of the extensions which are provided in the repository. The extensions are loaded at startup and are listed in the configuration file `conf.json`. They are loaded by order of appearance in that file. The extensions are defined using a simple format:
+```json
+{
+    "extensions": {
+        "extension_name": {
+            "enable": true,
+            "path": "extension_dir/extend.js",
+            "conf": {}
+        }
+    }
+}
+```
+Example:
+```js
+"aforge": {
+    "enable": true,
+    "path": "./aforge/aforge.js",
+    "conf": {
+        "apiKey": "________"
+    }
+}
+```
+`enable` and `conf` keys are optional. Omitting them means that the extension is enabled and that it does not need configuration. `path` and `conf` can be relative paths or absolute paths, and `conf` could be either an object containing configuration keys, or a string containing a path to an external json.
 
+## List of available extensions
 * [`jwt`](#jwt) - Authentication using JSON Web Tokens
 * [`jwt_delegate`](#jwt_delegate) - Centralize authentication on a different server
 * [`last_activity`](#last_activity) - Keep the time of users' last activity
@@ -14,30 +37,9 @@ Older extensions, less relevant but still operational
 * [`prefer_https`](#prefer_https) - Redirect every HTTP queries to HTTPS
 * [`user_setup`](#user_setup) - Manage user password reset
 
-The extensions are loaded at startup and are listed in the configuration file `conf.json`. They are loaded by order of appearance in that file. The extensions are defined using a simple format:
-```json
-{
-    "extensions": {
-        "extension_name": {
-            "enable": true,
-            "path": "extension_dir/extend.js",
-            "conf": {}
-        }
-    }
-}
-```
-`enable` and `conf` keys are optional. Omitting them means that the extension is enabled and that it does not need configuration. `path` and `conf` can be relative paths or absolute paths, and `conf` could be either an object containing configuration keys, or a string containing a path to an external json.
-```js
-"aforge": {
-    "enable": true,
-    "path": "./aforge/aforge.js",
-    "conf": {
-        "apiKey": "________"
-    }
-}
-```
+## Detailed description of extensions
 
-## es6-polyfills
+### es6-polyfills
 Provide ES6 polyfills if the code is ran in a NodeJS which is not ES6.
 (NodeJS v0.10.29 for instance, on older systems)
 * default configuration:
@@ -48,7 +50,7 @@ Provide ES6 polyfills if the code is ran in a NodeJS which is not ES6.
 }
 ```
 
-## jwt
+### jwt
 Implementation of JSON Web Token RFC7519 for user authentication https://jwt.io/  
 * requires `jsonwebtoken` `express-jwt` `express-unless` `crypto` `cookie-parser` `ms`
 * new routes: `/api/signIn` and `/api/verify`
