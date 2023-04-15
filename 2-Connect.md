@@ -81,7 +81,7 @@ https://demo.damas.io/cli/ gives explanations about the bash client and how to t
 ### Install the `damas` command on your system
 Install from this repository:
 ```sh
-cp cli/damas.sh /usr/bin/damas
+cp cli/damas /usr/bin/damas
 ```
 Install from the gitHub repository:
 ```sh
