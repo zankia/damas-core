@@ -23,6 +23,7 @@ Example:
 `enable` and `conf` keys are optional. Omitting them means that the extension is enabled and that it does not need configuration. `path` and `conf` can be relative paths or absolute paths, and `conf` could be either an object containing configuration keys, or a string containing a path to an external json.
 
 ## List of available extensions
+* [`graph`](#graph) - Recursive operations on database
 * [`jwt`](#jwt) - Authentication using JSON Web Tokens
 * [`jwt_delegate`](#jwt_delegate) - Centralize authentication on a different server
 * [`last_activity`](#last_activity) - Keep the time of users' last activity
@@ -49,6 +50,19 @@ Provide ES6 polyfills if the code is ran in a NodeJS which is not ES6.
     "path": "./extensions/es6_polyfills.js"
 }
 ```
+
+### graph
+Handles recursive operations regarding nodes in the database.
+* new routes: `/api/graphDelete`
+* default configuration:
+```js
+"graph": { 
+    "enable": true,
+    "path": "./extensions/graph.js"
+}
+```
+**Methods**
+* `graphDelete(ids, callback)` | Delete specified nodes and any other node that might be associated
 
 ### jwt
 Implementation of JSON Web Token RFC7519 for user authentication https://jwt.io/  
