@@ -1,26 +1,21 @@
 /*
- * mongodb.js - from Damas-Core
+ * server-nodejs/db/mongodb6.js - from Damas-Core
  * Licensed under the GNU GPL v3
- *
- * Legacy MongoDB support based on older driver without Promises.
- * - package.json dependency:
- *     "mongodb": "^2.1.21",
- * - connected to MongoDB server 3.6.5
- *
- * Use mongodb6 from this directory for an up-to-date version.
  */
+
+// SPECIFICATION BREAKING CHANGES (to add in documentation) :
+// - create() method now returns identifier(s) and not entire object(s)
 
 var async = require('async');
 
 module.exports = function (conf) {
     var self = this;
     self.conf = conf;
-    self.conn = false;
-    self.collection = false;
+    self.db = false;
     self.debug = require('debug')('app:db:mongo:' + process.pid);
-
-    var mongo = require('mongodb');
-    var ObjectID = mongo.ObjectID;
+    const { MongoClient } = require('mongodb');
+    self.client = new MongoClient(conf.host+':'+conf.port, conf.options);
+    var ObjectID = require('mongodb').ObjectId;
     require('./utils');
 
     /*
@@ -29,24 +24,23 @@ module.exports = function (conf) {
      * @param {function} callback - Callback function to routes.js
      */
     self.connect = function (callback) {
-        if (self.conn) {
-            callback(false, self.conn);
+        if (self.db) {
+            callback(false, self.db);
             return;
         }
         var conf = self.conf;
-        var server = new mongo.Server(conf.host, conf.port, conf.options);
-        var db = new mongo.Db(conf.collection, server);
-        db.open(function (err, connection) {
-            if (err) {
-                self.debug('Unable to connect to the MongoDB database');
-                callback(true);
-                return;
-            }
-            self.debug('Connected to the database');
-            self.conn = connection;
-            self.collection = conf.collection;
-            callback(false, self.conn);
-        });
+        self.client.connect().then(
+                res => {
+                    console.log('Connected successfully to server');
+                    self.db = self.client.db(self.conf.db);
+                    callback(false, self.db);
+                },
+                err => {
+                    console.log(err);
+                    self.debug('Unable to connect to the MongoDB database');
+                    callback(true);
+                }
+        );
     }; // connect()
 
     /*
@@ -55,19 +49,12 @@ module.exports = function (conf) {
      * @param {function} callback - Function needing the collection
      */
     self.getCollection = function (route, callback) {
-        self.connect(function (err, conn) {
-            if (err || !conn) {
+        self.connect(function (err, db) {
+            if (err || !db) {
                 route(true);
                 return;
             }
-            self.conn.collection(self.collection, function (err, coll) {
-                if (err || !coll) {
-                    self.debug('Error: unable to load the collection');
-                    route(true);
-                    return;
-                }
-                callback(coll);
-            });
+            callback(self.db.collection(self.conf.collection));
         });
     };
 
@@ -88,9 +75,14 @@ module.exports = function (conf) {
                 if (node._id) {
                     node = Object.assign(node, self.exportId(node._id));
                 }
-                coll.insert(node, {safe: true}, function (err, result) {
-                    next(null, err ? null : result.ops[0]);
-                });
+                coll.insertOne(node).then(
+                    res => {
+                        next(null, res.insertedId);
+                    },
+                    err => {
+                        next(null, null);
+                    }
+                );
             }
             async.mapLimit(nodes, 100, createNode, function (err, array) {
                 fireEvent('create', array);
@@ -115,18 +107,20 @@ module.exports = function (conf) {
                     idHash[ids[i]] = [i];
                 }
             }
-            coll.find(query).toArray(function (err, nodes) {
-                if (err) {
+            coll.find(query).toArray().then(
+                nodes => {
+                    callback(false, nodes.reduce(function (res, node) {
+                        var id = node._id.toString();
+                        for (var i = 0; i < idHash[id].length; ++i) {
+                            res[idHash[id][i]] = node;
+                        }
+                        return res;
+                    }, ids.map(function () { return null; })));
+                },
+                err => {
+                    self.debug('Error: find on mongo collection returned an error. '+err);
                     return callback(true);
-                }
-                callback(false, nodes.reduce(function (res, node) {
-                    var id = node._id.toString();
-                    for (var i = 0; i < idHash[id].length; ++i) {
-                        res[idHash[id][i]] = node;
-                    }
-                    return res;
-                }, ids.map(function () { return null; })));
-            });
+                });
         });
     }; // read()
 
@@ -155,10 +149,14 @@ module.exports = function (conf) {
                 if (0 === Object.keys(up.$unset).length) {
                     delete up.$unset;
                 }
-                coll.update(query, up, function (err, stat) {
-                    var id = query[Object.keys(query)[0]];
-                    next(null, err ? '' : id);
-                });
+                coll.updateOne(query, up).then(
+                    res => {
+                        next(null, query[Object.keys(query)[0]]);
+                        //next(null, res.upsertedId); // another way to get the id
+                    },
+                    err => {
+                        next(null, '');
+                    });
             }
             async.mapLimit(nodes, 100, updateNode, function (err, ids) {
                 self.read(ids, function (err, doc) {
@@ -176,17 +174,16 @@ module.exports = function (conf) {
      */
     self.remove = function (ids, callback) {
         self.getCollection(callback, function (coll) {
-            function deleteNode(id, next) {
-                coll.remove(id, function (err, result) {
-                    if (err || 0 === result.result.n) {
+            function deleteNode(obj, next) {
+                coll.deleteOne(obj).then(
+                    res => {
+                        next(null, res.deletedCount === 1? obj._id: null);
+                    },
+                    err => {
                         next(null, null);
-                    } else {
-                        next(null, id[Object.keys(id)[0]]);
-                    }
-                });
+                    });
             }
-            async.mapLimit(ids.map(self.exportId), 100, deleteNode,
-                    function (err, array) {
+            async.mapLimit(ids.map(self.exportId), 100, deleteNode, function (err, array) {
                 fireEvent('remove', array);
                 callback(false, array);
             });
@@ -200,17 +197,17 @@ module.exports = function (conf) {
      */
     self.search = function (keys, callback) {
         self.getCollection(callback, function (coll) {
-            coll.find(keys, {_id: true}).toArray(function (err, results) {
-                if (err) {
+            coll.find(keys, {_id: true}).toArray().then(
+                res => {
+                    var ids = [];
+                    for (r in res) {
+                        ids.push(res[r]._id.toString());
+                    }
+                    callback(false, ids);
+                },
+                err => {
                     callback(true);
-                    return;
-                }
-                var ids = [];
-                for (r in results) {
-                    ids.push(results[r]._id.toString());
-                }
-                callback(false, ids);
-            });
+                });
         });
     }; // search()
 
@@ -226,27 +223,27 @@ module.exports = function (conf) {
         var newIds = [];
         var self = this;
         self.getCollection(callback, function (coll) {
-            coll.find({tgt_id: {$in: ids}}).toArray(function (err, results) {
-                if (err) {
-                    callback(true);
-                    return;
-                }
-                for (var r in results) {
-                    if (undefined == links[results[r]._id]) {
-                        if (results[r].src_id != undefined) {
-                            if (0 > ids.indexOf(results[r].src_id)) {
-                                newIds.push(results[r].src_id);
+            coll.find({tgt_id: {$in: ids}}).toArray().then(
+                res => {
+                    for (var r in res) {
+                        if (undefined == links[res[r]._id]) {
+                            if (res[r].src_id != undefined) {
+                                if (0 > ids.indexOf(res[r].src_id)) {
+                                    newIds.push(res[r].src_id);
+                                }
                             }
+                            links[res[r]._id] = res[r];
                         }
-                        links[results[r]._id] = results[r];
                     }
-                }
-                if (--depth === 0 || newIds.length < 1) {
-                    callback(false, links);
-                } else {
-                    self.links_r(newIds, depth, links, callback);
-                }
-            });
+                    if (--depth === 0 || newIds.length < 1) {
+                        callback(false, links);
+                    } else {
+                        self.links_r(newIds, depth, links, callback);
+                    }
+                },
+                err => {
+                    callback(true);
+                });
         });
     }; // links_r()
 
@@ -299,21 +296,25 @@ module.exports = function (conf) {
      */
     self.mongo_search = function (query, sort, skip, limit, callback) {
         self.getCollection(callback, function (coll) {
-            var cur = coll.find(query, { _id: 1 } );
-            var total = cur.count(function(err,count){
-                var find = cur.sort(sort).skip(skip).limit(limit);
-                find.toArray(function (err, results) {
-                    if (err) {
-                        callback(true);
-                        return;
-                    }
-                    var ids = [];
-                    for (r in results) {
-                        ids.push(results[r]._id.toString());
-                    }
-                    callback(false, { count: count, ids: ids } );
+            var total = coll.countDocuments(query).then(
+                total => {
+                    var cur = coll.find(query, { _id: 1 } );
+                    var find = cur.sort(sort).skip(skip).limit(limit);
+                    find.toArray().then(
+                        res => {
+                            var ids = [];
+                            for (r in res) {
+                                ids.push(res[r]._id.toString());
+                            }
+                            callback(false, { count: total, ids: ids } );
+                        },
+                        err => {
+                            callback(true);
+                        });
+                },
+                err=> {
+                    callback(true);
                 });
-            });
         });
     }; // mongo_search()
 
@@ -387,22 +388,6 @@ module.exports = function (conf) {
         }
         return result;
     }
-/* implement full text search
-            result['$where'] = function () {
-                for (var key in this) {
-                    if (this[key])
-                }
-            }
-db.things.find({$where: function () {
-  for (var key in this) {
-    if (this[key] === 'bar') {
-      return true;
-    }
-    return false;
-    }
-}});
-*/
-
 };
 
 
