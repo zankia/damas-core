@@ -1,0 +1,43 @@
+services:
+    damas:
+        container_name: damas-core
+        image: primcode/damas-core:experimental
+        volumes:
+            - ./damas.json:/damas-core/server-nodejs/conf.json
+            - ./www:/app/www
+            - ./extensions:/app/extensions
+        environment:
+            DEBUG: "damas:*"
+            HTTP_PORT: 8090
+#        ports:
+#            - 80:80
+        depends_on:
+            - mongo
+        restart: always
+        stdin_open: true
+        tty: true
+        build:
+            context: ..
+            dockerfile: docker/Dockerfile
+    mongo:
+        container_name: damas-mongo
+        image: mongo:latest
+        volumes:
+            - ./db:/damas-core/db
+        restart: always
+        stdin_open: true
+        tty: true
+    nginx:
+        image: nginx
+        container_name: nginx
+        volumes:
+            - ./nginx.conf:/etc/nginx/nginx.conf
+            - /etc/letsencrypt/:/etc/letsencrypt/
+        ports:
+            - 80:80
+            - 443:443
+#        networks:
+#            - damas_default
+#            # for reverse proxy (multiple domains, one damas each) add networks here
+        depends_on:
+            - damas

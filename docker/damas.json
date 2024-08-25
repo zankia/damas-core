@@ -5,18 +5,22 @@
         "cert": "fullchain.pem",
         "key": "privkey.pem"
     },
-    "db": "mongodb",
-    "mongodb": {
-        "host": "mongo",
+    "db": "mongodb6",
+    "mongodb6": {
+        "host": "mongodb://mongo",
+        "db": "node",
         "collection": "node",
         "port": 27017,
-        "options": { "auto_reconnect": true }
+        "options": { }
     },
-	"morgan": "combined",
+    "morgan": "combined",
     "extensions": {
-        "es6_polyfills": {
+        "ulid": {
             "enable": true,
-            "path": "./extensions/es6_polyfills.js"
+            "path": "./extensions/ulid.js",
+            "conf": {
+                "replacedPattern": "{#}"
+            }
         },
         "nodemailer": {
             "enable": false,
@@ -39,9 +43,9 @@
             "path": "./extensions/jwt.js",
             "conf": {
                 "required": true,
-                "passwordHashAlgorithm": "md5",
+                "passwordHashAlgorithm": "sha1",
                 "secret": "webtokensecret",
-                "exp": "1d",
+                "exp": "30d",
                 "expressUse": "/api",
                 "expressUnless": {
                     "path": "/api/signIn/"

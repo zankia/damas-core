@@ -3,7 +3,7 @@
 
 <img src="http://damas-software.org/bin/damas-core_logo.svg?t=2" alt="damas-core logo"/>
 
-Simple JSON storage service in NodeJS and Express, focused on reliability, efficiency and extensibility.
+HTTP JSON storage using NodeJS focused on reliability, efficiency and extensibility.
 
 Its main features are:
 * RESTful HTTP web service with CRUD functions based on [strict specifications](https://github.com/remyla/damas-core/wiki/4-Specifications)
@@ -15,12 +15,20 @@ Its main features are:
 ## Usage
 Clone this repository and run:
 ```
+cd docker
 docker-compose up
 ```
 In a web browser, open:
 ```
 http://localhost
 ```
+
+You can also run the server from the sources (without docker):
+```
+cd server-nodejs
+node .
+```
+
 Read the [wiki](https://github.com/remyla/damas-core/wiki) to configure your server for your needs.
 
 ## Demo

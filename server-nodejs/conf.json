@@ -1,13 +1,20 @@
 {
-    "authorMode" : true,
+    "authorMode" : false,
     "https" : {
         "enable": false,
         "cert": "fullchain.pem",
         "key": "privkey.pem"
     },
-    "db": "mongodb",
+    "db": "mongodb6",
+    "mongodb6": {
+        "host": "mongodb://localhost",
+        "db": "node",
+        "collection": "node",
+        "port": 27017,
+        "options": { }
+    },
     "mongodb": {
-        "host": "localhost",
+        "host": "mongo",
         "collection": "node",
         "port": 27017,
         "options": { "auto_reconnect": true }
