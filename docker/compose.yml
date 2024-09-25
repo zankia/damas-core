@@ -1,7 +1,7 @@
 services:
     damas:
         container_name: damas-core
-        image: primcode/damas-core:experimental
+        image: primcode/damas-core:latest
         volumes:
             - ./damas.json:/damas-core/server-nodejs/conf.json
             - ./www:/app/www
@@ -9,8 +9,6 @@ services:
         environment:
             DEBUG: "damas:*"
             HTTP_PORT: 8090
-#        ports:
-#            - 80:80
         depends_on:
             - mongo
         restart: always
@@ -23,7 +21,7 @@ services:
         container_name: damas-mongo
         image: mongo:latest
         volumes:
-            - ./db:/damas-core/db
+            - ./db:/data/db
         restart: always
         stdin_open: true
         tty: true

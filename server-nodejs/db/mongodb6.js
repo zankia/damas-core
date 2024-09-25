@@ -5,6 +5,7 @@
 
 // SPECIFICATION BREAKING CHANGES (to add in documentation) :
 // - create() method now returns identifier(s) and not entire object(s)
+//     - added a damas-core 2.5 retro compatibility switch `conf.create_returns_obj`
 
 var async = require('async');
 
@@ -85,8 +86,24 @@ module.exports = function (conf) {
                 );
             }
             async.mapLimit(nodes, 100, createNode, function (err, array) {
-                fireEvent('create', array);
-                callback(false, array);
+                // damas-core 2.5 retro compatibility switch
+                if (self.conf.create_returns_obj === true) {
+                    console.log("### damas-core retro compatibility switch ###");
+                    console.log(array);
+                    if (array.includes(null)) {
+                        fireEvent('create', [null]);
+                        callback(false, [null]);
+                        return;
+		    }
+                    self.read(array, (err, res) => {
+                        fireEvent('create', res);
+                        callback(false, res);
+		    });
+                }
+                else {
+                    fireEvent('create', array);
+                    callback(false, array);
+                }
             });
         });
     }; // create()

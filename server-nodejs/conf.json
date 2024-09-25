@@ -11,7 +11,8 @@
         "db": "node",
         "collection": "node",
         "port": 27017,
-        "options": { }
+        "options": { },
+        "create_returns_obj": true
     },
     "mongodb": {
         "host": "mongo",
