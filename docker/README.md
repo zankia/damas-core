@@ -38,4 +38,6 @@ To build a new damas-core image from sources:
 docker compose build
 ```
 
-
+## CONTRIBUTE
+You can interact with the project raising issues and ideas here:
+https://github.com/remyla/damas-core/issues

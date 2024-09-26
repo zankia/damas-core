@@ -34,8 +34,9 @@ services:
         ports:
             - 80:80
             - 443:443
-#        networks:
-#            - damas_default
-#            # for reverse proxy (multiple domains, one damas each) add networks here
         depends_on:
             - damas
+#        # add reverse proxy networks
+#        # (multiple domains, one damas each)
+#        networks:
+#            - damas_default
