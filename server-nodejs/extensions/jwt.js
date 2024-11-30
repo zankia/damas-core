@@ -31,7 +31,7 @@ module.exports = function (app) {
         }
         let payload = {};
         let options = { expiresIn: req.body.expiresIn || conf.exp };
-        if (undefined === ms(options.expiresIn)) { 
+        if (undefined === ms(options.expiresIn)) {
             return res.status(401).json('Value : \'' + options.expiresIn + '\' is invalid expiration token');
         }
         if ('0' === options.expiresIn) {
@@ -125,27 +125,25 @@ module.exports = function (app) {
         func.unless = require('express-unless');
         return func;
     };
-    
+
     app.use(conf.expressUse, middleware().unless(conf.expressUnless));
     app.get('/api/verify', verify );
     app.route('/api/signIn').post(authenticate, function (req, res, next) {
         res.status(200).json(req.user);
     });
 
-    
-    app.route('/api/createToken').post(function (req, res, next) {  
-        var expiresIn = req.body.expiresIn || conf.exp;   
+    app.route('/api/createToken').post(function (req, res, next) {
+        var expiresIn = req.body.expiresIn || conf.exp;
         var payload = {
             _id: req.user._id,
             username: req.user.username,
             ignoreExpiration: expiresIn === '0'
-        };    
+        };
         var options = {
             expiresIn: expiresIn
-        };    
-        var token = jwt.sign(payload, conf.secret + req.user.password, options);        
-        res.status(200).json(token);        
-        
+        };
+        var token = jwt.sign(payload, conf.secret + req.user.password, options);
+        res.status(200).json(token);
     });
 
 }

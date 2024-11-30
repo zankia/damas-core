@@ -200,13 +200,11 @@ done
 TOKEN_FILE="/tmp/damas-$USER-$(echo -n $DAMAS_SERVER | cksum | head -c 10)"
 
 load_token() {
-  if [ -n "$DAMAS_TOKEN" ]; then
-    local TOKEN="$DAMAS_TOKEN"
-  else
-    local TOKEN=$(cat "$TOKEN_FILE" 2>/dev/null)
+  if [ -z "$DAMAS_TOKEN" ]; then
+    DAMAS_TOKEN=$(cat "$TOKEN_FILE" 2>/dev/null)
   fi
-  if [ -n "$TOKEN" ]; then
-    AUTH='-H "Authorization: Bearer '$TOKEN'"'
+  if [ -n "$DAMAS_TOKEN" ]; then
+    AUTH='-H "Authorization: Bearer '$DAMAS_TOKEN'"'
   else
     AUTH=""
   fi
