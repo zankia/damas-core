@@ -1,1 +1,0 @@
-<img src="http://damas-software.com/img/primcode_softwareengineeringcompany_logo.svg" alt="PRIMCODE software engineering company logo" align="right"/>

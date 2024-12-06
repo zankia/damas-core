@@ -10,52 +10,54 @@ JSON storage using NodeJS focused on reliability, efficiency and extensibility.
 
 Its main features are:
 * RESTful HTTP web service
-* CRUD operations based on [strict specifications](https://github.com/remyla/damas-core/wiki/4-Specifications)
-* [JSON web token authentication](https://github.com/remyla/damas-core/wiki/Authentication)
-* [Server extensions](https://github.com/remyla/damas-core/wiki/Extensions)
-* [Python and Javascript API](https://github.com/remyla/damas-core/wiki/3-API-reference)
-* [Command line interface](https://github.com/remyla/damas-core/blob/master/cli/README.md)
+* CRUD operations based on [strict specifications](doc/4-Specifications.md)
+* [JSON web token authentication](doc/Authentication.md)
+* [Server extensions](doc/Extensions.md)
+* [Python and Javascript API](doc/3-API-reference.md)
+* [Command line interface](cli/README.md)
 
 Directory structure:
 ```
-├── cli/            client (Bash + curl)
-├── docker/         package for deployment
-├── js/             client (Javascript API)
-├── py/             client (Python API)
+├── cli/            Bash + curl client command line
+├── docker/         deployment package
+├── js/             Javascript client API
+├── py/             Python client API
 ├── server-nodejs/  server HTTP (NodeJS/Express)
 ├── server-tests/   server Jasmine unit tests
 ├── LICENSE         GNU GPLv3 license
 └── README.md       this file
 ```
 
-## Usage
+## Usage using Docker
 Clone this repository and run:
 ```
 cd docker
 docker-compose up
 ```
-In a web browser, open:
-```
-http://localhost
-```
+Then in a web browser, open `http://localhost`
 
-You can also run the server from the sources (without docker):
+## Usage, from sources
+Run the server from the sources (without docker):
 ```
 cd server-nodejs
+# install dependencies
+npm install
+# run server
 node .
 ```
 
-Read the [wiki](https://github.com/remyla/damas-core/wiki) to configure your server for your needs.
+Read the [documentation](doc) to configure your server for your needs.
 
 ## Demo
-Visit the demo server at https://demo.damas.io
+A public demo server is available at https://demo.damas.io
 
 ## Related Links
 http://damas-software.org is a website which presents the projects related to damas-core  
 https://syncplanet.io is a Saas using damas-core as backend  
+https://hub.docker.com/r/primcode/damas-core the ready-to-install docker images
 http://dabox.io is collaborative platform for architecture using damas-core as backend  
-https://github.com/PRIMCODE/damas-flow is a flow graph interface  
-https://github.com/PRIMCODE/damas-dashboard is a web control center and admin intreface, usable but not well packaged and documented yet. Get in touch if interested  
+https://github.com/PRIMCODE/damas-flow is an interface to make directed graphs on top of damas-core
+https://github.com/PRIMCODE/damas-dashboard is a web control center and admin interface to index files, in production but not packaged for distribution. Get in touch if interested
 http://primcode.com PRIMCODE is the company behind the development, the distribution and the maintenance of damas-core
 
 ## Contributors
@@ -74,6 +76,28 @@ Axel Pisani
 Axel Prat  
 Mathieu Valero  
 Quentin Villecroze
+
+## Context
+`damas-core` is originaly created by [PRIMCODE](http://primcode.com) to support the production of 3D animated feature films and TV series as a digital asset manager and a universal meta data indexer (to index files, tasks, users etc) and was released as libre software in 2015 under the GNU GPLv3 license. Here is a chronology of the animated movies and TV series made using it:
+- Igor - 2008 - [IMDb](https://www.imdb.com/title/tt0465502/) [Wikipedia](https://en.wikipedia.org/wiki/Igor_(film))
+- Tatonka - 2010-2011 [IMDb](https://www.imdb.com/title/tt4446740/) [Wikipedia](https://en.wikipedia.org/wiki/Tales_of_Tatonka)
+- A Monster in Paris - 2011 - [IMDb](https://www.imdb.com/title/tt0961097/) [Wikipedia](https://en.wikipedia.org/wiki/A_Monster_in_Paris)
+- Approved for Adoption - 2012 - [IMDb](https://www.imdb.com/title/tt1621766/) [Wikipedia](https://en.wikipedia.org/wiki/Approved_for_Adoption)
+- Zou - 2012-2018 - [IMDb](https://www.imdb.com/title/tt2587622/) [Wikipedia](https://en.wikipedia.org/wiki/Zou_(TV_series))
+- Mademoiselle Zazie - 2013 - [IMDb](https://www.imdb.com/title/tt3227218/) [Wikipedia](https://en.wikipedia.org/wiki/Mademoiselle_Zazie)
+- Mia - 2014 - [IMDb](https://www.imdb.com/title/tt4670296/)
+- Zorro the Chronicles - 2015-2016 - [IMDb](https://www.imdb.com/title/tt6328652/)
+- Zombillenium - 2017 - [IMDb](https://www.imdb.com/title/tt5313906/) [Wikipedia](https://en.wikipedia.org/wiki/Zombillenium)
+- White-Fang - 2018 - [IMDb](https://www.imdb.com/title/tt5222768/) [Wikipedia](https://en.wikipedia.org/wiki/White_Fang_(2018_film))
+- Gigantosaurus - 2019 [IMDb](https://www.imdb.com/title/tt9636800/) [Wikipedia](https://en.wikipedia.org/wiki/Gigantosaurus_(TV_series))
+- Droners - 2020 - [IMDb](https://www.imdb.com/title/tt14452674/)
+- Nefertine on the Nile - 2021 - [IMDb](https://www.imdb.com/title/tt11857654/)
+- Weird Waters - 2022 - [IMDb](https://www.imdb.com/title/tt16970040/)
+- Heros à Moitié - 2022 - [IMDb](https://www.imdb.com/title/tt22187618/)
+- Hello Kitty - Super Style! - 2022 - [IMDb](https://www.imdb.com/title/tt15771940/) [Wikipedia](https://en.wikipedia.org/wiki/Hello_Kitty:_Super_Style!)
+- Le petit Nicolas : qu'est-ce qu'on attend pour être heureux ? - 2022 - [IMDb](https://www.imdb.com/title/tt10290244/) [Wikipedia](https://en.wikipedia.org/wiki/Little_Nicholas:_Happy_As_Can_Be)
+- Mars Express - 2023 - [IMDb](https://www.imdb.com/title/tt26915336/) [Wikipedia fr](https://fr.wikipedia.org/wiki/Mars_Express_(film))
+- Angelo dans la forêt mystérieuse - 2024 - [IMDb](https://www.imdb.com/title/tt23448260/) [Wikipedia fr](https://fr.wikipedia.org/wiki/Angelo_dans_la_for%C3%AAt_myst%C3%A9rieuse)
 
 ## License
 GPL License(GPLV3)

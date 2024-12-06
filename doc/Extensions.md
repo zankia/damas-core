@@ -1,4 +1,6 @@
-Extensions give new behaviors to the nodejs-server: extend the api, manage user authentication, permissions. This page gives a list of the extensions which are provided in the repository. The extensions are loaded at startup and are listed in the configuration file `conf.json`. They are loaded by order of appearance in that file. The extensions are defined using a simple format:
+# Extensions
+
+The extensions give new behaviors to the nodejs-server like extending the API, managing user authentication, or permissions. This page gives a list of the extensions which are provided in this repository. The extensions are loaded at startup and are listed in the configuration file `conf.json`. They are loaded by order of appearance in that file. The extensions are defined using a simple format:
 ```json
 {
     "extensions": {
@@ -10,7 +12,7 @@ Extensions give new behaviors to the nodejs-server: extend the api, manage user 
     }
 }
 ```
-Example:
+Dummy extension example:
 ```js
 "aforge": {
     "enable": true,
@@ -93,7 +95,7 @@ Implementation of JSON Web Token RFC7519 for user authentication https://jwt.io/
   * `expressUse` (string, regex or array) paths to protect with authentication
   * `expressUnless` (object) paths and methods to exclude from authentication
 
-See [[Authentication]], [express.use syntax](https://expressjs.com/en/api.html#app.use), [express unless syntax](https://www.npmjs.com/package/express-unless).
+See [Authentication](Authentication.md), [express.use syntax](https://expressjs.com/en/api.html#app.use), [express unless syntax](https://www.npmjs.com/package/express-unless).
 
 #### Enable User Authentication
 By default, the installation gives a public access without user authentication. Here is the procedure to create a new user using the damas-core API and the damas command line interface:

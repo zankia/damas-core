@@ -12,7 +12,7 @@
         "collection": "node",
         "port": 27017,
         "options": { },
-        "create_returns_obj": true
+        "create_returns_obj": false
     },
     "mongodb": {
         "host": "mongo",

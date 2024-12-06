@@ -11,6 +11,7 @@ The communication protocol used by damas-core clients and servers is based on [J
 | [/api/upsert/](#upsert)             | POST      | JSON       | 200, 400, 403, 500 |
 | [/api/delete/](#delete)             | DELETE    | JSON       | 200, 207, 400, 404, 500 |
 | AUTH ||
+| [/api/createToken/](#createToken)   | POST      | JSON       | 200 |
 | [/api/signIn/](#signIn)             | POST      | FORM       | 200, 401, 404 |
 | [/api/verify/](#verify)             | GET       | -          | 200, 401 |
 | SEARCH ||
@@ -143,8 +144,15 @@ Permanently remove one or more elements from the database specifying their ident
 501 Not Implemented       text/html (error message) the operation is not available
 ```
 
+### createToken
+Request a new token from the server, while being already authenticated
+#### HTTP Requests
+> documentation needed
+#### HTTP Responses
+> documentation needed
+
 ### signIn
-Request a token from the sever
+Request a token from the server, providing a username and password
 
 #### HTTP Requests
 * `POST` `/api/signIn/` `application/x-www-form-urlencoded` `username` `password` `lifespan`

@@ -1,12 +1,14 @@
+# Authentication
+
 The authentication in damas-core is based upon the JSON Web Token (RFC 7519) authentication and secure transmission. You can find some resources here:
 * [JSON Web Token](https://en.wikipedia.org/wiki/JSON_Web_Token) - Wikipedia page
 * [jwt.io](https://jwt.io/) - and [Introduction](https://jwt.io/introduction/)
 * [npm JSONWebToken](https://www.npmjs.com/package/jsonwebtoken) - JWT module for NodeJS
 
-The implementation of this RFC is found in the [jwt.js](https://github.com/remyla/damas-core/wiki/Extensions#jwt) damas-core extension. Please find below some documentation about it.
+The implementation of this RFC is found in the [jwt damas-core extension](Extensions.md#jwt). Please find below some documentation about it.
 
 ## Web Tokens
-The tokens are delivered by the server using the [signIn](https://github.com/remyla/damas-core/wiki/4-Specifications#signIn) operation to authenticate users.
+The tokens are delivered by the server using the [signIn](4-Specifications.md#signIn) operation to authenticate users.
 
 ### Lifespan
 The default value for tokens' lifespan can be set in the server's conf.json under `extensions.jwt.exp`, and its value is "1d" (1 day) by default. See the syntax and examples [here](https://www.npmjs.com/package/ms). This value can also be specified during signIn, using the `expiresIn` parameter, in order to retrieve a token with the desired lifespan. A value of "0" ask for a token with an unlimited lifespan (see [#237](https://github.com/remyla/damas-core/issues/237)). By changing password, this revokes previously obtained tokens.  
@@ -69,7 +71,7 @@ else:
 ## Classes & Permissions
 Different types of permissions are available:
 * hard-coded permissions for each /api/ operation based on the current user's `class` key (in server-nodejs/routes/perms-tools.js)
-* extension for update permissions based on the modified key name and the user's `class` key. [extensions/restricted_keys.js](../Extensions#restricted_keys)
+* extension for update permissions based on the modified key name and the user's `class` key. See [restricted_keys extension](Extensions.md#restricted_keys).
 * read permissions based on the `author` key. See conf.json `authorMode` directive.
 
 The available user classes are: `admin` `editor` `user` `guest`.
@@ -101,7 +103,7 @@ project.token['_id']       # The user node id
 The [jwt_delegate](https://github.com/remyla/damas-core/wiki/Extensions#jwt_delegate) extension can be additionally used to centralize the authentication on a different server. When an user signs in, instead of authenticating him against the local database, the extension creates a new request that is sent to the delegation server. Once the user is authenticated, its element is copied in the local server, as if the user was authenticated locally.
 
 
-### Use the token inside custom Curl Commands
+### Use the token inside your custom curl Commands
 1. Request an access token from the server:
 ```sh
 $ curl https://localhost/api/signIn -d "username=remyla&password=yyy" > /tmp/token

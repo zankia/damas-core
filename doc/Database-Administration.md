@@ -1,3 +1,7 @@
+# Database Administration
+
+⚠️ This page has not been maintained for a long time
+
 ### Database dump and restore
 Don't forget to backup the database before doing mass changes. You can create a script for that purpose.
 
