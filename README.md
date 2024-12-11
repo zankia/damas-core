@@ -18,7 +18,7 @@ Its main features are:
 
 Directory structure:
 ```
-├── cli/            Bash + curl client command line
+├── cli/            Bash + curl command line client
 ├── docker/         deployment package
 ├── js/             Javascript client API
 ├── py/             Python client API
