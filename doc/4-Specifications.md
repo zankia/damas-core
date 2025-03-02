@@ -29,7 +29,7 @@ Insert new element(s) in the database. The elements have an `_id` key being thei
 
 #### HTTP Responses
 ```http
-201 Created               application/json (object or array of objects) created object(s)        
+201 Created               application/json (string or array of strings) created object(s) identifiers
 207 Multi-Status          application/json (array of objects and null) some objects already exist
 400 Bad Request           text/html (error message) not formatted correctly
 403 Forbidden             text/html (error message) the user does not have the right permission
@@ -37,9 +37,9 @@ Insert new element(s) in the database. The elements have an `_id` key being thei
 500 Internal Server Error text/html (error message) error while accessing the database
 ```
 
-> Returns the created element or an array containing the created elements in case of a multiple creation request.
+> Returns the created element's identifier or an array containing the created elements identifiers in case of a multiple creation request.
 
-> In case of a multiple element creation, the returned JSON is an array of objects ordered using the same order as the input array.
+> In case of a multiple element creation, the returned JSON is an array of strings ordered using the same order as the input array.
 
 > 207 Multi-Status happens when some specified identifiers already exist. A null value is returned in the array at corresponding position
 

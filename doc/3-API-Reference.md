@@ -1,5 +1,5 @@
 The damas-core API is available for Python and Javascript.  
-Read the [[2 Connect]] documentation to setup a client environment.
+Read the [2 Connect](2-Connect.md) documentation to setup a client environment.
 The demo site is available at https://demo.damas.io.
 
 ## Functions
@@ -23,7 +23,7 @@ The demo site is available at https://demo.damas.io.
 
 ***
 
-The web service's methods, parameters and responses follow the [[specification| 4 Specifications]].
+The web service's methods, parameters and responses follow the [specification](4-Specifications.md).
 
 #### JSON-Python correspondence table
 

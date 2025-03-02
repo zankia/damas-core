@@ -54,17 +54,17 @@ A public demo server is available at https://demo.damas.io
 ## Related Links
 http://damas-software.org is a website which presents the projects related to damas-core  
 https://syncplanet.io is a Saas using damas-core as backend  
-https://hub.docker.com/r/primcode/damas-core the ready-to-install docker images
+https://hub.docker.com/r/primcode/damas-core the ready-to-install docker images  
 http://dabox.io is collaborative platform for architecture using damas-core as backend  
-https://github.com/PRIMCODE/damas-flow is an interface to make directed graphs on top of damas-core
-https://github.com/PRIMCODE/damas-dashboard is a web control center and admin interface to index files, in production but not packaged for distribution. Get in touch if interested
+https://github.com/PRIMCODE/damas-flow is an interface to make directed graphs on top of damas-core  
+https://github.com/PRIMCODE/damas-dashboard is a web control center and admin interface to index files, in production but not packaged for distribution. Get in touch if interested  
 http://primcode.com PRIMCODE is the company behind the development, the distribution and the maintenance of damas-core
 
 ## Contributors
 Remy Lalanne - Project lead  
 Thibault Allard  
 Julie Aresu  
-Aymeric Cadier
+Aymeric Cadier  
 Sebastien Courtois  
 Ghislain Dugat  
 Joaquin Galvan Angeles  
@@ -102,7 +102,7 @@ Quentin Villecroze
 ## License
 GPL License(GPLV3)
 
-Copyright(c) 2024 Remy Lalanne remy@primcode.com
+Copyright(c) 2025 Remy Lalanne remy@primcode.com
 
 damas-core is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -1,15 +1,20 @@
-<img src="http://damas-software.org/bin/damas-core_logo.svg?t=2" alt="damas-core logo"/>
-
+```
+     _
+  __| | __ _ _ __ ___   __ _ ___        ___ ___  _ __ ___
+ / _` |/ _` | '_ ` _ \ / _` / __|_____ / __/ _ \| '__/ _ \
+| (_| | (_| | | | | | | (_| \__ \_____| (_| (_) | | |  __/
+ \__,_|\__,_|_| |_| |_|\__,_|___/      \___\___/|_|  \___|
+```
 Welcome to the damas-core wiki.
 
 ### Main Chapters
-* [[1 Installation]] - Get a server running
-* [[2 Connect]] - Set up a client and connect to a server
-* [[3 API Reference]] - List of API methods
-* [[4 Specifications]] - Protocol specifications
+* [1 Installation](1-Installation.md) - Get a server running
+* [2 Connect](2-Connect.md) - Set up a client and connect to a server
+* [3 API Reference](3-API-Reference.md) - List of API methods
+* [4 Specifications](4-Specifications.md) - Protocol specifications
 
 ### Additional information
-* [[Authentication]] - Token based authentication implemented in server-nodejs
-* [[Database Admin|Database Administration]] -  Cook Book, some recipes for the administration of the underlying database
-* [[Extensions]] - Documentation about the provided extensions and their format
-* [[Contributing]] - Documentation for coding conventions and unit testing
+* [Authentication](Authentification.md) - Token based authentication implemented in server-nodejs
+* [Database Admin](Database-Administration.md) -  Cook Book, some recipes for the administration of the underlying database
+* [Extensions](Extensions.md) - Documentation about the provided extensions and their format
+* [Contributing](Contributing.md) - Documentation for coding conventions and unit testing

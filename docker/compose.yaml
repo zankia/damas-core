@@ -1,7 +1,7 @@
 services:
     damas:
         container_name: damas-core
-        image: primcode/damas-core:latest
+        image: primcode/damas-core:2.6
         volumes:
             - ./damas.json:/damas-core/server-nodejs/conf.json
             - ./www:/app/www

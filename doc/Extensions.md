@@ -112,7 +112,7 @@ Then enable the extension:
     }
 }
 ```
-And configure the options depending on the behavior you want. Restart the server and sign in using the newly created user. Read [[documentation|Authentication]] to have more details about the authentication options and implementation.
+And configure the options depending on the behavior you want. Restart the server and sign in using the newly created user. Read [Authentication](Authentication.md) to have more details about the authentication options and implementation.
 
 ### jwt_delegate
 Centralizing authentication on a different server than the tracker.
